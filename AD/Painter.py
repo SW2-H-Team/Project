@@ -10,13 +10,18 @@ class Painter(QWidget):
         self.setUI()
 
     def setUI(self):
+        ###레이아웃
         mainlayout= QGridLayout()
         toollayout= QHBoxLayout()
         canvaslayout = QGridLayout()
 
+        mainlayout.addLayout(toollayout, 0, 0, 1, 10)
+        mainlayout.addLayout(canvaslayout, 1, 0, 9, 10)
+        self.setLayout(mainlayout)
+
         #캔버스
 
-        ## 툴 레이아웃
+        ## 툴
         #도구
         tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(8)]
         for i in range(len(tools)):
@@ -27,11 +32,6 @@ class Painter(QWidget):
         toollayout.addWidget(Button('1',self.buttonClicked))
         toollayout.addWidget(QLabel('배경색: '))
         toollayout.addWidget(Button('2',self.buttonClicked))
-
-        ##레이아웃 결합
-        mainlayout.addLayout(toollayout,0,0,1,10)
-        mainlayout.addLayout(canvaslayout,1,0,9,10)
-        self.setLayout(mainlayout)
 
     def buttonClicked(self):
 
