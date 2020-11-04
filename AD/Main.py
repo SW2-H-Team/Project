@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from Status import *
 from Painter import Painter
 from Store import Store
+from GetMoney import GetMoney
 from Button import Button
 
 class MyApp(QWidget):
@@ -15,7 +16,7 @@ class MyApp(QWidget):
         # 탭 레이아웃
         tab1 = Painter()
         tab2 = Store()
-        tab3 = QWidget()
+        tab3 = GetMoney()
 
         tabs = QTabWidget()
         tabs.addTab(tab1, '그림그리기')
