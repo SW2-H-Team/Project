@@ -2,11 +2,15 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from Button import Button
+from Bitcoin import *
 
 class GetMoney(QWidget):
 
-    def __init__(self,parent=None):
-        super().__init__(parent)
+    def __init__(self,status):
+        super().__init__()
+
+        self.status=status
+
         self.setUI()
 
     def setUI(self):
@@ -16,7 +20,7 @@ class GetMoney(QWidget):
         self.setLayout(mainlayout)
         mainlayout.addLayout(tablayout)
         # 탭
-        tab1=QWidget()
+        tab1=BitcoinMarket(self.status)
         tab2=QWidget()
 
         tabs = QTabWidget()
