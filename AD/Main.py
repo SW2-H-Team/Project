@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import *
 
-#from Status import *
 from Painter import Painter
 from Store import Store
 from GetMoney import GetMoney

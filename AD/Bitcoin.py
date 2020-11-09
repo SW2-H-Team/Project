@@ -2,8 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-#from Main import *
-#from Status import *
 from Button import Button
 
 import random
@@ -104,7 +102,7 @@ class Bitcoin(QWidget):
 
     # 그래프 갱신
     def update_line(self, i):
-        
+
         lastx=self.x[-1]
         if lastx > self.x[0]+59:
             self.x = [self.x[-1]]
