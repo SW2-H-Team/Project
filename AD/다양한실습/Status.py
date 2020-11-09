@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from Button import Button
+from Bitcoin import *
 
 from multiprocessing import Process, Queue
 import multiprocessing as mp

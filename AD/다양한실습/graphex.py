@@ -21,6 +21,7 @@ class MyWindow(QWidget):
         self.pushButton.clicked.connect(self.buttonClicked)
 
         self.fig = plt.Figure()
+        self.ax = self.fig.add_subplot()
         self.canvas = FigureCanvas(self.fig)
 
         leftLayout = QVBoxLayout()
@@ -47,11 +48,11 @@ class MyWindow(QWidget):
         x=np.arange(20)
         y=np.random.rand(20)
 
-        ax = self.fig.add_subplot()
-        ax.cla()
 
-        ax.plot(x,y)
-        ax.grid()
+        self.ax.cla()
+
+        self.ax.plot(x,y)
+        self.ax.grid()
         self.canvas.draw()
 
 if __name__ == "__main__":
