@@ -1,3 +1,4 @@
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from Painter import Painter
@@ -10,7 +11,11 @@ class MyApp(QWidget):
     def __init__(self):
         super().__init__()
         self.money=0
-        self.time=0
+        # 시간
+        self.minute=0
+        self.hour=0
+        self.day=0
+        self.week=0
 
         self.initUI()
 
@@ -22,6 +27,7 @@ class MyApp(QWidget):
         tab3 = GetMoney(self)
 
         tabs = QTabWidget()
+        tabs.setFixedWidth(750)
         tabs.addTab(tab1, '그림그리기')
         tabs.addTab(tab2, '상점')
         tabs.addTab(tab3, '용돈벌기')
@@ -33,38 +39,69 @@ class MyApp(QWidget):
         statuslayout =  QHBoxLayout()
 
         self.moneylabel = QLabel('Money: {}'.format(self.money))
-        self.timelabel = QLabel('시간 경과: {}m'.format(self.time))
+        self.timelabel = QLabel('시간 경과: {}m'.format(self.minute))
 
         statuslayout.addWidget(Button('save data', self.buttonClicked))
-        statuslayout.addStretch(2)
+        statuslayout.addStretch()
         statuslayout.addWidget(self.moneylabel)
-        statuslayout.addStretch(1)
+        statuslayout.addStretch()
         statuslayout.addWidget(self.timelabel)
 
+        # 가계부
+        historylayout = QVBoxLayout()
+
+        self.history = QTextEdit()
+        self.history.setReadOnly(True)
+        self.history.setFixedWidth(200)
+
+        historylayout.addWidget(QLabel('가계부'))
+        historylayout.addWidget(self.history)
+
         # 메인 레이아웃
-        mainlayout = QVBoxLayout()
-        mainlayout.addLayout(tablayout)
-        mainlayout.addLayout(statuslayout)
+        mainlayout = QGridLayout()
+        mainlayout.addLayout(tablayout,0,0,5,5)
+        mainlayout.addLayout(statuslayout,5,0,6,8)
+        mainlayout.addLayout(historylayout,0,5,5,8)
 
         self.setLayout(mainlayout)
         self.setWindowTitle('AD')
-        self.setGeometry(300, 150, 700, 500)
+        self.setGeometry(200, 120, 900, 600)
         self.show()
 
     # 모든 경제활동에서 발생하는 돈의 흐름
-    def moneyUpdate(self,money):
+    def moneyUpdate(self,money,text):
+        # 가계부에 내용을 적습니다.
+        historyold = self.history.toPlainText()
+        self.history.setTextColor(QColor(255,0,0)) # 현재의 기록은 강조하여 표시
+        self.history.setText(text)
+        self.history.append('-----------------')
+        self.history.setTextColor(QColor(0,0,0))
+        self.history.append(historyold)
+
+        # 지출/수입 반영
         self.money += money
         self.moneylabel.setText('Money: {}'.format(self.money))
 
+
     # 시간의 경과 표시
     def timeUpdate(self):
-        self.time += 1
-        self.timelabel.setText('시간 경과: {}m'.format(self.time))
+        self.minute += 1
+        if self.minute ==60:
+            self.hour +=1
+            self.minute =0
+        if self.hour ==24:
+            self.day +=1
+            self.hour =0
+        if self.day ==7:
+            self.week+=1
+            self.day =0
+
+        self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.week,self.day,self.hour,self.minute))
 
     def buttonClicked(self):
         button = self.sender()
 
-        self.money += 100
+        self.money += 1000
         print(self.money)
 
         self.moneylabel.setText('Money: {}'.format(self.money))

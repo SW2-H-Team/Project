@@ -32,7 +32,7 @@ class Bitcoin(QWidget):
 
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
 
-        self.name = name        #종목이름
+        self.itemname = name        #종목이름
         self.price = random.randint(700,1000) #매입가
         self.holding=0          #보유량
 
@@ -60,7 +60,7 @@ class Bitcoin(QWidget):
         self.presentvaluelabel = QLabel('코인 현재가치: {}'.format(self.presentvalue))
         self.gnllabel = QLabel('평가손익: {}'.format(self.presentvalue - self.investmentamount))
 
-        rightlayout.addWidget(QLabel(self.name), 0, 0)
+        rightlayout.addWidget(QLabel(self.itemname), 0, 0)
         rightlayout.addWidget(self.pricelabel,1,0)
         rightlayout.addWidget(self.holdinglabel,3,0)
         rightlayout.addWidget(self.presentvaluelabel,4,0)
@@ -86,7 +86,8 @@ class Bitcoin(QWidget):
                     self.holding+=buying
                     self.investmentamount+=investment
                     # 보유금액에서 차감
-                    self.status.moneyUpdate(-1*self.price*buying)
+                    text= '{} {}개 매수\n잔고: {} - {}'.format(self.itemname,buying,self.status.money,investment)
+                    self.status.moneyUpdate(-1*self.price*buying,text)
 
         elif button.text() =='매도':
             selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요.')
@@ -96,7 +97,8 @@ class Bitcoin(QWidget):
                 self.holding -= selling
                 self.investmentamount -= self.price * selling
                 # 보유금액에 증가
-                self.status.moneyUpdate(self.price*selling)
+                text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
+                self.status.moneyUpdate(self.price*selling,text)
 
         self.holdinglabel.setText('보유량: {}'.format(self.holding))
 
@@ -128,7 +130,7 @@ class Bitcoin(QWidget):
         self.gnllabel.setText('평가손익: {}'.format(self.presentvalue - self.investmentamount))
 
         # 시간갱신
-        if self.name == 'HHHH':
+        if self.itemname == 'HHHH':
             self.status.timeUpdate()
 
         return [self.line]
@@ -160,6 +162,7 @@ class BitcoinMarket(QWidget):
         scrollarea.setWidget(bitcoins)
 
         mainlayout.addWidget(scrollarea)
+
 
 if __name__ == '__main__':
     import sys
