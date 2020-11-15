@@ -63,10 +63,6 @@ class Store(QWidget):
         if key in colorButton_list:
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?",
                                          QMessageBox.No | QMessageBox.Yes)
-            if self.money < 1000:
-                QMessageBox.setText("잔액이 부족합니다.")
-            else:
-                self.money -= 1000
             if reply == QMessageBox.Yes:
                 colorButton_dic[key].setStyleSheet('background:%s' %key)
                 colorButton_dic[key].setEnabled(False)
