@@ -78,3 +78,4 @@ if __name__ == '__main__':
     store = Store()
     store.show()
     sys.exit(app.exec_())
+
