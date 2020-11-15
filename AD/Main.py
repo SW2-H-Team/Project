@@ -76,19 +76,22 @@ class MyApp(QWidget):
 
     # 모든 경제활동에서 발생하는 돈의 흐름
     def moneyUpdate(self,money,text):
+        # 지출/수입 반영
+        self.money += money
+        self.moneylabel.setText('Money: {}'.format(self.money))
+
         # 가계부에 내용을 적습니다.
         historyold = self.history.toPlainText()
         self.history.setTextColor(QColor(255,0,0))# 현재의 기록은 강조하여 표시
         text = text.split('\n')
         text = text[0]+' ({}:{}:{}:{})\n'.format(self.week,self.day,self.hour,self.minute) +text[1]
         self.history.setText(text)
+        self.history.append('= '+str(self.money))
         self.history.append('--------------------------------------')
         self.history.setTextColor(QColor(0,0,0))
         self.history.append(historyold)
 
-        # 지출/수입 반영
-        self.money += money
-        self.moneylabel.setText('Money: {}'.format(self.money))
+
 
 
     # 시간의 경과 표시

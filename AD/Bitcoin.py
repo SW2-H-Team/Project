@@ -73,7 +73,8 @@ class Bitcoin(QWidget):
         button = self.sender()
         print(button.text())
         if button.text() =='매수':
-            buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.')
+            buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.\n최대 매수가능량: {}'
+                                             .format(self.status.money//self.price))
             investment = self.price * buying
             if buying<0 : #예외처리
                 QMessageBox.warning(self, '경고!', '0 이상의 수를 입력해주세요.',QMessageBox.Ok)
@@ -88,7 +89,8 @@ class Bitcoin(QWidget):
                     self.status.moneyUpdate(-1*self.price*buying,text)
 
         elif button.text() =='매도':
-            selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요.')
+            selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 5%\n현재 코인 보유량: {}'
+                                              .format(self.holding))
             if selling <0 or selling>self.holding: #예외처리
                 QMessageBox.warning(self, '경고!', '{}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
             elif ok:
@@ -96,7 +98,7 @@ class Bitcoin(QWidget):
                 self.investmentamount -= self.price * selling
                 # 보유금액에 증가
                 text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
-                self.status.moneyUpdate(self.price*selling,text)
+                self.status.moneyUpdate(int(self.price*selling*0.95),text)
             if not self.holding:
                 self.investmentamount=0
 
@@ -157,7 +159,6 @@ class Bitcoin(QWidget):
             self.subgradient = 0.0001* np.random.randint(-300,400) #소폭 상승하도록 조정
         else:
             self.subgradient = 0.0001* np.random.randint(-600,601) # 유지하도록 조정
-
 
     # 그래프 갱신
     def updateLine(self, i):
