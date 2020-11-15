@@ -12,6 +12,7 @@ class MyMplCanvas(FigureCanvas):
         fig = Figure(figsize=(width, height), dpi=dpi)
 
         self.axes = fig.add_subplot(211, xlim=(0, 50), ylim=(50, 100))
+        self.axes.set_xlabel('fffffff')
 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)

@@ -8,9 +8,12 @@ from Button import Button
 
 class MyApp(QWidget):
 
-    def __init__(self):
+    def __init__(self,playername):
         super().__init__()
-        self.money=0
+
+        self.playername=playername
+
+        self.money=10000
         # 시간
         self.minute=0
         self.hour=0
@@ -38,10 +41,13 @@ class MyApp(QWidget):
         #상태창
         statuslayout =  QHBoxLayout()
 
+        self.namelabel = QLabel('이름: {}'.format(self.playername))
         self.moneylabel = QLabel('Money: {}'.format(self.money))
         self.timelabel = QLabel('시간 경과: {}m'.format(self.minute))
 
         statuslayout.addWidget(Button('save data', self.buttonClicked))
+        statuslayout.addStretch()
+        statuslayout.addWidget(self.namelabel)
         statuslayout.addStretch()
         statuslayout.addWidget(self.moneylabel)
         statuslayout.addStretch()
@@ -72,9 +78,11 @@ class MyApp(QWidget):
     def moneyUpdate(self,money,text):
         # 가계부에 내용을 적습니다.
         historyold = self.history.toPlainText()
-        self.history.setTextColor(QColor(255,0,0)) # 현재의 기록은 강조하여 표시
+        self.history.setTextColor(QColor(255,0,0))# 현재의 기록은 강조하여 표시
+        text = text.split('\n')
+        text = text[0]+' ({}:{}:{}:{})\n'.format(self.week,self.day,self.hour,self.minute) +text[1]
         self.history.setText(text)
-        self.history.append('-----------------')
+        self.history.append('--------------------------------------')
         self.history.setTextColor(QColor(0,0,0))
         self.history.append(historyold)
 
@@ -109,5 +117,6 @@ class MyApp(QWidget):
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
-    ex = MyApp()
+    ex = MyApp('김중현 ')
     sys.exit(app.exec_())
+
