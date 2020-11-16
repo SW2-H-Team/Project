@@ -12,8 +12,8 @@ class MyApp(QWidget):
         super().__init__()
 
         self.playername=playername
-
-        self.money=10000
+        # 돈
+        self.money=20000
         # 시간
         self.minute=0
         self.hour=0

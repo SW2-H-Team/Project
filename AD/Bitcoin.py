@@ -18,7 +18,7 @@ class Bitcoin(QWidget):
         self.status=status
 
         self.x = [0]
-        self.y = [random.randint(500, 3000)]
+        self.y = [random.randint(6000, 12000)]
         # 그래프 기울기
         self.economy = 0
         self.adjustment= 1
@@ -27,7 +27,7 @@ class Bitcoin(QWidget):
 
 
         self.fig = Figure(figsize=(5, 2))
-        self.ax = self.fig.add_subplot(ylim=(self.y[0] * 0.5, self.y[0] * 1.5 ), xlim=(0,60))
+        self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
 
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
@@ -40,7 +40,7 @@ class Bitcoin(QWidget):
         self.presentvalue = self.price*self.holding # 현재 보유중인 코인의 가치
 
         self.setUI()
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=10)
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
 
     def setUI(self):
         mainlayout = QHBoxLayout()
@@ -89,7 +89,7 @@ class Bitcoin(QWidget):
                     self.status.moneyUpdate(-1*self.price*buying,text)
 
         elif button.text() =='매도':
-            selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 5%\n현재 코인 보유량: {}'
+            selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 8%\n현재 코인 보유량: {}'
                                               .format(self.holding))
             if selling <0 or selling>self.holding: #예외처리
                 QMessageBox.warning(self, '경고!', '{}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
@@ -98,7 +98,7 @@ class Bitcoin(QWidget):
                 self.investmentamount -= self.price * selling
                 # 보유금액에 증가
                 text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
-                self.status.moneyUpdate(int(self.price*selling*0.95),text)
+                self.status.moneyUpdate(int(self.price*selling*0.92),text)
             if not self.holding:
                 self.investmentamount=0
 
@@ -106,37 +106,44 @@ class Bitcoin(QWidget):
     # 그래프 기울기 관리
     def changeEconomy(self):
         random = np.random.randint(1,1001)
-        if random <= 15: return True  # 1.5%
+        if random <= 20: return True  # 2%
         else: return False
 
     def changeGradient(self):
         random= np.random.randint(1,21)
-        if random<=7: return True #35%
+        if random<=6: return True #30%
         else: return False
 
+    # 코인의 경제상황 (개별적인 그래프 변화율)
     def updateEconomy(self):
         random = np.random.randint(1, 101)
-        if random <= 12:       #12%
-            self.economy = -10
-        elif random <= 36:     # 24%
-            self.economy = -4
-        elif random <= 70:     #34%
-            self.economy = np.random.randint(-1,2)
-        elif random <= 92:    #22%
-            self.economy = 6
-        else:  #8%
-            self.economy = 9
+        if random <= 4:       #4%
+            self.economy = -7
+        elif random < 20:     #16%
+            self.economy = -3.3
+        elif random <= 40:     # 22%        #경기불황 42%
+            self.economy = -1.5
+        elif random <= 64:     #20% 보통
+            self.economy = 0  # 기댓값 0.082
+        elif random <= 82:  # 20%            #경기 호황 38%
+            self.economy = 1.8
+        elif random <= 96:    #14%
+            self.economy = 4
+        else:  #4%
+            self.economy = 7.5
         print(self.economy)
 
+    # 코인의 기울기설정
     def updateGradient(self):
-        self.gradient= np.random.normal(0,0.005,1)[0]+0.001* self.economy
+        #기울기 = 조정함수*정규분포*경제상황
+        self.gradient= self.adjustment*(np.random.normal(0,0.004,1)[0]+0.001* self.economy)
 
-    #
+    # 그래프 과도한 성장 제한
     def setAdjustment(self):
         if self.price<600 and self.gradient>0:
-            self.adjustment=1.8
-        elif self.price<2000 :
             self.adjustment=1.3
+        elif self.price<2000 :
+            self.adjustment=1.1
         elif self.price<10000:
             self.adjustment=1
         elif self.price<40000:
@@ -152,13 +159,25 @@ class Bitcoin(QWidget):
         else:
             self.adjustment=0.1
 
+    # 그래프의 역동적인 모습을 만들기 위한 그래프
     def setSubgradient(self):
-        if self.price <600:
-            self.subgradient = 0.0001* np.random.randint(0,600) #무조건 오르도록 조정
-        elif self.price <2000:
-            self.subgradient = 0.0001* np.random.randint(-300,400) #소폭 상승하도록 조정
+        if self.price <1000:
+            self.subgradient = 0.0001* np.random.randint(300,500,1)[0]
+        elif self.price <10000:
+            self.subgradient = 0.0001* np.random.normal(0,1000,1)[0]
         else:
-            self.subgradient = 0.0001* np.random.randint(-600,601) # 유지하도록 조정
+            self.subgradient = 0.0001* np.random.normal(0,900,1)[0]
+
+    # y축 재설정
+    def setYLim(self):
+        if self.price <10000:
+            self.ax.set_ylim(0, self.y[0]*2.8)
+        elif self.price <100000:
+            self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2.4)
+        elif self.price < 1000000:
+            self.ax.set_ylim(self.y[0]*0.5,self.y[0]*2.1)
+        else:
+            self.ax.set_ylim(self.y[0]*0.6,self.y[0]*1.8)
 
     # 그래프 갱신
     def updateLine(self, i):
@@ -168,7 +187,7 @@ class Bitcoin(QWidget):
             self.x = [0]
             self.y = [self.y[-1]]
             self.ax.set_xlim(self.x[0],self.x[0]+60)
-            self.ax.set_ylim(self.y[0]*0.5, self.y[0]*1.5)
+            self.setYLim()
             self.ax.set_xlabel('{}: {}: {}:'.format(self.status.week,self.status.day,self.status.hour))
             self.ax.figure.canvas.draw()
         # 값 갱신
@@ -181,7 +200,7 @@ class Bitcoin(QWidget):
         self.setSubgradient()
 
         x = self.x[-1] + 1
-        y = int((1+self.adjustment*self.gradient+self.subgradient)*self.y[-1])
+        y = int((1+self.gradient+self.subgradient)*self.y[-1])
 
         self.x.append(x)
         self.y.append(y)
