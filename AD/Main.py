@@ -12,12 +12,14 @@ class MyApp(QWidget):
         super().__init__()
 
         self.playername=playername
+        # 빚
+        self.debt=20000000
         # 돈
-        self.money=20000
+        self.money=1000001
         # 시간
         self.minute=0
         self.hour=0
-        self.day=0
+        self.day=6
         self.week=0
 
         self.initUI()
@@ -91,9 +93,6 @@ class MyApp(QWidget):
         self.history.setTextColor(QColor(0,0,0))
         self.history.append(historyold)
 
-
-
-
     # 시간의 경과 표시
     def timeUpdate(self):
         self.minute += 1
@@ -106,8 +105,25 @@ class MyApp(QWidget):
         if self.day ==7:
             self.week+=1
             self.day =0
+            if self.debt:
+                self.payBack()
 
         self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.week,self.day,self.hour,self.minute))
+
+    # 채무 상환
+    def payBack(self):
+        self.debt -= 1000000
+        if self.money > 1000000:
+            text = '채무 상환\n잔고: {} - {}'.format(self.money, 1000000)
+            self.moneyUpdate(-1000000,text)
+        else:
+            # @@ 도구,색깔 있는지 판별
+                # @@@ 있으면 뺏고 차감시켜
+            text = '{} 압류당함.\n잔고: {} - {}'.format('$$',self.money,self.money)
+            self.moneyUpdate(-self.money,text)
+                # @@@ 없으면 게임오버
+
+
 
     def buttonClicked(self):
         button = self.sender()

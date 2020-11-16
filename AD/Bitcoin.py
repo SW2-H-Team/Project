@@ -141,9 +141,9 @@ class Bitcoin(QWidget):
     # 그래프 과도한 성장 제한
     def setAdjustment(self):
         if self.price<600 and self.gradient>0:
-            self.adjustment=1.3
-        elif self.price<2000 :
-            self.adjustment=1.1
+            self.adjustment=1.5
+        elif self.price<4000 and self.gradient>0:
+            self.adjustment=1.2
         elif self.price<10000:
             self.adjustment=1
         elif self.price<40000:
@@ -171,13 +171,13 @@ class Bitcoin(QWidget):
     # y축 재설정
     def setYLim(self):
         if self.price <10000:
-            self.ax.set_ylim(0, self.y[0]*2.8)
+            self.ax.set_ylim(0, self.y[0]*3)
         elif self.price <100000:
-            self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2.4)
+            self.ax.set_ylim(self.y[0]*0.3,self.y[0]*2.5)
         elif self.price < 1000000:
-            self.ax.set_ylim(self.y[0]*0.5,self.y[0]*2.1)
+            self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2.2)
         else:
-            self.ax.set_ylim(self.y[0]*0.6,self.y[0]*1.8)
+            self.ax.set_ylim(self.y[0]*0.5,self.y[0]*2)
 
     # 그래프 갱신
     def updateLine(self, i):
@@ -213,7 +213,7 @@ class Bitcoin(QWidget):
 
         self.pricelabel.setText('매입가: {}'.format(self.price))
         self.presentvaluelabel.setText('현재가치: {}'.format(self.presentvalue))
-        self.gnllabel.setText('평가손익: {}'.format(self.presentvalue - self.investmentamount))
+        self.gnllabel.setText('평가손익: {}'.format(int(0.92*self.presentvalue) - self.investmentamount))
 
         # 시간갱신
         if self.itemname == 'HHHH':
