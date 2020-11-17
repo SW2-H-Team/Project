@@ -22,11 +22,13 @@ class Painter(QWidget):
         self.setLayout(mainlayout)
 
         #캔버스
-        canvaslayout.addWidget(Canvas.Canvas())
+        canvas = Canvas.Canvas()
+        canvaslayout.addWidget(canvas)
 
         ## 툴
         #도구
-        toollayout.addWidget(ToolUI.ToolUI())
+        tools = ToolUI.ToolUI(canvas)
+        toollayout.addWidget(tools)
         #tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
         #for i in range(len(tools)):
         #    toollayout.addWidget(tools[i])
