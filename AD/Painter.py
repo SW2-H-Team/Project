@@ -9,6 +9,7 @@ class Painter(QWidget):
 
     def __init__(self,parent=None):
         super().__init__(parent)
+        self.setGeometry(300, 300, 750, 510)
         self.setUI()
 
     def setUI(self):
