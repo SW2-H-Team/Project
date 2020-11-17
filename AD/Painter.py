@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
 from Button import Button
+import Canvas
 
 class Painter(QWidget):
 
@@ -11,8 +12,8 @@ class Painter(QWidget):
 
     def setUI(self):
         ###레이아웃
-        mainlayout= QGridLayout()
-        toollayout= QHBoxLayout()
+        mainlayout = QGridLayout()
+        toollayout = QHBoxLayout()
         canvaslayout = QGridLayout()
 
         mainlayout.addLayout(toollayout, 0, 0, 1, 10)
@@ -20,10 +21,11 @@ class Painter(QWidget):
         self.setLayout(mainlayout)
 
         #캔버스
+        canvaslayout.addWidget(Canvas.Canvas())
 
         ## 툴
         #도구
-        tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(8)]
+        tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
         for i in range(len(tools)):
             toollayout.addWidget(tools[i])
         toollayout.addStretch()
