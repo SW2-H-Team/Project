@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 
 from Button import Button
 import Canvas
+import ToolUI
 
 class Painter(QWidget):
 
@@ -25,15 +26,17 @@ class Painter(QWidget):
 
         ## 툴
         #도구
-        tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
-        for i in range(len(tools)):
-            toollayout.addWidget(tools[i])
-        toollayout.addStretch()
+        toollayout.addWidget(ToolUI.ToolUI())
+        #tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
+        #for i in range(len(tools)):
+        #    toollayout.addWidget(tools[i])
+        #toollayout.addStretch()
+
         #색상
-        toollayout.addWidget(QLabel('전경색: '))
-        toollayout.addWidget(Button('1',self.buttonClicked))
-        toollayout.addWidget(QLabel('배경색: '))
-        toollayout.addWidget(Button('2',self.buttonClicked))
+        #toollayout.addWidget(QLabel('전경색: '))
+        #toollayout.addWidget(Button('1',self.buttonClicked))
+        #toollayout.addWidget(QLabel('배경색: '))
+        #toollayout.addWidget(Button('2',self.buttonClicked))
 
     def buttonClicked(self):
 
