@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
+import ToolUI
+
 
 class Canvas(QMainWindow):
 
@@ -17,6 +19,7 @@ class Canvas(QMainWindow):
         self.initUI()
 
     def initUI(self):
+
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('File')
@@ -28,6 +31,9 @@ class Canvas(QMainWindow):
         clear_action = QAction('Clear', self)
         clear_action.setShortcut('Ctrl+C')
         clear_action.triggered.connect(self.clear)
+
+        #ToolUI.tools[7].addAction(save_action)
+        #ToolUI.tools[8].addAction(clear_action)
 
         filemenu.addAction(save_action)
         filemenu.addAction(clear_action)
