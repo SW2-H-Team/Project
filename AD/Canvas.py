@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-import ToolUI
+from ToolUI import *
 
 
 class Canvas(QMainWindow):
@@ -20,23 +20,18 @@ class Canvas(QMainWindow):
 
     def initUI(self):
 
-        menubar = self.menuBar()
-        menubar.setNativeMenuBar(False)
-        filemenu = menubar.addMenu('File')
+        #menubar = self.menuBar()
+        #menubar.setNativeMenuBar(False)
+        #filemenu = menubar.addMenu('File')
 
-        save_action = QAction('Save', self)
-        save_action.setShortcut('Ctrl+S')
-        save_action.triggered.connect(self.save)
 
-        clear_action = QAction('Clear', self)
-        clear_action.setShortcut('Ctrl+C')
-        clear_action.triggered.connect(self.clear)
 
-        #ToolUI.tools[7].addAction(save_action)
-        #ToolUI.tools[8].addAction(clear_action)
+        #tools = ToolUI(self)
+        #tools.tools[7].addAction(save_action)
+        #tools.tools[8].addAction(clear_action)
 
-        filemenu.addAction(save_action)
-        filemenu.addAction(clear_action)
+        #filemenu.addAction(save_action)
+        #filemenu.addAction(clear_action)
 
         self.setWindowTitle('Simple Painter')
         self.setGeometry(300, 300, 725, 430)
@@ -63,15 +58,7 @@ class Canvas(QMainWindow):
         if e.button() == Qt.LeftButton:
             self.drawing = False
 
-    def save(self):
-        fpath, _ = QFileDialog.getSaveFileName(self, 'Save Image', '', "PNG(*.png);;JPEG(*.jpg *.jpeg);;All Files(*.*) ")
 
-        if fpath:
-            self.image.save(fpath)
-
-    def clear(self):
-        self.image.fill(Qt.white)
-        self.update()
 
 
 
