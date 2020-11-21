@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 
 from Button import Button
 from Bitcoin import *
+from OddOrEven import *
 
 class GetMoney(QWidget):
 
@@ -20,20 +21,20 @@ class GetMoney(QWidget):
         self.setLayout(mainlayout)
         mainlayout.addLayout(tablayout)
         # 탭
-        tab1=BitcoinMarket(self.status)
-        tab2=QWidget()
+        self.tab1=BitcoinMarket(self.status)
+        self.tab2=OddOrEven(self.status)
 
         tabs = QTabWidget()
-        tabs.addTab(tab1, '비트코인')
-        tabs.addTab(tab2, '홀짝')
+        tabs.addTab(self.tab1, '비트코인')
+        tabs.addTab(self.tab2, '홀짝')
 
         tablayout.addWidget(tabs)
 
 if __name__ == '__main__':
-
+    from Main import *
     import sys
 
     app = QApplication(sys.argv)
-    getmoney = GetMoney()
+    getmoney = GetMoney(MyApp('dd'))
     getmoney.show()
     sys.exit(app.exec_())

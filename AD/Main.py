@@ -15,7 +15,7 @@ class MyApp(QWidget):
         # 빚
         self.debt=20000000
         # 돈
-        self.money=1000001
+        self.money=1000000000
         # 시간
         self.minute=0
         self.hour=0
@@ -27,15 +27,15 @@ class MyApp(QWidget):
     # 메인 UI
     def initUI(self):
         # 탭 레이아웃
-        tab1 = Painter()
-        tab2 = Store(self)
-        tab3 = GetMoney(self)
+        self.paintertab = Painter()
+        self.storetab = Store()
+        self.getmoneytab = GetMoney(self)
 
         tabs = QTabWidget()
         tabs.setFixedWidth(750)
-        tabs.addTab(tab1, '그림그리기')
-        tabs.addTab(tab2, '상점')
-        tabs.addTab(tab3, '용돈벌기')
+        tabs.addTab(self.paintertab, '그림그리기')
+        tabs.addTab(self.storetab, '상점')
+        tabs.addTab(self.getmoneytab, '용돈벌기')
 
         tablayout = QVBoxLayout()
         tablayout.addWidget(tabs)
@@ -97,6 +97,7 @@ class MyApp(QWidget):
     def timeUpdate(self):
         self.minute += 1
         if self.minute ==60:
+            self.getmoneytab.tab2.getNumber()
             self.hour +=1
             self.minute =0
         if self.hour ==24:
@@ -124,7 +125,7 @@ class MyApp(QWidget):
                 # @@@ 없으면 게임오버
 
 
-
+    ###################################################
     def buttonClicked(self):
         button = self.sender()
 

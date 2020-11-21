@@ -4,8 +4,6 @@ from PyQt5.QtGui import *
 
 from Button import Button
 
-import random
-
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -18,7 +16,7 @@ class Bitcoin(QWidget):
         self.status=status
 
         self.x = [0]
-        self.y = [random.randint(6000, 12000)]
+        self.y = [np.random.randint(6000, 12000)]
         # 그래프 기울기
         self.economy = 0
         self.adjustment= 1
@@ -40,7 +38,7 @@ class Bitcoin(QWidget):
         self.presentvalue = self.price*self.holding # 현재 보유중인 코인의 가치
 
         self.setUI()
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=100)
 
     def setUI(self):
         mainlayout = QHBoxLayout()
@@ -71,7 +69,6 @@ class Bitcoin(QWidget):
 
     def buttonClicked(self):
         button = self.sender()
-        print(button.text())
         if button.text() =='매수':
             buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.\n최대 매수가능량: {}'
                                              .format(self.status.money//self.price))
@@ -87,6 +84,8 @@ class Bitcoin(QWidget):
                     # 보유금액에서 차감
                     text= '{} {}개 매수\n잔고: {} - {}'.format(self.itemname,buying,self.status.money,investment)
                     self.status.moneyUpdate(-1*self.price*buying,text)
+                elif cancel:
+                    pass
 
         elif button.text() =='매도':
             selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 8%\n현재 코인 보유량: {}'
