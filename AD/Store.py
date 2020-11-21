@@ -5,8 +5,9 @@ from Button import Button
 
 class Store(QWidget):
 
-    def __init__(self):
+    def __init__(self, status):
         super().__init__()
+        self.status = status
         self.setUI()
 
 
@@ -67,10 +68,10 @@ class Store(QWidget):
                 if self.status.money < 1000:
                     QMessageBox.warning(self, "경고", "잔액이 부족합니다.", QMessageBox.Ok)
                 else:
-                    self.status.money -= 1000
                     colorButton_dic[key].setStyleSheet('background:%s' %key)
                     colorButton_dic[key].setEnabled(False)
-                    self.status.moneylabel.setText('Money: {}'.format(self.status.money))
+                    self.status.moneyUpdate(-1000, "상점\n구입")
+
             else:
                 pass
 
