@@ -13,10 +13,18 @@ class Canvas(QMainWindow):
         self.image = QImage(QSize(725, 430), QImage.Format_RGB32)
         self.image.fill(Qt.white)
         self.drawing = False
-        self.brush_size = 5
-        self.brush_color = Qt.black
+        self.ChangedSize(5)
+        self.ChangedColor(Qt.black)
         self.last_point = QPoint()
         self.initUI()
+
+
+    def ChangedColor(self, color):
+        self.brush_color = color
+
+    def ChangedSize(self, size):
+        self.brush_size = size
+
 
     def initUI(self):
 
