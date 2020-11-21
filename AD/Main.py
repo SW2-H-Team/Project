@@ -28,7 +28,7 @@ class MyApp(QWidget):
     def initUI(self):
         # 탭 레이아웃
         self.paintertab = Painter()
-        self.storetab = Store()
+        self.storetab = Store(self)
         self.getmoneytab = GetMoney(self)
 
         tabs = QTabWidget()

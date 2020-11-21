@@ -3,27 +3,27 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-from ToolUI import *
-
 
 class Canvas(QMainWindow):
 
-    def __init__(self):
+    def __init__(self,painter):
         super().__init__()
+
+        self.painter=painter
+
         self.image = QImage(QSize(725, 430), QImage.Format_RGB32)
         self.image.fill(Qt.white)
         self.drawing = False
-        self.ChangedSize(5)
-        self.ChangedColor(Qt.black)
+
+        self.brush_color = Qt.black
+        self.brush_size = 5
+
+        #self.ChangedSize(5)
         self.last_point = QPoint()
         self.initUI()
 
 
-    def ChangedColor(self, color):
-        self.brush_color = color
 
-    def ChangedSize(self, size):
-        self.brush_size = size
 
 
     def initUI(self):

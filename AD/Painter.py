@@ -12,6 +12,9 @@ class Painter(QWidget):
         self.setGeometry(300, 300, 750, 510)
         self.setUI()
 
+        #self.currentcolor= Qt.black
+        #self.currentsize=5
+
     def setUI(self):
         ###레이아웃
         mainlayout = QGridLayout()
@@ -23,17 +26,18 @@ class Painter(QWidget):
         self.setLayout(mainlayout)
 
         #캔버스
-        canvas = Canvas.Canvas()
+        canvas = Canvas.Canvas(self)
         canvaslayout.addWidget(canvas)
 
         ## 툴
         #도구
-        tools = ToolUI.ToolUI(canvas)
+        tools = ToolUI.ToolUI(canvas,self)
         toollayout.addWidget(tools)
         #tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
         #for i in range(len(tools)):
         #    toollayout.addWidget(tools[i])
         #toollayout.addStretch()
+
 
         #색상
         #toollayout.addWidget(QLabel('전경색: '))
