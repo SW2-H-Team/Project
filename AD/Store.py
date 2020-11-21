@@ -64,8 +64,13 @@ class Store(QWidget):
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?",
                                          QMessageBox.No | QMessageBox.Yes)
             if reply == QMessageBox.Yes:
-                colorButton_dic[key].setStyleSheet('background:%s' %key)
-                colorButton_dic[key].setEnabled(False)
+                if self.status.money < 1000:
+                    QMessageBox.warning(self, "경고", "잔액이 부족합니다.", QMessageBox.Ok)
+                else:
+                    self.status.money -= 1000
+                    colorButton_dic[key].setStyleSheet('background:%s' %key)
+                    colorButton_dic[key].setEnabled(False)
+                    self.status.moneylabel.setText('Money: {}'.format(self.status.money))
             else:
                 pass
 
