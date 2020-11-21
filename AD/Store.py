@@ -26,7 +26,6 @@ class Store(QWidget):
         tab2 = QWidget()
 
         tabs = QTabWidget()
-        tabs.addTab(tab1, '도구')
         tabs.addTab(tab2, '색상')
 
         tablayout.addWidget(tabs)
@@ -37,12 +36,16 @@ class Store(QWidget):
         tab2.layout = QGridLayout()
 
         self.redButton = Button("Red", self.buttonClicked)
-
         self.yellowButton = Button("Yellow", self.buttonClicked)
         self.blueButton = Button("Blue", self.buttonClicked)
         self.greenButton = Button("Green", self.buttonClicked)
+        self.orangeButton = Button("Orange", self.buttonClicked)
+        self.purpleButton = Button("Purple", self.buttonClicked)
+        self.whiteButton = Button("White", self.buttonClicked)
+        self.cyanButton = Button("Cyan", self.buttonClicked)
 
-        button_list = [self.redButton, self.yellowButton, self.blueButton, self.greenButton]
+        button_list = [self.redButton, self.yellowButton, self.blueButton, self.greenButton,
+                       self.orangeButton, self.purpleButton, self.whiteButton, self.cyanButton]
 
         #button 생성
         r = 0; c = 0
@@ -59,8 +62,10 @@ class Store(QWidget):
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
-        colorButton_list = ["Red", "Yellow", "Blue", "Green"]
-        colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton, "Green": self.greenButton}
+        colorButton_list = ["Red", "Yellow", "Blue", "Green", "Orange", "Purple", "White", "Cyan"]
+        colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton,
+                           "Green": self.greenButton, "Orange": self.orangeButton, "Purple": self.purpleButton,
+                           "White": self.whiteButton, "Cyan": self.cyanButton}
         if key in colorButton_list:
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?",
                                          QMessageBox.No | QMessageBox.Yes)
@@ -70,11 +75,10 @@ class Store(QWidget):
                 else:
                     colorButton_dic[key].setStyleSheet('background:%s' %key)
                     colorButton_dic[key].setEnabled(False)
-                    self.status.moneyUpdate(-1000, "상점\n구입")
+                    self.status.moneyUpdate(-1000, "{}구입\n{} - 1000".format(key, self.status.money))
 
             else:
                 pass
-
 
 if __name__ == '__main__':
 
