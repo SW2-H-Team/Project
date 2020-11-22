@@ -1,4 +1,3 @@
-
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -69,7 +68,11 @@ class Canvas(QMainWindow):
                 painter.drawLine(self.last_point, e.pos())
                 self.last_point = e.pos()
             elif self.save_drawingType == 'line':
-                pass
+                if self.brush_size <= 3:
+                    painter.setPen(QPen(Qt.gray, 1))
+                else:
+                    painter.setPen(QPen(Qt.gray, self.brush_size // 3 ))
+                painter.drawPoint(self.past_point)
 
             self.update()
 
