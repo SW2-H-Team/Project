@@ -51,7 +51,6 @@ class LoginWindow(QWidget):
                 ex = MyApp(self)
 
 class MyApp(QWidget):
-
     def __init__(self,main):
         super().__init__()
 
@@ -62,8 +61,8 @@ class MyApp(QWidget):
         self.money=1000000
         # 시간
         self.minute=0
-        self.hour=23
-        self.day=6
+        self.hour=0
+        self.day=0
         self.week=0
         ## painter 관련
         # 보유한 색깔

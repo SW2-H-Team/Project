@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 from Button import Button
-
+from Slide import Slide
 
 class ToolUI(QWidget):
     def __init__(self, canvas, painter, parent=None):
@@ -18,19 +18,19 @@ class ToolUI(QWidget):
         self.save_point = 5
         self.tool()
 
-
     def tool(self):
         layout = QHBoxLayout()
         self.setLayout(layout)
 
-        #self.tools = [Button('{}'.format(str(x)), self.buttonClicked) for x in range(2)]
+        # self.tools = [Button('{}'.format(str(x)), self.buttonClicked) for x in range(2)]
         self.tools = []
 
         self.tools.append(Button('그리기', self.buttonClicked))
         self.tools.append(Button('직선', self.buttonClicked))
+        self.tools.append(Button('선굵기', self.buttonClicked))
         self.tools.append(Button('선모드', self.buttonClicked))
         self.tools.append(Button('색효과', self.buttonClicked))
-        self.tools.append(Button('스포이드', self.buttonClicked))
+        self.tools.append(Button('텍스트', self.buttonClicked))
         self.tools.append(Button('지우개', self.buttonClicked))
 
         self.tools.append(Button('저장', self.save))
@@ -48,7 +48,6 @@ class ToolUI(QWidget):
             layout.addWidget(self.tools[i])
         layout.addStretch()
 
-
         # 색상         >> 메시지 남김 : 원래 전경색이었는데 색 바꾸기로 그냥 이름 바꿨어!
         layout.addWidget(QLabel('색 바꾸기: '))
         # layout.addWidget(Button('1', self.foregroundColor()))
@@ -56,9 +55,7 @@ class ToolUI(QWidget):
         # layout.addWidget(Button('배경', self.buttonClicked()))
         # layout.addWidget(QLabel('현재 색깔: '))
 
-
-# ------------------------------------------------------------------------ #
-
+    # ------------------------------------------------------------------------ #
 
     # 그림 저장하기
     def save(self):
@@ -82,12 +79,10 @@ class ToolUI(QWidget):
         if fpath:
             self.canvas.image.save(fpath + _)
 
-
     # 그림 초기화
     def clear(self):
         self.canvas.image.fill(Qt.white)
         self.canvas.update()
-
 
     # def foregroundColor(self):
     #    self.ChangedColor(Qt.red)
@@ -95,7 +90,6 @@ class ToolUI(QWidget):
     # 배경색 (바뀌게 될지도 모르니까 그냥 냅둠)
     # def backgroungColor(self):
     #    self.ChangedColor(QColor(255,255,255))
-
 
     # 색깔과 사이즈에 변화주는 함수
     def ChangedColor(self, color):
@@ -108,14 +102,10 @@ class ToolUI(QWidget):
         self.ChangedColor(color)
         self.ChangedSize(size)
 
-
     def spoid(self, e):
         pass
 
-
-
-# ----------------------------------------------------------------------- #
-
+    # ----------------------------------------------------------------------- #
 
     def buttonClicked(self):
         button = self.sender()
@@ -123,106 +113,64 @@ class ToolUI(QWidget):
 
         if key == '그리기':
             self.canvas.save_drawingType = 'drawing'
-            self.canvas.brush_size = self.save_brush_size
-            self.save_brush_size = self.change('선 굵기', '50', self.save_brush_size)
             self.ChangedValue(self.save_brush_color, self.save_brush_size)
 
         elif key == '지우개':
             self.canvas.save_drawingType = 'drawing'
-            self.save_eraser_size = self.change('지우개 굵기', '50', self.save_eraser_size)
             self.ChangedValue(QColor(255, 255, 255), self.save_eraser_size)
 
         elif key == '직선':
             self.canvas.save_drawingType = 'line'
-            self.canvas.brush_size = self.save_line_size
-            self.save_line_size = self.change('직선 굵기', '50', self.save_line_size)
             self.ChangedValue(self.save_brush_color, self.save_line_size)
 
         elif key == '선모드':
+            self.save_brush_mode = self.changingMode()
             self.canvas.brush_mode = self.save_brush_mode
-            self.save_brush_mode = self.changingMode('선의 모드', '4', self.save_brush_mode)
-            self.canvas.brush_mode = self.save_brush_mode
+            self.ChangedValue(self.save_brush_color, self.save_brush_size)
+
+        elif key == '선굵기':
+            self.Thickness()
 
         elif key == '색효과':
             pass
 
-        elif key == '스포이드':
-            pass
-
-
+        elif key == '텍스트':
+            self.canvas.save_drawingType = 'text'
 
 
     # 굵기 정하는 창 띄워주는 함수
-    def Thickness(self, thicknessType, maxThickness, saveValue):  # (원하는 굵기 종류, 굵기의 최대 범위, cancel 시 반환할 값)
-        while True:
-            thickness, ok = QInputDialog.getText(self, '{}'.format(thicknessType),
-                                                 '원하는 굵기를 선택하세요.\n최대 굵기: {}'.format(maxThickness))
-            if ok == False:
-                return saveValue
-            if thickness == '':
-                QMessageBox.warning(self, '경고!', '숫자를 입력하세요.', QMessageBox.Ok)
-                continue
-            elif thickness.isdigit():
-                pass
-            else:
-                QMessageBox.warning(self, '경고!', '값이 이상합니다. 다시 입력해주세요.', QMessageBox.Ok)
-                continue
+    def Thickness(self):  # (원하는 굵기 종류, 굵기의 최대 범위, cancel 시 반환할 값)
 
-            thickness = int(thickness)
+        # 어떤 굵기를 바꿀 것인지
+        items = ("그리기", "직선", "지우개")
+        item, ok = QInputDialog.getItem(self, "선굵기", "변경하고 싶은 모드를 골라주세요.", items)
 
-            if thickness <= 0:  # 예외처리
-                QMessageBox.warning(self, '경고!', '0 보다 큰 수를 입력하세요.', QMessageBox.Ok)
-                continue
-            elif thickness > int(maxThickness):
-                QMessageBox.warning(self, '경고!', '{} 보다 작은 수를 입력하세요.'.format(maxThickness), QMessageBox.Ok)
-                continue
-            else:
-                if ok:
-                    return thickness
-
-
+        if ok:
+            self.sld = Slide(item, self)
+            # 이 부분에 슬롯 넣기
 
     # 변경할 것인지 물어보는 창 띄워주는 함수
-    def change(self, changingType, limit, saveValue):
-        result = saveValue
-        answer = QMessageBox.question(self, '질문', '{}를 변경할까요?'.format(changingType),
-                                          QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if answer == QMessageBox.Yes:
-            self.save_point = self.Thickness('{}'.format(changingType),
-                                                       '{}'.format(limit), saveValue)
-            result = self.save_point
-        else:
-            pass
-
-        return result
-
-
-    # 선모드 선택 
-    def changingMode(self, changingType, limit, saveValue):
-        text = '원하는 모드를 선택하세요.\n0 : 실선\n1 : 짧은실선\n2 : 점선\n3 : 실점선'
+    def changingMode(self):
+        # 어떤 모드를 선택할 것인 것인지
+        items = ("실선", "짧은실선", "점선", "실점선")
         list = [Qt.SolidLine, Qt.DashLine, Qt.DotLine, Qt.DashDotLine, ]
-        result = saveValue
-        answer = QMessageBox.question(self, '질문', '{}를 변경할까요?'.format(changingType),
-                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        result = self.save_brush_mode
 
-        if answer == QMessageBox.Yes:
-            while True:
-                thickness, ok = QInputDialog.getInt(self, '{}'.format(changingType), text)
-                if ok == False:
-                    break
-                elif thickness > 3:
-                    QMessageBox.warning(self, '경고!', '{} 보다 작은 수를 입력하세요.'.format(limit), QMessageBox.Ok)
-                    continue
-                else:
-                    result = list[thickness]
-                    break
-        else:
+        item, ok = QInputDialog.getItem(self, "선모드", "바꾸고자 하는 모드를 골라주세요.", items, 0, False)
+
+        if ok == False:
             pass
+        else:
+            if item == items[0]:
+                result = list[0]
+            elif item == items[1]:
+                result = list[1]
+            elif item == items[2]:
+                result = list[2]
+            else:
+                result = list[3]
 
         return result
-
-
-
 
 
     # 현재 무슨 색인지 텍스트로 알려주기
