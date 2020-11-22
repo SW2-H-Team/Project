@@ -6,7 +6,7 @@ from Button import Button
 
 
 class ToolUI(QWidget):
-    def __init__(self,canvas,painter, parent=None):
+    def __init__(self, canvas, painter, parent=None):
         super().__init__(parent)
         self.canvas = canvas
         self.painter = painter
@@ -60,10 +60,25 @@ class ToolUI(QWidget):
 
     # 그림 저장하기
     def save(self):
-        fpath, _ = QFileDialog.getSaveFileName(self, 'Save Image', '', "PNG(*.png) ")
+        fpath, _ = QFileDialog.getSaveFileName(self, 'Save Image', '',
+                                               "PNG(*.png);;JPEG(*.jpg);;JPEG(*.jpeg);;All Files(*.*) ")
+
+        # 확장자명 구하기
+        if _ == 'PNG(*.png)':
+            _ = '.png'
+        elif _ == 'JPEG(*.jpg)':
+            _ = '.jpg'
+        elif _ == 'JPEG(*.jpeg)':
+            _ = '.jpeg'
+        else:
+            filenameExtension = fpath.find('.')
+            filenameExtensionLen = len(fpath)
+            _ = fpath[filenameExtension:filenameExtensionLen]
+            fpath = fpath[0:filenameExtension]
+            
+        # 파일 저장하기
         if fpath:
-            self.canvas.image.save(fpath + '.png')
-            # 혹시 다른 확장자로 바꾸거나 .png.png 로 저장되는 걸 수정하고 싶으면 이 부분 고치기
+            self.canvas.image.save(fpath + _)
 
 
     # 그림 초기화
