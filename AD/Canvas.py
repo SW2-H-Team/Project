@@ -4,8 +4,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
-
-
 class Canvas(QMainWindow):
 
     def __init__(self, painter):
@@ -21,8 +19,12 @@ class Canvas(QMainWindow):
         self.brush_size = 5
         self.brush_mode = Qt.SolidLine
 
+        self.string = 'you and me'
+        self.stringFont = 'DejaVu Sans Mono'
+        self.stringFontSize = 18
 
-        # 모드 선택 ['drawing':그리기, 'line':직선, ]
+
+       # 모드 선택 ['drawing':그리기, 'line':직선, 'text':텍스트]
         self.save_drawingType = 'drawing'
 
 
@@ -60,6 +62,9 @@ class Canvas(QMainWindow):
             elif self.save_drawingType == 'line':
                 self.drawing = True
                 self.past_point = e.pos()
+            elif self.save_drawingType == 'text':
+                self.drawing = True
+                self.last_point = e.pos()
 
 
     # 좌클릭을 한 상태로 움직일 때
@@ -77,6 +82,8 @@ class Canvas(QMainWindow):
                 else:
                     painter.setPen(QPen(Qt.gray, self.brush_size // 3, self.brush_mode, Qt.RoundCap))
                 painter.drawPoint(self.past_point)
+            elif self.save_drawingType == 'text':
+                pass
 
             self.update()
 
@@ -93,7 +100,17 @@ class Canvas(QMainWindow):
                 painter.drawLine(self.past_point, self.present_point)
                 self.update()
                 self.drawing = False
+            elif self.save_drawingType == 'text':
+                painter = QPainter(self.image)
+                self.draw_text(painter)
+                self.drawing = False
 
+
+
+    def draw_text(self, qp):
+        qp.setFont(QFont(self.stringFont, self.stringFontSize))
+        qp.drawText(self.last_point, self.string)
+        self.update()
 
 
 
