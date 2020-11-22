@@ -3,7 +3,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 from Button import Button
-from Slide import Slide
+from Slide import *
+
 
 class ToolUI(QWidget):
     def __init__(self, canvas, status, parent=None):
@@ -16,6 +17,7 @@ class ToolUI(QWidget):
         self.save_brush_mode = Qt.SolidLine
         self.save_brush_color = QColor(0, 0, 0)
         self.save_point = 5
+        self.save_alpha = 255
         self.tool()
 
     def tool(self):
@@ -48,28 +50,29 @@ class ToolUI(QWidget):
             layout.addWidget(self.tools[i])
         layout.addStretch()
 
-        # 색상         >> 메시지 남김 : 원래 전경색이었는데 색 바꾸기로 그냥 이름 바꿨어!
+        # 색상
         layout.addWidget(QLabel('색 바꾸기: '))
         # layout.addWidget(Button('1', self.foregroundColor()))
         # layout.addWidget(QLabel('배경색: '))
         # layout.addWidget(Button('배경', self.buttonClicked()))
         # layout.addWidget(QLabel('현재 색깔: '))
 
-	
-	# 색상 선택
+        # 색상 선택
         cb = QComboBox(self)
         self.status.cb = cb
         self.status.cb.addItem("Black")
         layout.addWidget(cb)
 
         self.status.cb.currentIndexChanged.connect(self.comboBoxFunction)
-    
 
     # canvas로 전달
     def comboBoxFunction(self):
-        self.ChangedColor(self.status.save_brush_color[self.status.cb.currentText()])
+        self.save_brush_color = self.status.save_brush_color[self.status.cb.currentText()]
+        self.ChangedColor(self.save_brush_color)
+
 
     # ------------------------------------------------------------------------ #
+
 
     # 그림 저장하기
     def save(self):
@@ -93,6 +96,7 @@ class ToolUI(QWidget):
         if fpath:
             self.canvas.image.save(fpath + _)
 
+
     # 그림 초기화
     def clear(self):
         self.canvas.image.fill(Qt.white)
@@ -105,6 +109,7 @@ class ToolUI(QWidget):
     # def backgroungColor(self):
     #    self.ChangedColor(QColor(255,255,255))
 
+
     # 색깔과 사이즈에 변화주는 함수
     def ChangedColor(self, color):
         self.canvas.brush_color = color
@@ -116,10 +121,13 @@ class ToolUI(QWidget):
         self.ChangedColor(color)
         self.ChangedSize(size)
 
-    def spoid(self, e):
-        pass
+    def ChangedFont(self, font, size):
+        self.canvas.stringFont = font
+        self.canvas.stringFontSize = size
+
 
     # ----------------------------------------------------------------------- #
+
 
     def buttonClicked(self):
         button = self.sender()
@@ -146,10 +154,11 @@ class ToolUI(QWidget):
             self.Thickness()
 
         elif key == '색효과':
-            pass
+            self.ColorEffect()
 
         elif key == '텍스트':
             self.canvas.save_drawingType = 'text'
+            self.ChangedText()
 
 
     # 굵기 정하는 창 띄워주는 함수
@@ -160,33 +169,41 @@ class ToolUI(QWidget):
         item, ok = QInputDialog.getItem(self, "선굵기", "변경하고 싶은 모드를 골라주세요.", items)
 
         if ok:
-            self.sld = Slide(item, self)
-            # 이 부분에 슬롯 넣기
+            self.sld = Slide_Thickness(item, self, items)
+
 
     # 변경할 것인지 물어보는 창 띄워주는 함수
     def changingMode(self):
         # 어떤 모드를 선택할 것인 것인지
-        items = ("실선", "짧은실선", "점선", "실점선")
-        list = [Qt.SolidLine, Qt.DashLine, Qt.DotLine, Qt.DashDotLine, ]
+        items = ("실선", "점선")
+        list = [Qt.SolidLine, Qt.DotLine, ]
         result = self.save_brush_mode
 
-        item, ok = QInputDialog.getItem(self, "선모드", "바꾸고자 하는 모드를 골라주세요.", items, 0, False)
+        item, ok = QInputDialog.getItem(self, "선모드", "바꾸고자 하는 모드를 골라주세요.", items)
 
         if ok == False:
             pass
         else:
             if item == items[0]:
                 result = list[0]
-            elif item == items[1]:
-                result = list[1]
-            elif item == items[2]:
-                result = list[2]
             else:
-                result = list[3]
+                result = list[1]
 
         return result
 
 
-    # 현재 무슨 색인지 텍스트로 알려주기
-    def nowColor(self):
-        pass
+    # 텍스트 기능 실행을 위한 함수
+    def ChangedText(self):
+        s, OK = QInputDialog.getText(self, "입력글자", "텍스트에 입력할 글자를 적어주세요.")
+        if OK:
+            self.canvas.string = s
+            items = ('Default', 'Arial', 'Times New Ronam', "Consolas", "Courier New", "DejaVu Sans Mono")
+            item, ok = QInputDialog.getItem(self, "폰트 선택", "텍스트에 사용할 폰트를 골라주세요.", items)
+
+            if ok:
+                self.sld = Slide_ChangedText(item, self, items)
+
+
+    # 색효과 기능 실행을 위한 함수
+    def ColorEffect(self):
+        self.sld = Slide_ColorEffect(self)
