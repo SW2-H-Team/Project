@@ -1,4 +1,3 @@
-
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 
@@ -6,18 +5,19 @@ from PyQt5.QtWidgets import *
 from Button import *
 
 
-class Slide(QWidget):
-    def __init__(self,item,tool):
+class Slide_Thickness(QWidget):
+    def __init__(self,item,tool, items):
         super().__init__()
         self.title='굵기변경'
         self.item = item
         self.tool =tool
+        self.items = items
 
-        if self.item == '그리기':
+        if self.item == self.items[0]:
             self.currentsize = self.tool.save_brush_size
-        elif self.item == '직선':
+        elif self.item == self.items[1]:
             self.currentsize = self.tool.save_line_size
-        elif self.item == '지우개':
+        elif self.item == self.items[2]:
             self.currentsize = self.tool.save_eraser_size
 
         self.initUI()
@@ -64,22 +64,22 @@ class Slide(QWidget):
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='ok':
-            if self.item == '그리기':
+            if self.item == self.items[0]:
                 self.tool.save_brush_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_brush_size)
-            elif self.item == '직선':
+            elif self.item == self.items[1]:
                 self.tool.save_line_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_line_size)
-            elif self.item == '지우개':
+            elif self.item == self.items[2]:
                 self.tool.save_eraser_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_eraser_size)
             self.close()
         elif button.text()=='cancel':
             self.close()
 
+
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
     ex = Slide()
     sys.exit(app.exec_())
-
