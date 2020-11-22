@@ -31,10 +31,9 @@ class GetMoney(QWidget):
         tablayout.addWidget(tabs)
 
 if __name__ == '__main__':
-    from Main import *
     import sys
 
     app = QApplication(sys.argv)
-    getmoney = GetMoney(MyApp('dd'))
+    getmoney = GetMoney()
     getmoney.show()
     sys.exit(app.exec_())

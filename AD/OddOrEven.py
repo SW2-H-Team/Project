@@ -47,7 +47,6 @@ class OddOrEven(QWidget):
         #버튼레이아웃
         self.oddbutton = Button('홀',self.buttonClicked)
         self.evenbutton = Button('짝',self.buttonClicked)
-        self.resultlabel = QLabel('결과는!\n홀')
 
         self.oddbutton.setCheckable(True)
         self.evenbutton.setCheckable(True)
@@ -55,8 +54,6 @@ class OddOrEven(QWidget):
         buttonlayout.addStretch(2)
         buttonlayout.addWidget(self.oddbutton)
         buttonlayout.addStretch(1)
-        buttonlayout.addWidget(self.resultlabel)
-        mainlayout.addStretch(1)
         buttonlayout.addWidget(self.evenbutton)
         buttonlayout.addStretch(2)
 
@@ -90,10 +87,6 @@ class OddOrEven(QWidget):
     def getNumber(self):
         number = np.random.randint(1,3)
         self.historyUpdate(number) #결과 나올때마다 기록 업데이트
-        if number==1:
-            self.resultlabel.setText('결과는!\n홀')
-        else:
-            self.resultlabel.setText('결과는!\n짝')
         # 결과 확인
         self.checkResult(number)
 
@@ -137,24 +130,34 @@ class OddOrEven(QWidget):
         if button.text()=='충전하기' :
             charge, ok = QInputDialog.getInt(self, '충전하기', '충전할 금액을 입력하세요.\n충전가능금액: {}'
                                              .format(self.status.money))
-            if charge<=0:
-                QMessageBox.warning(self, '경고!', '0보다 큰 값을 입력해 주세요.', QMessageBox.Ok)
-            elif charge>=self.status.money:
-                QMessageBox.warning(self, '경고!', '최대 보유금액 만큼의 값을 입력할 수 있습니다.', QMessageBox.Ok)
-
-            else:
-                if ok:
+            # ok 버튼을 누르면,
+            if ok:
+                # 예외처리
+                if charge <= 0:
+                    QMessageBox.warning(self, '경고!', '0보다 큰 값을 입력해 주세요.', QMessageBox.Ok)
+                elif charge > self.status.money:
+                    QMessageBox.warning(self, '경고!', '최대 보유금액 만큼의 값을 입력할 수 있습니다.', QMessageBox.Ok)
+                # 정상작동
+                else:
                     self.chargeUpdate(charge)
                     text= '홀짝게임에 충전\n잔고: {} - {}'.format(self.status.money,charge)
                     self.status.moneyUpdate(-charge,text)
 
         elif button.text()=='출금하기' :
-            withdrawl, ok = QInputDialog.getInt(self, '출금하기', '출금할 금액을 입력하세요.\n출금가능금액: {}'
+            withdrawl, ok = QInputDialog.getInt(self, '출금하기', '출금할 금액을 입력하세요.\n수수료 10%\n출금가능금액: {}'
                                              .format(self.charge))
+            # ok버튼을 누르면,
             if ok:
-                self.chargeUpdate(-withdrawl)
-                text= '홀짝게임에서 출금\n잔고: {} + {}'.format(self.status.money,withdrawl)
-                self.status.moneyUpdate(withdrawl,text)
+                # 예외처리
+                if withdrawl <=0:
+                    QMessageBox.warning(self, '경고!', '0보다 큰 값을 입력해 주세요.', QMessageBox.Ok)
+                elif withdrawl >self.charge:
+                    QMessageBox.warning(self, '경고!', '최대 충전금액 만큼의 값을 입력할 수 있습니다.', QMessageBox.Ok)
+                # 정상작동
+                else:
+                    self.chargeUpdate(-withdrawl)
+                    text= '홀짝게임에서 출금\n잔고: {} + {}'.format(self.status.money,int(0.9*withdrawl))
+                    self.status.moneyUpdate(int(0.9*withdrawl),text)
 
         # 홀 선택
         elif len(button.text())==1:

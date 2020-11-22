@@ -23,8 +23,7 @@ class Bitcoin(QWidget):
         self.gradient= 0.001
         self.subgradient = 0
 
-
-        self.fig = Figure(figsize=(5, 2))
+        self.fig = Figure(figsize=(4.5, 2))
         self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
 
@@ -73,31 +72,33 @@ class Bitcoin(QWidget):
             buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.\n최대 매수가능량: {}'
                                              .format(self.status.money//self.price))
             investment = self.price * buying
-            if buying<0 : #예외처리
-                QMessageBox.warning(self, '경고!', '0 이상의 수를 입력해주세요.',QMessageBox.Ok)
-            elif investment >self.status.money:
-                QMessageBox.warning(self, '경고!', '보유 금액이 부족합니다.', QMessageBox.Ok)
-            else:
-                if ok:
+
+            if ok:
+                if buying < 0:  # 예외처리
+                    QMessageBox.warning(self, '경고!', '0 이상의 수를 입력해주세요.', QMessageBox.Ok)
+                elif investment > self.status.money:
+                    QMessageBox.warning(self, '경고!', '보유 금액이 부족합니다.', QMessageBox.Ok)
+                else:
                     self.holding+=buying
                     self.investmentamount+=investment
                     # 보유금액에서 차감
                     text= '{} {}개 매수\n잔고: {} - {}'.format(self.itemname,buying,self.status.money,investment)
                     self.status.moneyUpdate(-1*self.price*buying,text)
-                elif cancel:
-                    pass
+
 
         elif button.text() =='매도':
             selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 8%\n현재 코인 보유량: {}'
                                               .format(self.holding))
-            if selling <0 or selling>self.holding: #예외처리
-                QMessageBox.warning(self, '경고!', '{}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
-            elif ok:
-                self.holding -= selling
-                self.investmentamount -= self.price * selling
-                # 보유금액에 증가
-                text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
-                self.status.moneyUpdate(int(self.price*selling*0.92),text)
+
+            if ok:
+                if not 0<selling <=self.holding: #예외처리
+                    QMessageBox.warning(self, '경고!', '{}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
+                else:
+                    self.holding -= selling
+                    self.investmentamount -= self.price * selling
+                    # 보유금액에 증가
+                    text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
+                    self.status.moneyUpdate(int(self.price*selling*0.92),text)
             if not self.holding:
                 self.investmentamount=0
 
@@ -130,7 +131,6 @@ class Bitcoin(QWidget):
             self.economy = 4
         else:  #4%
             self.economy = 7.5
-        print(self.economy)
 
     # 코인의 기울기설정
     def updateGradient(self):
@@ -172,11 +172,11 @@ class Bitcoin(QWidget):
         if self.price <10000:
             self.ax.set_ylim(0, self.y[0]*3)
         elif self.price <100000:
-            self.ax.set_ylim(self.y[0]*0.3,self.y[0]*2.5)
+            self.ax.set_ylim(self.y[0]*0.2,self.y[0]*2.5)
         elif self.price < 1000000:
-            self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2.2)
+            self.ax.set_ylim(self.y[0]*0.3,self.y[0]*2.2)
         else:
-            self.ax.set_ylim(self.y[0]*0.5,self.y[0]*2)
+            self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2)
 
     # 그래프 갱신
     def updateLine(self, i):
@@ -248,7 +248,6 @@ class BitcoinMarket(QWidget):
         scrollarea.setWidget(bitcoins)
 
         mainlayout.addWidget(scrollarea)
-
 
 if __name__ == '__main__':
     import sys
