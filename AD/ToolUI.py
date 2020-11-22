@@ -6,10 +6,10 @@ from Button import Button
 from Slide import Slide
 
 class ToolUI(QWidget):
-    def __init__(self, canvas, painter, parent=None):
+    def __init__(self, canvas, status, parent=None):
         super().__init__(parent)
         self.canvas = canvas
-        self.painter = painter
+        self.status = status
         self.save_eraser_size = 5
         self.save_brush_size = 5
         self.save_line_size = 5
@@ -54,6 +54,20 @@ class ToolUI(QWidget):
         # layout.addWidget(QLabel('배경색: '))
         # layout.addWidget(Button('배경', self.buttonClicked()))
         # layout.addWidget(QLabel('현재 색깔: '))
+
+	
+	# 색상 선택
+        cb = QComboBox(self)
+        self.status.cb = cb
+        self.status.cb.addItem("Black")
+        layout.addWidget(cb)
+
+        self.status.cb.currentIndexChanged.connect(self.comboBoxFunction)
+    
+
+    # canvas로 전달
+    def comboBoxFunction(self):
+        self.ChangedColor(self.status.save_brush_color[self.status.cb.currentText()])
 
     # ------------------------------------------------------------------------ #
 

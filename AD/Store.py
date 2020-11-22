@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 from Button import Button
 
@@ -41,11 +42,11 @@ class Store(QWidget):
         self.greenButton = Button("Green", self.buttonClicked)
         self.orangeButton = Button("Orange", self.buttonClicked)
         self.purpleButton = Button("Purple", self.buttonClicked)
-        self.whiteButton = Button("White", self.buttonClicked)
+        self.brownButton = Button("Brown", self.buttonClicked)
         self.cyanButton = Button("Cyan", self.buttonClicked)
 
         button_list = [self.redButton, self.yellowButton, self.blueButton, self.greenButton,
-                       self.orangeButton, self.purpleButton, self.whiteButton, self.cyanButton]
+                       self.orangeButton, self.purpleButton, self.brownButton, self.cyanButton]
 
         #button 생성
         r = 0; c = 0
@@ -62,12 +63,15 @@ class Store(QWidget):
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
-        colorButton_list = ["Red", "Yellow", "Blue", "Green", "Orange", "Purple", "White", "Cyan"]
+        colorButton_list = ["Red", "Yellow", "Blue", "Green", "Orange", "Purple", "Brown", "Cyan"]
         colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton,
                            "Green": self.greenButton, "Orange": self.orangeButton, "Purple": self.purpleButton,
-                           "White": self.whiteButton, "Cyan": self.cyanButton}
+                           "Brown": self.brownButton, "Cyan": self.cyanButton}
+        RGBNumber_dic = {"Red": QColor(255, 0, 0), "Yellow": QColor(255, 228, 0), "Blue": QColor(0, 0, 255),
+                           "Green": QColor(0, 255, 0), "Orange": QColor(255, 94, 0), "Purple": QColor(217, 65, 197),
+                           "Brown": QColor(165, 42, 42), "Cyan": QColor(0, 255, 255)}
         if key in colorButton_list:
-            reply = QMessageBox.question(self, "구매", "구입하시겠습니까?",
+            reply = QMessageBox.question(self, "구매", "구입하시겠습니까?\n10,000,000원",
                                          QMessageBox.No | QMessageBox.Yes)
             if reply == QMessageBox.Yes:
                 if self.status.money < 1000:
@@ -75,8 +79,10 @@ class Store(QWidget):
                 else:
                     colorButton_dic[key].setStyleSheet('background:%s' %key)
                     colorButton_dic[key].setEnabled(False)
-                    self.status.moneyUpdate(-1000, "{}구입\n{} - 1000".format(key, self.status.money))
-
+                    self.status.moneyUpdate(-1000, "{}구입\n{} - 10000000".format(key, self.status.money))
+                    self.status.save_brush_color["{}".format(key)] = RGBNumber_dic[key]
+                    self.status.cb.addItem("{}".format(key))
+                    print("Success")
             else:
                 pass
 

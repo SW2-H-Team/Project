@@ -7,8 +7,9 @@ import ToolUI
 
 class Painter(QWidget):
 
-    def __init__(self,parent=None):
+    def __init__(self, status, parent=None):
         super().__init__(parent)
+        self.status = status
         self.setGeometry(300, 300, 750, 510)
         self.setUI()
 
@@ -26,12 +27,12 @@ class Painter(QWidget):
         self.setLayout(mainlayout)
 
         #캔버스
-        canvas = Canvas.Canvas(self)
+        canvas = Canvas.Canvas(self.status)
         canvaslayout.addWidget(canvas)
 
         ## 툴
         #도구
-        tools = ToolUI.ToolUI(canvas,self)
+        tools = ToolUI.ToolUI(canvas,self.status)
         toollayout.addWidget(tools)
         #tools = [ Button('{}'.format(str(x)),self.buttonClicked) for x in range(9)]
         #for i in range(len(tools)):

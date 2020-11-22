@@ -76,9 +76,8 @@ class MyApp(QWidget):
         self.history=[]
         ##
 
-
-
-
+	## RGB값
+        self.save_brush_color = {"Black": QColor(0, 0 ,0)}
         self.initUI()
 
     # 메인 UI
@@ -94,7 +93,7 @@ class MyApp(QWidget):
         mainlayout.addLayout(historylayout, 0, 5, 5, 8)
 
         # 탭 레이아웃
-        self.paintertab = Painter()
+        self.paintertab = Painter(self)
         self.storetab = Store(self)
         self.getmoneytab = GetMoney(self)
 

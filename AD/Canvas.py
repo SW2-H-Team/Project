@@ -6,10 +6,10 @@ from PyQt5.QtCore import *
 
 class Canvas(QMainWindow):
 
-    def __init__(self, painter):
+    def __init__(self, status):
         super().__init__()
 
-        self.painter = painter
+        self.status = status
 
         self.image = QImage(QSize(725, 430), QImage.Format_RGB32)
         self.image.fill(Qt.white)
