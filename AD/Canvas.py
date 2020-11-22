@@ -108,6 +108,7 @@ class Canvas(QMainWindow):
 
 
     def draw_text(self, qp):
+        qp.setPen(self.brush_color)
         qp.setFont(QFont(self.stringFont, self.stringFontSize))
         qp.drawText(self.last_point, self.string)
         self.update()
