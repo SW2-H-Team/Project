@@ -4,6 +4,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 
+
+
 class Canvas(QMainWindow):
 
     def __init__(self, painter):
@@ -15,8 +17,10 @@ class Canvas(QMainWindow):
         self.image.fill(Qt.white)
         self.drawing = False
 
-        self.brush_color = Qt.black
+        self.brush_color = QColor(0, 0, 0)
         self.brush_size = 5
+        self.brush_mode = Qt.SolidLine
+
 
         # 모드 선택 ['drawing':그리기, 'line':직선, ]
         self.save_drawingType = 'drawing'
@@ -62,7 +66,7 @@ class Canvas(QMainWindow):
     def mouseMoveEvent(self, e):
         if (e.buttons() & Qt.LeftButton) & self.drawing:
             painter = QPainter(self.image)
-            painter.setPen(QPen(self.brush_color, self.brush_size, Qt.SolidLine, Qt.RoundCap))
+            painter.setPen(QPen(self.brush_color, self.brush_size, self.brush_mode, Qt.RoundCap))
 
             if self.save_drawingType == 'drawing':
                 painter.drawLine(self.last_point, e.pos())
@@ -71,7 +75,7 @@ class Canvas(QMainWindow):
                 if self.brush_size <= 3:
                     painter.setPen(QPen(Qt.gray, 1))
                 else:
-                    painter.setPen(QPen(Qt.gray, self.brush_size // 3 ))
+                    painter.setPen(QPen(Qt.gray, self.brush_size // 3, self.brush_mode, Qt.RoundCap))
                 painter.drawPoint(self.past_point)
 
             self.update()
@@ -84,7 +88,7 @@ class Canvas(QMainWindow):
                 self.drawing = False
             elif self.save_drawingType == 'line':
                 painter = QPainter(self.image)
-                painter.setPen(QPen(self.brush_color, self.brush_size, Qt.SolidLine, Qt.RoundCap))
+                painter.setPen(QPen(self.brush_color, self.brush_size, self.brush_mode, Qt.RoundCap))
                 self.present_point = e.pos()
                 painter.drawLine(self.past_point, self.present_point)
                 self.update()
