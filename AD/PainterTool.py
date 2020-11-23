@@ -29,14 +29,20 @@ class ToolUI(QWidget):
 
         self.tools.append(Button('그리기', self.buttonClicked))
         self.tools.append(Button('직선', self.buttonClicked))
+        self.tools.append(Button('지우개', self.buttonClicked))
         self.tools.append(Button('선굵기', self.buttonClicked))
         self.tools.append(Button('선모드', self.buttonClicked))
         self.tools.append(Button('색효과', self.buttonClicked))
         self.tools.append(Button('텍스트', self.buttonClicked))
-        self.tools.append(Button('지우개', self.buttonClicked))
 
         self.tools.append(Button('저장', self.save))
         self.tools.append(Button('지우기', self.clear))
+
+        self.tools[0].setCheckable(True)
+        self.tools[0].toggle() #기본으로 브러쉬를 사용
+        self.tools[1].setCheckable(True)
+        self.tools[2].setCheckable(True)
+
 
         save_action = QAction('Save', self)
         save_action.setShortcut('Ctrl+S')
@@ -134,14 +140,33 @@ class ToolUI(QWidget):
         key = button.text()
 
         if key == '그리기':
+            # 한번에 한 버튼만 눌리게.
+            if not self.tools[0].isChecked():
+                self.tools[0].toggle()
+            elif self.tools[1].isChecked():
+                self.tools[1].toggle()
+            elif self.tools[2].isChecked():
+                self.tools[2].toggle()
             self.canvas.save_drawingType = 'drawing'
             self.ChangedValue(self.save_brush_color, self.save_brush_size)
 
         elif key == '지우개':
+            if self.tools[0].isChecked():
+                self.tools[0].toggle()
+            elif self.tools[1].isChecked():
+                self.tools[1].toggle()
+            elif not self.tools[2].isChecked():
+                self.tools[2].toggle()
             self.canvas.save_drawingType = 'drawing'
             self.ChangedValue(QColor(255, 255, 255), self.save_eraser_size)
 
         elif key == '직선':
+            if self.tools[0].isChecked():
+                self.tools[0].toggle()
+            elif not self.tools[1].isChecked():
+                self.tools[1].toggle()
+            elif self.tools[2].isChecked():
+                self.tools[2].toggle()
             self.canvas.save_drawingType = 'line'
             self.ChangedValue(self.save_brush_color, self.save_line_size)
 
@@ -151,7 +176,7 @@ class ToolUI(QWidget):
             self.ChangedValue(self.save_brush_color, self.save_brush_size)
 
         elif key == '선굵기':
-            self.Thickness()
+            self.setThickness()
 
         elif key == '색효과':
             self.ColorEffect()
@@ -162,14 +187,8 @@ class ToolUI(QWidget):
 
 
     # 굵기 정하는 창 띄워주는 함수
-    def Thickness(self):  # (원하는 굵기 종류, 굵기의 최대 범위, cancel 시 반환할 값)
-
-        # 어떤 굵기를 바꿀 것인지
-        items = ("그리기", "직선", "지우개")
-        item, ok = QInputDialog.getItem(self, "선굵기", "변경하고 싶은 모드를 골라주세요.", items)
-
-        if ok:
-            self.sld = Slide_Thickness(item, self, items)
+    def setThickness(self):
+        self.sld = Slide_Thickness(self)
 
 
     # 변경할 것인지 물어보는 창 띄워주는 함수

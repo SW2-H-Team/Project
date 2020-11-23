@@ -6,19 +6,20 @@ from Button import *
 
 
 class Slide_Thickness(QWidget):
-    def __init__(self, item, tool, items):
+    def __init__(self, tool):
         super().__init__()
-        self.title='굵기변경'
-        self.item = item
-        self.tool = tool
-        self.items = items
 
-        if self.item == self.items[0]:
+        self.tool = tool
+        # 현재 사용중인 도구의 크기를 조절함.
+        if self.tool.tools[0].isChecked():
             self.currentsize = self.tool.save_brush_size
-        elif self.item == self.items[1]:
+            self.title = '브러쉬 크기 조절'
+        elif self.tool.tools[1].isChecked():
             self.currentsize = self.tool.save_line_size
-        elif self.item == self.items[2]:
+            self.title = '직선 굵기 조절'
+        elif self.tool.tools[2].isChecked():
             self.currentsize = self.tool.save_eraser_size
+            self.title = '지우개 크기 조절'
 
         self.initUI()
 
@@ -64,13 +65,13 @@ class Slide_Thickness(QWidget):
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='ok':
-            if self.item == self.items[0]:
+            if self.tool.tools[0].isChecked():
                 self.tool.save_brush_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_brush_size)
-            elif self.item == self.items[1]:
+            elif self.tool.tools[1].isChecked():
                 self.tool.save_line_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_line_size)
-            elif self.item == self.items[2]:
+            elif self.tool.tools[2].isChecked():
                 self.tool.save_eraser_size = self.currentsize
                 self.tool.ChangedSize(self.tool.save_eraser_size)
             self.close()
