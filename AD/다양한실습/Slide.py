@@ -213,8 +213,7 @@ class Slide_ColorEffect(QWidget):
         button = self.sender()
         if button.text()=='ok':
             self.tool.save_alpha = self.currentsize
-            self.tool.save_brush_color = QColor(self.tool.save_red, self.tool.save_green, self.tool.save_blue, self.tool.save_alpha)
-            self.tool.ChangedColor(self.tool.save_brush_color)
+            self.tool.ChangedRGBA(self.tool.save_red, self.tool.save_green, self.tool.save_blue, self.tool.save_alpha)
             self.close()
         elif button.text()=='cancel':
             self.close()
