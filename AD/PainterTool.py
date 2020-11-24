@@ -143,6 +143,8 @@ class ToolUI(QWidget):
 
     # 색깔과 사이즈에 변화주는 함수
     def ChangedColor(self, color):
+        self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
+                                 format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.canvas.brush_color = color
 
     def ChangedSize(self, size):
@@ -153,6 +155,8 @@ class ToolUI(QWidget):
         self.save_green = g
         self.save_blue = b
         self.save_alpha = a
+        self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
+                                 format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.ChangedColor(self.MakeColor())
 
     def MakeColor(self):
