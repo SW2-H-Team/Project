@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 
 from Button import Button
 from Slide import *
@@ -11,13 +13,21 @@ class ToolUI(QWidget):
         super().__init__(parent)
         self.canvas = canvas
         self.status = status
+
+        # canvas와 연계되는 도구 값 저장 변수
         self.save_eraser_size = 5
         self.save_brush_size = 5
         self.save_line_size = 5
         self.save_brush_mode = Qt.SolidLine
-        self.save_brush_color = QColor(0, 0, 0)
         self.save_point = 5
+
+        self.save_red = 0
+        self.save_blue = 0
+        self.save_green = 0
         self.save_alpha = 255
+        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+
+
         self.tool()
 
     def tool(self):
@@ -73,7 +83,10 @@ class ToolUI(QWidget):
 
     # canvas로 전달
     def comboBoxFunction(self):
-        self.save_brush_color = self.status.save_brush_color[self.status.cb.currentText()]
+        self.save_red = self.status.current_brush_color[self.status.cb.currentText()][0]
+        self.save_green = self.status.current_brush_color[self.status.cb.currentText()][1]
+        self.save_blue = self.status.current_brush_color[self.status.cb.currentText()][2]
+        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
         self.ChangedColor(self.save_brush_color)
 
 
@@ -123,9 +136,21 @@ class ToolUI(QWidget):
     def ChangedSize(self, size):
         self.canvas.brush_size = size
 
-    def ChangedValue(self, color, size):
+    def ChangedRGBA(self, r, g, b, a):
+        self.save_red = r
+        self.save_green = g
+        self.save_blue = b
+        self.save_alpha = a
+        self.ChangedColor(self.MakeColor())
+
+    def MakeColor(self):
+        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+        return self.save_brush_color
+
+    def ChangedValue(self, color, size, mode):
         self.ChangedColor(color)
         self.ChangedSize(size)
+        self.canvas.brush_mode = mode
 
     def ChangedFont(self, font, size):
         self.canvas.stringFont = font
@@ -148,7 +173,7 @@ class ToolUI(QWidget):
             elif self.tools[2].isChecked():
                 self.tools[2].toggle()
             self.canvas.save_drawingType = 'drawing'
-            self.ChangedValue(self.save_brush_color, self.save_brush_size)
+            self.ChangedValue(self.save_brush_color, self.save_brush_size, self.save_brush_mode)
 
         elif key == '지우개':
             if self.tools[0].isChecked():
@@ -158,7 +183,7 @@ class ToolUI(QWidget):
             elif not self.tools[2].isChecked():
                 self.tools[2].toggle()
             self.canvas.save_drawingType = 'drawing'
-            self.ChangedValue(QColor(255, 255, 255), self.save_eraser_size)
+            self.ChangedValue(QColor(255, 255, 255, 255), self.save_eraser_size, Qt.SolidLine)
 
         elif key == '직선':
             if self.tools[0].isChecked():
@@ -168,12 +193,12 @@ class ToolUI(QWidget):
             elif self.tools[2].isChecked():
                 self.tools[2].toggle()
             self.canvas.save_drawingType = 'line'
-            self.ChangedValue(self.save_brush_color, self.save_line_size)
+            self.ChangedValue(self.save_brush_color, self.save_line_size, self.save_brush_mode)
 
         elif key == '선모드':
             self.save_brush_mode = self.changingMode()
             self.canvas.brush_mode = self.save_brush_mode
-            self.ChangedValue(self.save_brush_color, self.save_brush_size)
+            self.ChangedValue(self.save_brush_color, self.save_brush_size, self.save_brush_mode)
 
         elif key == '선굵기':
             self.setThickness()
