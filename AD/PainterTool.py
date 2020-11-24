@@ -42,7 +42,7 @@ class ToolUI(QWidget):
         self.tools.append(Button('지우개', self.buttonClicked))
         self.tools.append(Button('선굵기', self.buttonClicked))
         self.tools.append(Button('선모드', self.buttonClicked))
-        self.tools.append(Button('색효과', self.buttonClicked))
+        self.tools.append(Button('투명도', self.buttonClicked))
         self.tools.append(Button('텍스트', self.buttonClicked))
 
         self.tools.append(Button('저장', self.save))
@@ -67,6 +67,8 @@ class ToolUI(QWidget):
         layout.addStretch()
 
         # 색상
+        for i in range(0, 4):
+            layout.addWidget(QLabel())
         layout.addWidget(QLabel('색 바꾸기: '))
         # layout.addWidget(Button('1', self.foregroundColor()))
         # layout.addWidget(QLabel('배경색: '))
@@ -81,13 +83,23 @@ class ToolUI(QWidget):
 
         self.status.cb.currentIndexChanged.connect(self.comboBoxFunction)
 
+        # 선택한 색 보이기
+        self.label = QLabel()
+        self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
+                                 format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
+        layout.addWidget(self.label, 1)
+
+
     # canvas로 전달
     def comboBoxFunction(self):
         self.save_red = self.status.current_brush_color[self.status.cb.currentText()][0]
         self.save_green = self.status.current_brush_color[self.status.cb.currentText()][1]
         self.save_blue = self.status.current_brush_color[self.status.cb.currentText()][2]
         self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+        self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
+                                 format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.ChangedColor(self.save_brush_color)
+
 
 
     # ------------------------------------------------------------------------ #
@@ -203,7 +215,7 @@ class ToolUI(QWidget):
         elif key == '선굵기':
             self.setThickness()
 
-        elif key == '색효과':
+        elif key == '투명':
             self.ColorEffect()
 
         elif key == '텍스트':
