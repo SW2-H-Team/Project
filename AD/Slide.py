@@ -1,5 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
 from Button import *
 
@@ -163,7 +164,6 @@ class Slide_ColorEffect(QWidget):
         super().__init__()
         self.title='색효과'
         self.tool = tool
-
         self.currentsize = self.tool.save_alpha
 
         self.initUI()
@@ -189,6 +189,7 @@ class Slide_ColorEffect(QWidget):
         self.cancelbutton.setFixedSize(80,30)
 
         self.sld.valueChanged.connect(self.setText)
+
         # 레이아웃
         mainlayout = QGridLayout()
 
@@ -209,16 +210,18 @@ class Slide_ColorEffect(QWidget):
 
     def buttonClicked(self):
         button = self.sender()
-        if button.text()=='ok':
+        if button.text() == 'ok':
             self.tool.save_alpha = self.currentsize
+            self.tool.ChangedRGBA(self.tool.save_red, self.tool.save_green, self.tool.save_blue, self.tool.save_alpha)
             self.close()
-        elif button.text()=='cancel':
+        elif button.text() == 'cancel':
             self.close()
 
 
 
 if __name__ == '__main__':
     import sys
+
     app = QApplication(sys.argv)
-    ex = Slide_AddText()
+    ex = Slide_Thickness()
     sys.exit(app.exec_())
