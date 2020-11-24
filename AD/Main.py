@@ -79,22 +79,21 @@ class MyApp(QWidget):
         # 데이터파일 열기
         try:
             f = open('data.dat', 'rb')
-        except FileNotFoundError as e:
-            pass
-        # 데이터에 불러온 데이터 저장
-        try:
+            # 데이터에 불러온 데이터 저장
             totaldata = pickle.load(f)
             # 불러온 데이터에 현재 이름에 대한 정보가 있으면,
             if name in totaldata:
-                self.data=totaldata[name] #데이터를 덮어씌우기
+                self.data = totaldata[name]  # 데이터를 덮어씌우기
             # 없으면,
             else:
-                totaldata[name]=self.data # 사전에 새로운 이름에 대한 정보 추가,
+                totaldata[name] = self.data  # 사전에 새로운 이름에 대한 정보 추가,
             # 그리고 변수에 이 데이터를 저장
-            self.totaldata=totaldata
-        except:
+            self.totaldata = totaldata
+            f.close()
+
+        except FileNotFoundError as e:
             pass
-        f.close()
+
 
     # 데이터 저장
     def dataSave(self):
