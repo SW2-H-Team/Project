@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+
 
 from Button import Button
 from Slide import *
@@ -17,11 +19,6 @@ class ToolUI(QWidget):
         self.save_brush_size = 5
         self.save_line_size = 5
         self.save_brush_mode = Qt.SolidLine
-        self.save_red = 0
-        self.save_blue = 0
-        self.save_green = 0
-        self.save_alpha = 255
-        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
         self.save_point = 5
 
         self.tool()
@@ -79,8 +76,11 @@ class ToolUI(QWidget):
 
     # canvas로 전달
     def comboBoxFunction(self):
-        self.save_brush_color = self.status.save_brush_color[self.status.cb.currentText()]
-        self.ChangedColor(self.save_brush_color)
+        self.status.a = self.status.current_brush_color[self.status.cb.currentText()][0]
+        self.status.b = self.status.current_brush_color[self.status.cb.currentText()][1]
+        self.status.c = self.status.current_brush_color[self.status.cb.currentText()][2]
+        self.current_brush_color = QColor(self.status.a, self.status.b, self.status.c)
+        self.ChangedColor(self.current_brush_color)
 
 
     # ------------------------------------------------------------------------ #
@@ -156,6 +156,13 @@ class ToolUI(QWidget):
         button = self.sender()
         key = button.text()
 
+<<<<<<< HEAD
+
+
+
+
+=======
+>>>>>>> 625c7a117911d74d6a01223e2494f191b876b406
         if key == '그리기':
             # 한번에 한 버튼만 눌리게.
             if not self.tools[0].isChecked():
@@ -203,6 +210,12 @@ class ToolUI(QWidget):
             self.ChangedText()
 
 
+<<<<<<< HEAD
+
+
+
+=======
+>>>>>>> 625c7a117911d74d6a01223e2494f191b876b406
 
     # 굵기 정하는 창 띄워주는 함수
     def setThickness(self):
@@ -243,4 +256,4 @@ class ToolUI(QWidget):
 
     # 색효과 기능 실행을 위한 함수
     def ColorEffect(self):
-        self.sld = Slide_ColorEffect(self)
+        self.sld = Slide_ColorEffect(self, self.status)

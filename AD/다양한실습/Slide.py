@@ -160,12 +160,19 @@ class Slide_ChangedText(QWidget):
 
 
 class Slide_ColorEffect(QWidget):
-    def __init__(self, tool):
+    def __init__(self, tool, status):
         super().__init__()
         self.title='색효과'
         self.tool = tool
-
-        self.currentsize = self.tool.save_alpha
+        self.status = status
+        #RGB값 저장
+        self.save_red = self.status.a
+        self.save_blue = self.status.b
+        self.save_green = self.status.c
+        self.save_alpha = 255
+        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+        #
+        self.currentsize = self.save_alpha
 
         self.initUI()
 
@@ -212,8 +219,14 @@ class Slide_ColorEffect(QWidget):
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='ok':
+<<<<<<< HEAD
+            self.save_alpha = self.currentsize
+            self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+            self.tool.ChangedColor(self.save_brush_color)
+=======
             self.tool.save_alpha = self.currentsize
             self.tool.ChangedRGBA(self.tool.save_red, self.tool.save_green, self.tool.save_blue, self.tool.save_alpha)
+>>>>>>> 625c7a117911d74d6a01223e2494f191b876b406
             self.close()
         elif button.text()=='cancel':
             self.close()
