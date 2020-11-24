@@ -12,9 +12,8 @@ class OddOrEven(QWidget):
         super().__init__()
         self.status=status
 
-        self.charge=0
-
-        self.history=''
+        self.charge=self.status.data['ore'][0]
+        self.history =self.status.data['ore'][1]
 
         self.setUI()
 

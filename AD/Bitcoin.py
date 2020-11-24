@@ -11,33 +11,36 @@ from matplotlib.figure import Figure
 import matplotlib.animation as animation
 
 class Bitcoin(QWidget):
-    def __init__(self,name,status):
+    def __init__(self,name,status,holding=0,x=[0],y=[np.random.randint(6000, 12000)],investmentamount=0):
         super().__init__()
+
+        self.setFixedSize(680,200)
         self.status=status
 
-        self.x = [0]
-        self.y = [np.random.randint(6000, 12000)]
+        self.x = x
+        self.y = y
         # 그래프 기울기
         self.economy = 0
         self.adjustment= 1
         self.gradient= 0.001
         self.subgradient = 0
 
+        # 그래프 시각화
         self.fig = Figure(figsize=(4.5, 2))
         self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
-
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
-
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
+        # 그래프 속성
         self.itemname = name        #종목이름
         self.price = self.y[-1] #매입가
-        self.holding=0          #보유량
+        self.holding=holding         #보유량
 
-        self.investmentamount = 0 # 총 투자금액
+        self.investmentamount = investmentamount # 총 투자금액
         self.presentvalue = self.price*self.holding # 현재 보유중인 코인의 가치
 
         self.setUI()
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=100)
+
 
     def setUI(self):
         mainlayout = QHBoxLayout()
@@ -63,6 +66,8 @@ class Bitcoin(QWidget):
 
         buyingbutton = Button('매수', self.buttonClicked)
         sellingbutton = Button('매도', self.buttonClicked)
+        buyingbutton.setFixedSize(120,30)
+        sellingbutton.setFixedSize(120,30)
         rightlayout.addWidget(buyingbutton,7,0)
         rightlayout.addWidget(sellingbutton,7,1)
 
@@ -187,7 +192,6 @@ class Bitcoin(QWidget):
             self.y = [self.y[-1]]
             self.ax.set_xlim(self.x[0],self.x[0]+60)
             self.setYLim()
-            self.ax.set_xlabel('{}: {}: {}:'.format(self.status.week,self.status.day,self.status.hour))
             self.ax.figure.canvas.draw()
         # 값 갱신
 
@@ -215,7 +219,7 @@ class Bitcoin(QWidget):
         self.gnllabel.setText('평가손익: {}'.format(int(0.92*self.presentvalue) - self.investmentamount))
 
         # 시간갱신
-        if self.itemname == 'HHHH':
+        if self.itemname == self.status.data['bitcoins'][0]['itemname']:
             self.status.timeUpdate()
 
         return [self.line]
@@ -240,14 +244,52 @@ class BitcoinMarket(QWidget):
         vbox = QVBoxLayout()
         bitcoins.setLayout(vbox) # 그룹박스에는 레이아웃을 넣어야함
 
-        #비트코인 생성
-        vbox.addWidget(Bitcoin('HHHH',self.status))
-        vbox.addWidget(Bitcoin('aaaa',self.status))
-        vbox.addWidget(Bitcoin('bbbb',self.status))
+        ## 비트코인 생성
+        self.bitcoins=[]
+        # 불러온 데이터의 정보를 그대로 사용
+        if self.status.data['bitcoins']:
+            for i in range(5):
+                self.bitcoinLoad(self.status,i,vbox)
+        # 새로운 데이터의 경우 비트코인을 새로 생성
+        else:
+            for i in range(5):
+                self.bitcoinGenerate(vbox)
 
         scrollarea.setWidget(bitcoins)
 
         mainlayout.addWidget(scrollarea)
+
+    # 비트코인 이름만들기
+    def setBitcoinName(self):
+        name = ''
+        for i in range(5):
+            random=np.random.randint(0,2)
+            if random==0: #대문자
+                name += chr(np.random.randint(65,91))
+            else:
+                name += chr(np.random.randint(97,123))
+        return name
+
+    # 비트코인 불러오기
+    def bitcoinLoad(self,status,index,layout):
+        name = self.status.data['bitcoins'][index]['itemname']
+        holding = self.status.data['bitcoins'][index]['holding']
+        x= self.status.data['bitcoins'][index]['x']
+        y= self.status.data['bitcoins'][index]['y']
+        investmentamount=self.status.data['bitcoins'][index]['investmentamount']
+        oldbitcoin = Bitcoin(name,status,holding,x,y,investmentamount)
+        layout.addWidget(oldbitcoin)
+        self.bitcoins.append(oldbitcoin)
+
+    # 비트코인 생성
+    def bitcoinGenerate(self,layout):
+        name = self.setBitcoinName() #비트코인 이름을 만들고,
+        newbitcoin = Bitcoin(name,self.status) #그 이름을 갖고 비트코인을 생성한다음,
+        layout.addWidget(newbitcoin) # 생선한 비트코인을 비트코인 마켓에 추가한다.
+        self.status.data['bitcoins'].append({
+            'itemname':name,'holding':0,'x':[0],'y':newbitcoin.y,'investmentamount':0}) # 메인의 데이터에 이 비트코인 정보를 저장한다.
+        self.bitcoins.append(newbitcoin)  # 마지막으로 메인의 데이터에 이 비트코인 정보를 추가한다.
+
 
 if __name__ == '__main__':
     import sys

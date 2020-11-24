@@ -1,4 +1,4 @@
-import sys
+import pickle
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -42,46 +42,81 @@ class LoginWindow(QWidget):
                 QMessageBox.warning(self, '경고!', '뭐라도 입력하세요.', QMessageBox.Ok)
             # 입력되면,
             else:
-                self.name = self.nameinput.text()
-                # 데이터 불러오기
-
-
+                # 현재 입력창의 텍스트를 이름으로 설정,
+                name = self.nameinput.text()
                 # 게임 실행
                 self.close() #로그인 창은 끄고,
-                ex = MyApp(self)
+                ex = MyApp(name)
 
 class MyApp(QWidget):
-    def __init__(self,main):
+    def __init__(self,name):
         super().__init__()
 
-        self.playername=main.name
-        # 빚
-        self.debt=200000000
-        # 돈
-        self.money=1000000
-        # 시간
-        self.minute=0
-        self.hour=0
-        self.day=0
-        self.week=0
-        ## painter 관련
-        # 보유한 색깔
-        self.colors=[]
-        ## bitcoin관련
-        # 그래프 현황
-        self.graphx=[]
-        self.graphy=[]
-        ## 홀짝게임 현황
-        self.charge =[]
-        self.history=[]
-        ##
+        self.totaldata={}
+        self.data={'playername':name,'time':[0,0,0,0],'money':1000000,'debt':200000000,'history':'',
+                   'bitcoins':[],'ore':[0,'']}
 
-	## RGB값
-        self.current_brush_color = {"Black": (0, 0 ,0)}
+        self.dataLoad(name)
+
+        self.playername=self.data['playername']
+        # 빚
+        self.debt=self.data['debt']
+        # 돈
+        self.money=self.data['money']
+        # 시간
+        self.time = self.data['time']
+
+	    ## RGB값
+        self.current_brush_color = {"Black": (0, 0, 0)}
         self.a = 0
         self.b = 0
         self.c = 0
+
         self.initUI()
+
+    # 시작시 데이터 불러오기
+    def dataLoad(self,name):
+        # 데이터파일 열기
+        try:
+            f = open('data.dat', 'rb')
+        except FileNotFoundError as e:
+            pass
+        # 데이터에 불러온 데이터 저장
+        try:
+            totaldata = pickle.load(f)
+            # 불러온 데이터에 현재 이름에 대한 정보가 있으면,
+            if name in totaldata:
+                self.data=totaldata[name] #데이터를 덮어씌우기
+            # 없으면,
+            else:
+                totaldata[name]=self.data # 사전에 새로운 이름에 대한 정보 추가,
+            # 그리고 변수에 이 데이터를 저장
+            self.totaldata=totaldata
+        except:
+            pass
+        f.close()
+
+    # 데이터 저장
+    def dataSave(self):
+        #
+        self.data['time']=self.time
+        self.data['money']=self.money
+        self.data['debt']=self.debt
+        self.data['history']=self.history.toPlainText()
+        #비트코인의 이름, 보유량, x,y 를 저장
+        for i in range(5):
+            self.data['bitcoins'][i]['holding']=self.getmoneytab.tab1.bitcoins[i].holding
+            self.data['bitcoins'][i]['x']=self.getmoneytab.tab1.bitcoins[i].x
+            self.data['bitcoins'][i]['y']=self.getmoneytab.tab1.bitcoins[i].y
+            self.data['bitcoins'][i]['investmentamount']=self.getmoneytab.tab1.bitcoins[i].investmentamount
+        self.data['ore']=[self.getmoneytab.tab2.charge,self.getmoneytab.tab2.history]
+
+        self.totaldata[self.playername]=self.data
+        #
+        f = open('data.dat', 'wb')
+        pickle.dump(self.totaldata, f)
+        f.close()
+
 
     # 메인 UI
     def initUI(self):
@@ -113,7 +148,7 @@ class MyApp(QWidget):
 
         self.namelabel = QLabel('이름: {}'.format(self.playername))
         self.moneylabel = QLabel('Money: {}'.format(self.money))
-        self.timelabel = QLabel('시간 경과: {}m'.format(self.minute))
+        self.timelabel = QLabel('시간 경과: {}m'.format(self.time[3]))
 
         statuslayout.addWidget(Button('save data', self.buttonClicked))
         statuslayout.addStretch()
@@ -128,6 +163,7 @@ class MyApp(QWidget):
 
         self.historylabel = QLabel('가계부\t\t남은 빚: {}'.format(self.debt))
         self.history = QTextEdit()
+        self.history.setText(self.data['history'])
         self.history.setReadOnly(True)
         self.history.setFixedWidth(200)
 
@@ -151,7 +187,7 @@ class MyApp(QWidget):
         historyold = self.history.toPlainText()
         self.history.setTextColor(QColor(255,0,0))# 현재의 기록은 강조하여 표시
         text = text.split('\n')
-        text = text[0]+' ({}:{}:{}:{})\n'.format(self.week,self.day,self.hour,self.minute) +text[1]
+        text = text[0]+' ({}:{}:{}:{})\n'.format(self.time[0],self.time[1],self.time[2],self.time[3])+text[1]
         self.history.setText(text)
         self.history.append('= '+str(self.money))
         self.history.append('--------------------------------------')
@@ -160,21 +196,21 @@ class MyApp(QWidget):
 
     # 시간의 경과 표시
     def timeUpdate(self):
-        self.minute += 1
-        if self.minute ==60:
+        self.time[3] +=1 # 분
+        if self.time[3] ==60: #60분 >1시간
             self.getmoneytab.tab2.getNumber() # 1시간마다 홀짝게임 결과 발표
-            self.hour +=1
-            self.minute =0
-        if self.hour ==24:
-            self.day +=1
-            self.hour =0
-        if self.day ==7:
-            self.week+=1
-            self.day =0
+            self.time[2]+=1
+            self.time[3]=0
+        if self.time[2] ==24: #24시간 > 1일
+            self.time[1]+=1
+            self.time[2]=0
+        if self.time[1] ==7: # 7일 >1주
+            self.time[0]+=1
+            self.time[1]=0
             if self.debt: # 일주일마다 채무 상환
                 self.payBack()
 
-        self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.week,self.day,self.hour,self.minute))
+        self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
 
     # 채무 상환
     def payBack(self):
@@ -200,12 +236,15 @@ class MyApp(QWidget):
     def buttonClicked(self):
         button = self.sender()
 
-        self.money += 1000
-        print(self.money)
+        if button.text()=='save data':
+            self.dataSave()
+            self.money += 1000
+            print(self.money)
 
-        self.moneylabel.setText('Money: {}'.format(self.money))
+            self.moneylabel.setText('Money: {}'.format(self.money))
 
 if __name__ == '__main__':
+    import sys
     app = QApplication(sys.argv)
 
     ex = LoginWindow()
