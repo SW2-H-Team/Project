@@ -32,6 +32,7 @@ class Canvas(QMainWindow):
         self.brush_size = 5
         self.brush_mode = Qt.SolidLine
 
+
         self.string = 'you and me'
         self.stringFont = 'DejaVu Sans Mono'
         self.stringFontSize = 18
@@ -45,8 +46,6 @@ class Canvas(QMainWindow):
         self.past_point = None
         self.present_point = None
 
-        # 그리기 모드에서 활용할 point
-        self.last_point = QPoint()
 
         self.initUI()
 
@@ -60,7 +59,7 @@ class Canvas(QMainWindow):
 
     def paintEvent(self, e):
         canvas = QPainter(self)
-        canvas.drawPixmap(self.rect(), self.image)
+        canvas.drawPixmap(self.rect(), self.image, self.rect())
         if self.drawingPath:
             canvas.setPen(QPen(self.brush_color, self.brush_size, self.brush_mode, Qt.RoundCap))
             canvas.drawPath(self.drawingPath)
