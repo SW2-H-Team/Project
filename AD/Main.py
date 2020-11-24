@@ -77,7 +77,10 @@ class MyApp(QWidget):
         ##
 
 	## RGB값
-        self.save_brush_color = {"Black": QColor(0, 0 ,0)}
+        self.current_brush_color = {"Black": (0, 0 ,0)}
+        self.a = 0
+        self.b = 0
+        self.c = 0
         self.initUI()
 
     # 메인 UI

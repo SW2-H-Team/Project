@@ -67,9 +67,9 @@ class Store(QWidget):
         colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton,
                            "Green": self.greenButton, "Orange": self.orangeButton, "Purple": self.purpleButton,
                            "Brown": self.brownButton, "Cyan": self.cyanButton}
-        RGBNumber_dic = {"Red": QColor(255, 0, 0), "Yellow": QColor(255, 228, 0), "Blue": QColor(0, 0, 255),
-                           "Green": QColor(0, 255, 0), "Orange": QColor(255, 94, 0), "Purple": QColor(217, 65, 197),
-                           "Brown": QColor(165, 42, 42), "Cyan": QColor(0, 255, 255)}
+        RGBNumber_dic = {"Red": (255, 0, 0), "Yellow": (255, 228, 0), "Blue": (0, 0, 255),
+                           "Green": (0, 255, 0), "Orange": (255, 94, 0), "Purple": (217, 65, 197),
+                           "Brown": (165, 42, 42), "Cyan": (0, 255, 255)}
         if key in colorButton_list:
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?\n10,000,000원",
                                          QMessageBox.No | QMessageBox.Yes)
@@ -80,7 +80,7 @@ class Store(QWidget):
                     colorButton_dic[key].setStyleSheet('background:%s' %key)
                     colorButton_dic[key].setEnabled(False)
                     self.status.moneyUpdate(-1000, "{}구입\n{} - 10000000".format(key, self.status.money))
-                    self.status.save_brush_color["{}".format(key)] = RGBNumber_dic[key]
+                    self.status.current_brush_color["{}".format(key)] = RGBNumber_dic[key]
                     self.status.cb.addItem("{}".format(key))
                     print("Success")
             else:
