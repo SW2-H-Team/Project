@@ -215,7 +215,7 @@ class ToolUI(QWidget):
         elif key == '선굵기':
             self.setThickness()
 
-        elif key == '투명':
+        elif key == '투명도':
             self.ColorEffect()
 
         elif key == '텍스트':
