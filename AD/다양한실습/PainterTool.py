@@ -129,6 +129,17 @@ class ToolUI(QWidget):
     def ChangedSize(self, size):
         self.canvas.brush_size = size
 
+    def ChangedRGBA(self, r, g, b, a):
+        self.save_red = r
+        self.save_green = g
+        self.save_blue = b
+        self.save_alpha = a
+        self.ChangedColor(self.MakeColor())
+
+    def MakeColor(self):
+        self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
+        return self.save_brush_color
+
     def ChangedValue(self, color, size):
         self.ChangedColor(color)
         self.ChangedSize(size)
@@ -144,11 +155,6 @@ class ToolUI(QWidget):
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
-
-
-        if (self.save_red or self.save_blue or self.save_green or self.save_alpha) > -1:
-            self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
-
 
         if key == '그리기':
             # 한번에 한 버튼만 눌리게.
@@ -195,10 +201,6 @@ class ToolUI(QWidget):
         elif key == '텍스트':
             self.canvas.save_drawingType = 'text'
             self.ChangedText()
-
-
-        if (self.save_red or self.save_blue or self.save_green or self.save_alpha) > -1:
-            self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
 
 
 
