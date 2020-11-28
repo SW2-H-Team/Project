@@ -54,7 +54,7 @@ class Bitcoin(QWidget):
         leftlayout.addWidget(self.canvas)
 
         self.pricelabel = QLabel('매입가: {:,}'.format(self.price))
-        self.holdinglabel = QLabel('보유량: {}'.format(self.holding))
+        self.holdinglabel = QLabel('보유량: {:,}'.format(self.holding))
         self.presentvaluelabel = QLabel('코인 현재가치: {:,}'.format(self.presentvalue))
         self.gnllabel = QLabel('평가손익: {:,}'.format(self.presentvalue - self.investmentamount))
 
@@ -87,7 +87,7 @@ class Bitcoin(QWidget):
                     self.holding+=buying
                     self.investmentamount+=investment
                     # 보유금액에서 차감
-                    text= '{} {}개 매수\n잔고: {:,} - {:,}'.format(self.itemname,buying,self.status.money,investment)
+                    text= '{} {:,}개 매수\n잔고: {:,} - {:,}'.format(self.itemname,buying,self.status.money,investment)
                     self.status.moneyUpdate(-1*self.price*buying,text)
 
 
@@ -97,17 +97,17 @@ class Bitcoin(QWidget):
 
             if ok:
                 if not 0<selling <=self.holding: #예외처리
-                    QMessageBox.warning(self, '경고!', '{}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
+                    QMessageBox.warning(self, '경고!', '{:,}이하의 자연수를 입해주세요.'.format(self.holding), QMessageBox.Ok)
                 else:
                     self.holding -= selling
                     self.investmentamount -= self.price * selling
                     # 보유금액에 증가
-                    text = '{} {}개 매도\n잔고: {:,} + {:,}'.format(self.itemname, selling, self.status.money, self.price*selling)
+                    text = '{} {:,}개 매도\n잔고: {:,} + {:,}'.format(self.itemname, selling, self.status.money, self.price*selling)
                     self.status.moneyUpdate(int(self.price*selling*0.92),text)
             if not self.holding:
                 self.investmentamount=0
 
-        self.holdinglabel.setText('보유량: {}'.format(self.holding))
+        self.holdinglabel.setText('보유량: {:,}'.format(self.holding))
     # 그래프 기울기 관리
     def changeEconomy(self):
         random = np.random.randint(1,1001)
