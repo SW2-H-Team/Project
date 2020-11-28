@@ -80,7 +80,7 @@ class OddOrEven(QWidget):
 
     def chargeUpdate(self,amount):
         self.charge+=amount
-        self.chargelabel.setText(str(self.charge))
+        self.chargelabel.setText('{:,}'.format(self.charge))
 
     # 한 시간마다 결과나옴.
     def getNumber(self):
@@ -94,24 +94,24 @@ class OddOrEven(QWidget):
         if self.oddbutton.isChecked() or self.evenbutton.isChecked():
             if number==1:
                 if self.oddbutton.isChecked():
-                    self.statusUpdate('성공! {}원 획득! '.format(int(1.9 * self.charge)))
+                    self.statusUpdate('성공! {:,}원 획득! '.format(int(1.9 * self.charge)))
                     self.chargeUpdate(int(0.9*self.charge))
                     self.oddbutton.toggle()
                 else:
-                    self.statusUpdate('실패! {}원 증발'.format(self.charge))
+                    self.statusUpdate('실패! {:,}원 증발'.format(self.charge))
                     self.chargeUpdate(-self.charge)
                     self.evenbutton.toggle()
                     #파산체크
                     self.status.checkDefeated()
             elif number==2:
                 if self.oddbutton.isChecked():
-                    self.statusUpdate('실패! {}원 증발'.format(self.charge))
+                    self.statusUpdate('실패! {:,}원 증발'.format(self.charge))
                     self.chargeUpdate(-self.charge)
                     self.oddbutton.toggle()
                     #파산체
                     self.status.checkDefeated()
                 else:
-                    self.statusUpdate('성공! {}원 획득! '.format(int(1.9 * self.charge)))
+                    self.statusUpdate('성공! {:,}원 획득! '.format(int(1.9 * self.charge)))
                     self.chargeUpdate(int(0.9*self.charge))
                     self.evenbutton.toggle()
         # 어떤 버튼도 선택되지 않을 때,
@@ -131,7 +131,7 @@ class OddOrEven(QWidget):
         button= self.sender()
         # 충전 버튼
         if button.text()=='충전하기' :
-            charge, ok = QInputDialog.getInt(self, '충전하기', '충전할 금액을 입력하세요.\n충전가능금액: {}'
+            charge, ok = QInputDialog.getInt(self, '충전하기', '충전할 금액을 입력하세요.\n충전가능금액: {:,}'
                                              .format(self.status.money))
             # ok 버튼을 누르면,
             if ok:
@@ -143,7 +143,7 @@ class OddOrEven(QWidget):
                 # 정상작동
                 else:
                     self.chargeUpdate(charge)
-                    text= '홀짝게임에 충전\n잔고: {} - {}'.format(self.status.money,charge)
+                    text= '홀짝게임에 충전\n잔고: {:,} - {:,}'.format(self.status.money,charge)
                     self.status.moneyUpdate(-charge,text)
 
         elif button.text()=='출금하기' :
@@ -159,7 +159,7 @@ class OddOrEven(QWidget):
                 # 정상작동
                 else:
                     self.chargeUpdate(-withdrawl)
-                    text= '홀짝게임에서 출금\n잔고: {} + {}'.format(self.status.money,int(0.9*withdrawl))
+                    text= '홀짝게임에서 출금\n잔고: {:,} + {:,}'.format(self.status.money,int(0.9*withdrawl))
                     self.status.moneyUpdate(int(0.9*withdrawl),text)
 
         # 홀 선택

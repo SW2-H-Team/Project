@@ -81,7 +81,7 @@ class Store(QWidget):
                 else:
                     colorButton_dic[key].setStyleSheet('background:%s' %key)
                     colorButton_dic[key].setEnabled(False)
-                    self.status.moneyUpdate(-self.color_price, "{}구입\n{} - {:,}".format(key, self.status.money, self.color_price))
+                    self.status.moneyUpdate(-self.color_price, "{}구입\n{:,} - {:,}".format(key, self.status.money, self.color_price))
                     self.status.current_brush_color["{}".format(key)] = RGBNumber_dic[key]
                     self.status.cb.addItem("{}".format(key))
                     self.moneyChange()

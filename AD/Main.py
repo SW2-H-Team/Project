@@ -115,9 +115,6 @@ class MyApp(QWidget):
 
 	    ## RGB값
         self.current_brush_color = self.data['brushcolors']
-        self.a = 0
-        self.b = 0
-        self.c = 0
 
         self.initUI()
 
@@ -198,21 +195,20 @@ class MyApp(QWidget):
 
 
         self.namelabel = QLabel('이름: {}'.format(self.playername))
-        self.moneylabel = QLabel('Money: {}'.format(self.money))
+        self.moneylabel = QLabel('Money: {:,}'.format(self.money))
         self.timelabel = QLabel('시간 경과: {}m'.format(self.time[3]))
+        self.timelabel.setFixedWidth(300)
 
         statuslayout.addWidget(Button('save data', self.buttonClicked))
-        statuslayout.addStretch()
+        statuslayout.addStretch(1)
         statuslayout.addWidget(self.namelabel)
-        statuslayout.addStretch()
+        statuslayout.addStretch(1)
         statuslayout.addWidget(self.moneylabel)
-        statuslayout.addStretch()
+        statuslayout.addStretch(1)
         statuslayout.addWidget(self.timelabel)
 
         # 가계부
-
-
-        self.historylabel = QLabel('가계부\t\t남은 빚: {}'.format(self.debt))
+        self.historylabel = QLabel('가계부\t\t남은 빚: {:,}'.format(self.debt))
         self.history = QTextEdit()
         self.history.setText(self.data['history'])
         self.history.setReadOnly(True)
@@ -232,7 +228,7 @@ class MyApp(QWidget):
     def moneyUpdate(self,money,text):
         # 지출/수입 반영
         self.money += money
-        self.moneylabel.setText('Money: {}'.format(self.money))
+        self.moneylabel.setText('Money: {:,}'.format(self.money))
 
         # 최고보유금액갱신
         self.peakofmoneyUpdate()
@@ -246,7 +242,7 @@ class MyApp(QWidget):
         text = text.split('\n')
         text = text[0] + ' ({}:{}:{}:{})\n'.format(self.time[0], self.time[1], self.time[2], self.time[3]) + text[1]
         self.history.setText(text)
-        self.history.append('= ' + str(self.money)) #결과금액 표시
+        self.history.append('= {:,}'.format(self.money)) #결과금액 표시
         self.history.append('--------------------------------------') #분리선
         self.history.setTextColor(QColor(0, 0, 0))
         self.history.append(historyold)
@@ -280,7 +276,7 @@ class MyApp(QWidget):
         self.debt -= 1000000
         self.historylabel.setText('가계부\t\t남은 빚: {}'.format(self.debt))
         if self.money >= 1000000:
-            text = '채무 상환\n잔고: {} - {}'.format(self.money, 1000000)
+            text = '채무 상환\n잔고: {:,} - {:,}'.format(self.money, 1000000)
             self.moneyUpdate(-1000000,text)
         else:
             # @@ 도구,색깔 있는지 판별
@@ -307,9 +303,18 @@ class MyApp(QWidget):
                         return False
                 return True
 
-    # 승리체크
-    def victory(self):
-        pass
+    # 업적달성
+    def achievement(self):
+        if self.money>=10^8: #1억
+            pass
+        elif self.money >= 10^10: #100억
+            pass
+        elif self.money >= 10^12: #1조
+            pass
+        elif self.money >= 10^16: #1경
+            pass
+        elif self.money >= 10^20: #1해
+            pass
 
     ###################################################
     def buttonClicked(self):

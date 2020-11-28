@@ -30,7 +30,7 @@ class Bitcoin(QWidget):
         self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=100)
         # 그래프 속성
         self.itemname = name        #종목이름
         self.price = self.y[-1] #매입가
@@ -53,10 +53,10 @@ class Bitcoin(QWidget):
 
         leftlayout.addWidget(self.canvas)
 
-        self.pricelabel = QLabel('매입가: {}'.format(self.price))
+        self.pricelabel = QLabel('매입가: {:,}'.format(self.price))
         self.holdinglabel = QLabel('보유량: {}'.format(self.holding))
-        self.presentvaluelabel = QLabel('코인 현재가치: {}'.format(self.presentvalue))
-        self.gnllabel = QLabel('평가손익: {}'.format(self.presentvalue - self.investmentamount))
+        self.presentvaluelabel = QLabel('코인 현재가치: {:,}'.format(self.presentvalue))
+        self.gnllabel = QLabel('평가손익: {:,}'.format(self.presentvalue - self.investmentamount))
 
         rightlayout.addWidget(QLabel(self.itemname), 0, 0)
         rightlayout.addWidget(self.pricelabel,1,0)
@@ -87,7 +87,7 @@ class Bitcoin(QWidget):
                     self.holding+=buying
                     self.investmentamount+=investment
                     # 보유금액에서 차감
-                    text= '{} {}개 매수\n잔고: {} - {}'.format(self.itemname,buying,self.status.money,investment)
+                    text= '{} {}개 매수\n잔고: {:,} - {:,}'.format(self.itemname,buying,self.status.money,investment)
                     self.status.moneyUpdate(-1*self.price*buying,text)
 
 
@@ -102,7 +102,7 @@ class Bitcoin(QWidget):
                     self.holding -= selling
                     self.investmentamount -= self.price * selling
                     # 보유금액에 증가
-                    text = '{} {}개 매도\n잔고: {} + {}'.format(self.itemname, selling, self.status.money, self.price*selling)
+                    text = '{} {}개 매도\n잔고: {:,} + {:,}'.format(self.itemname, selling, self.status.money, self.price*selling)
                     self.status.moneyUpdate(int(self.price*selling*0.92),text)
             if not self.holding:
                 self.investmentamount=0
@@ -214,9 +214,9 @@ class Bitcoin(QWidget):
         self.price = self.y[-1]
         self.presentvalue = self.price * self.holding
 
-        self.pricelabel.setText('매입가: {}'.format(self.price))
-        self.presentvaluelabel.setText('현재가치: {}'.format(self.presentvalue))
-        self.gnllabel.setText('평가손익: {}'.format(int(0.92*self.presentvalue) - self.investmentamount))
+        self.pricelabel.setText('매입가: {:,}'.format(self.price))
+        self.presentvaluelabel.setText('현재가치: {:,}'.format(self.presentvalue))
+        self.gnllabel.setText('평가손익: {:,}'.format(int(0.92*self.presentvalue) - self.investmentamount))
 
         # 시간갱신
         if self.itemname == self.status.data['bitcoins'][0]['itemname']:
