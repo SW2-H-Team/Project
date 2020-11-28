@@ -9,10 +9,10 @@ from Store import Store
 from GetMoney import GetMoney
 from Button import Button
 
+# 로그인 화면
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.name=''
 
         self.setUI()
 
@@ -48,16 +48,61 @@ class LoginWindow(QWidget):
                 self.close() #로그인 창은 끄고,
                 ex = MyApp(name)
 
+# 패배 화면
+class DefeatWindow(QWidget):
+    def __init__(self,status):
+        super().__init__()
+
+        self.name=status.playername
+        self.time=status.time
+        self.peakofmoney=status.peakofmoney
+
+        self.setUI()
+
+    def setUI(self):
+        mainlayout=QVBoxLayout()
+        recordlayout=QVBoxLayout()
+        retrylayout=QVBoxLayout()
+
+        namelabel=QLabel('이름: '+self.name)
+        timelabel=QLabel('생존시간: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
+        peakofmoneylabel=QLabel('최고 보유금액: '+str(self.peakofmoney))
+
+        recordlayout.addWidget(namelabel)
+        recordlayout.addWidget(timelabel)
+        recordlayout.addWidget(peakofmoneylabel)
+
+        defeatlabel = QLabel('파산했습니다. 다시하시겠습니까?')
+        retrybutton=Button('다시하기',self.buttonClicked)
+        retrybutton.setFixedSize(200,40)
+
+        retrylayout.addStretch()
+        retrylayout.addWidget(defeatlabel)
+        retrylayout.addWidget(retrybutton)
+
+        self.setLayout(mainlayout)
+        mainlayout.addLayout(recordlayout)
+        mainlayout.addLayout(retrylayout)
+        self.setGeometry(200, 120, 900, 600)
+        self.show()
+
+    def buttonClicked(self):
+        button=self.sender()
+        if button.text()=='다시하기':
+            self.close()
+            self.ex = LoginWindow()
+
+# 게임화면
 class MyApp(QWidget):
     def __init__(self,name):
         super().__init__()
-
+        # 데이터초기화
         self.totaldata={}
-        self.data={'playername':name,'time':[0,0,0,0],'money':1000000,'debt':200000000,'history':'',
-                   'bitcoins':[],'ore':[0,'']}
+        self.data={'playername':name,'time':[0,0,0,0],'pom':1000000,'money':1000000,'debt':200000000,'history':'',
+                   'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)}}
 
         self.dataLoad(name)
-
+        # 사용자이름
         self.playername=self.data['playername']
         # 빚
         self.debt=self.data['debt']
@@ -65,9 +110,11 @@ class MyApp(QWidget):
         self.money=self.data['money']
         # 시간
         self.time = self.data['time']
+        # 보유금액 최고기록
+        self.peakofmoney=self.data['pom']
 
 	    ## RGB값
-        self.current_brush_color = {"Black": (0, 0, 0)}
+        self.current_brush_color = self.data['brushcolors']
         self.a = 0
         self.b = 0
         self.c = 0
@@ -80,25 +127,28 @@ class MyApp(QWidget):
         try:
             f = open('data.dat', 'rb')
             # 데이터에 불러온 데이터 저장
-            totaldata = pickle.load(f)
-            # 불러온 데이터에 현재 이름에 대한 정보가 있으면,
-            if name in totaldata:
-                self.data = totaldata[name]  # 데이터를 덮어씌우기
-            # 없으면,
-            else:
-                totaldata[name] = self.data  # 사전에 새로운 이름에 대한 정보 추가,
-            # 그리고 변수에 이 데이터를 저장
-            self.totaldata = totaldata
+            try:
+                totaldata = pickle.load(f)
+                # 불러온 데이터에 현재 이름에 대한 정보가 있으면,
+                if name in totaldata:
+                    self.data = totaldata[name]  # 데이터를 덮어씌우기
+                # 없으면,
+                else:
+                    totaldata[name] = self.data  # 사전에 새로운 이름에 대한 정보 추가,
+                # 그리고 변수에 이 데이터를 저장
+                self.totaldata = totaldata
+            except:
+                pass
             f.close()
 
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             pass
-
 
     # 데이터 저장
     def dataSave(self):
         #
         self.data['time']=self.time
+        self.data['pom']=self.peakofmoney
         self.data['money']=self.money
         self.data['debt']=self.debt
         self.data['history']=self.history.toPlainText()
@@ -109,6 +159,8 @@ class MyApp(QWidget):
             self.data['bitcoins'][i]['y']=self.getmoneytab.tab1.bitcoins[i].y
             self.data['bitcoins'][i]['investmentamount']=self.getmoneytab.tab1.bitcoins[i].investmentamount
         self.data['ore']=[self.getmoneytab.tab2.charge,self.getmoneytab.tab2.history]
+
+        self.data['brushcolors']=self.current_brush_color
 
         self.totaldata[self.playername]=self.data
         #
@@ -182,16 +234,27 @@ class MyApp(QWidget):
         self.money += money
         self.moneylabel.setText('Money: {}'.format(self.money))
 
+        # 최고보유금액갱신
+        self.peakofmoneyUpdate()
         # 가계부에 내용을 적습니다.
-        historyold = self.history.toPlainText()
-        self.history.setTextColor(QColor(255,0,0))# 현재의 기록은 강조하여 표시
+        self.historyUpdate(text)
+
+    # 가계부 갱신
+    def historyUpdate(self,text):
+        historyold = self.history.toPlainText()     #우선 현재의 가계부기록을 가져오고,
+        self.history.setTextColor(QColor(255, 0, 0))  # 현재의 기록은 강조하여 표시
         text = text.split('\n')
-        text = text[0]+' ({}:{}:{}:{})\n'.format(self.time[0],self.time[1],self.time[2],self.time[3])+text[1]
+        text = text[0] + ' ({}:{}:{}:{})\n'.format(self.time[0], self.time[1], self.time[2], self.time[3]) + text[1]
         self.history.setText(text)
-        self.history.append('= '+str(self.money))
-        self.history.append('--------------------------------------')
-        self.history.setTextColor(QColor(0,0,0))
+        self.history.append('= ' + str(self.money)) #결과금액 표시
+        self.history.append('--------------------------------------') #분리선
+        self.history.setTextColor(QColor(0, 0, 0))
         self.history.append(historyold)
+
+    # 최대 보유금액 갱신
+    def peakofmoneyUpdate(self):
+        if self.money > self.peakofmoney:
+            self.peakofmoney=self.money
 
     # 시간의 경과 표시
     def timeUpdate(self):
@@ -208,6 +271,7 @@ class MyApp(QWidget):
             self.time[1]=0
             if self.debt: # 일주일마다 채무 상환
                 self.payBack()
+                self.checkDefeated() #파산크
 
         self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
 
@@ -225,23 +289,40 @@ class MyApp(QWidget):
             self.moneyUpdate(-self.money,text)
                 # @@@ 없으면 게임오버
 
-    # 파산, 패배처
-    def bankruptcy(self):
-        if not self.colors and self.money==0:
-            return True
+    # 패배 체크
+    def checkDefeated(self):
+        if self.bankrupt():
+            for i in self.getmoneytab.tab1.bitcoins: # 시간이 흐르지않게 막아줌
+                i.ani._stop()
+            self.close() #현재화면을 끄고,
+            self.ex = DefeatWindow(self) #패배화면을 띄운다.
 
+    # 파산감지
+    def bankrupt(self):
+        # 현금, 비트코인 보유량, 홀짝게임충전금이 전부 없으면,(파산하면)
+        if self.money==0 :
+            if self.getmoneytab.tab2.charge==0:
+                for i in self.getmoneytab.tab1.bitcoins:
+                    if i.holding !=0:
+                        return False
+                return True
+
+    # 승리체크
+    def victory(self):
+        pass
 
     ###################################################
     def buttonClicked(self):
         button = self.sender()
 
         if button.text()=='save data':
-            self.dataSave()
-            self.money += 1000
-            print(self.money)
+            reply = QMessageBox.question(self, '저장하기', '지금까지의 데이터를 저장하시겠습니까?',
+                                         QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
 
-            self.moneylabel.setText('Money: {}'.format(self.money))
-
+            if reply == QMessageBox.Yes:
+                self.dataSave()
+                print('저장됨')
+############################################
 if __name__ == '__main__':
     import sys
     app = QApplication(sys.argv)
