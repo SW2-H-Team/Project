@@ -469,7 +469,7 @@ class MyApp(QWidget):
             if reply == QMessageBox.Yes:
                 self.dataSave()
                 print('저장됨')
-                
+
 ############################################
 if __name__ == '__main__':
     import sys
