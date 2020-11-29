@@ -22,12 +22,12 @@ class Painter(QWidget):
         self.setLayout(mainlayout)
 
         #캔버스
-        canvas = Canvas.Canvas(self.status)
-        canvaslayout.addWidget(canvas)
+        self.canvas = Canvas.Canvas(self.status)
+        canvaslayout.addWidget(self.canvas)
 
         ## 툴
         #도구
-        tools = PainterTool.ToolUI(canvas,self.status)
+        tools = PainterTool.ToolUI(self.canvas,self.status)
         toollayout.addWidget(tools)
 
 

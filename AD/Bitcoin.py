@@ -30,7 +30,7 @@ class Bitcoin(QWidget):
         self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=100)
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
         # 그래프 속성
         self.itemname = name        #종목이름
         self.price = self.y[-1] #매입가
@@ -104,6 +104,7 @@ class Bitcoin(QWidget):
                     # 보유금액에 증가
                     text = '{} {:,}개 매도\n잔고: {:,} + {:,}'.format(self.itemname, selling, self.status.money, self.price*selling)
                     self.status.moneyUpdate(int(self.price*selling*0.92),text)
+                    self.status.showAchievement()
             if not self.holding:
                 self.investmentamount=0
 

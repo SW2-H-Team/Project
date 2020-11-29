@@ -43,48 +43,58 @@ class Store(QWidget):
         self.cyanButton = Button("Cyan", self.buttonClicked)
         self.skyblueButton = Button("Skyblue", self.buttonClicked)
 
+        self.colorButton_list = ["Red", "Yellow", "Blue", "Green", "Orange", "Purple", "Brown", "Cyan", "Skyblue"]
+        self.colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton,
+                                "Green": self.greenButton, "Orange": self.orangeButton, "Purple": self.purpleButton,
+                                "Brown": self.brownButton, "Cyan": self.cyanButton, "Skyblue": self.skyblueButton}
+        self.RGBNumber_dic = {"Red": (255, 0, 0), "Yellow": (255, 228, 0), "Blue": (0, 0, 255),
+                              "Green": (0, 255, 0), "Orange": (255, 94, 0), "Purple": (217, 65, 197),
+                              "Brown": (165, 42, 42), "Cyan": (0, 255, 255), "Skyblue": (135, 206, 250)}
 
         button_list = [self.redButton, self.yellowButton, self.blueButton, self.greenButton,
                        self.orangeButton, self.purpleButton, self.brownButton, self.cyanButton,
                        self.skyblueButton]
 
-        #button 생성
-        r = 0; c = 0
+        # button 생성
+        r = 0;
+        c = 0
         for i in button_list:
             i.setStyleSheet('background:gray')
             tab.layout.addWidget(i, r, c)
             c += 1
             if c > 2:
-                r += 1; c = 0
-
-        tab.setLayout(tab.layout)
+                r += 1;
+                c = 0
 
         self.color_price = 10000
         self.count = 2
+        # 데이터 불러오기
+        for key in list(self.status.data['brushcolors'].keys()):
+            if key!='Black':
+                self.colorButton_dic[key].setStyleSheet('background:%s' % key)
+                self.colorButton_dic[key].setEnabled(False)
+                self.moneyChange()
+
+        tab.setLayout(tab.layout)
 
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
-        colorButton_list = ["Red", "Yellow", "Blue", "Green", "Orange", "Purple", "Brown", "Cyan", "Skyblue"]
-        colorButton_dic = {"Red": self.redButton, "Yellow": self.yellowButton, "Blue": self.blueButton,
-                           "Green": self.greenButton, "Orange": self.orangeButton, "Purple": self.purpleButton,
-                           "Brown": self.brownButton, "Cyan": self.cyanButton, "Skyblue": self.skyblueButton}
-        RGBNumber_dic = {"Red": (255, 0, 0), "Yellow": (255, 228, 0), "Blue": (0, 0, 255),
-                           "Green": (0, 255, 0), "Orange": (255, 94, 0), "Purple": (217, 65, 197),
-                           "Brown": (165, 42, 42), "Cyan": (0, 255, 255), "Skyblue": (135, 206, 250)}
-        if key in colorButton_list:
+
+        if key in self.colorButton_list:
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?\n{:,}".format(self.color_price),
                                          QMessageBox.No | QMessageBox.Yes)
             if reply == QMessageBox.Yes:
                 if self.status.money < self.color_price:
                     QMessageBox.warning(self, "경고", "잔액이 부족합니다.", QMessageBox.Ok)
                 else:
-                    colorButton_dic[key].setStyleSheet('background:%s' %key)
-                    colorButton_dic[key].setEnabled(False)
+                    self.colorButton_dic[key].setStyleSheet('background:%s' %key)
+                    self.colorButton_dic[key].setEnabled(False)
                     self.status.moneyUpdate(-self.color_price, "{}구입\n{:,} - {:,}".format(key, self.status.money, self.color_price))
-                    self.status.current_brush_color["{}".format(key)] = RGBNumber_dic[key]
+                    self.status.current_brush_color["{}".format(key)] = self.RGBNumber_dic[key]
                     self.status.cb.addItem("{}".format(key))
                     self.moneyChange()
+                    self.status.showAchievement() # 모든 색상을 구입했는지 감
             else:
                 pass
 

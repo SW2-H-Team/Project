@@ -30,7 +30,7 @@ class LoginWindow(QWidget):
         mainlayout.addWidget(self.nameinput,4,3,4,7)
         mainlayout.addWidget(inputbutton,5,4,5,6)
 
-        self.setGeometry(200, 120, 900, 600)
+        self.setGeometry(200, 120, 600, 400)
         self.show()
 
     def buttonClicked(self):
@@ -92,14 +92,82 @@ class DefeatWindow(QWidget):
             self.close()
             self.ex = LoginWindow()
 
+#업적달성창
+class AchievementWindow(QWidget):
+    def __init__(self,achievement,record,totalrecord):
+        super().__init__()
+
+        self.achievement=achievement
+        self.record=record
+        self.totalrecord=totalrecord
+
+        self.setUI()
+
+    def setUI(self):
+        #레이아웃
+        mainlayout=QVBoxLayout()
+        labellayout=QVBoxLayout()
+        recordlayout=QVBoxLayout()
+        buttonlayout=QHBoxLayout()
+
+        self.setLayout(mainlayout)
+        mainlayout.addLayout(labellayout)
+        mainlayout.addStretch()
+        mainlayout.addLayout(recordlayout)
+        mainlayout.addStretch()
+        mainlayout.addLayout(buttonlayout)
+
+        self.setGeometry(200, 120, 600, 400)
+        self.show()
+
+        #라벨
+        if str(self.achievement).isdecimal():
+            achievementlabel=QLabel('{:,}원 달성!'.format(self.achievement))
+        else:
+            achievementlabel = QLabel('All-Color 달성!')
+        labellayout.addWidget(achievementlabel)
+
+        #기록표시
+        myrecord=QLabel('당신의 기록 : {}:{}:{}:{}'.format(self.record[0],self.record[1],self.record[2],self.record[3]))
+        recordlabel1=QLabel('해당 업적 최단기간 달성 순위표')
+        recordlabel2=QLabel('순위  이름        기록')
+        self.records=QTextEdit()
+        self.records.isReadOnly()
+
+        self.showRank(self.totalrecord)
+
+        recordlayout.addWidget(myrecord)
+        recordlayout.addStretch()
+        recordlayout.addWidget(recordlabel1)
+        recordlayout.addWidget(recordlabel2)
+        recordlayout.addWidget(self.records)
+
+        #버튼
+        continuebutton=Button('계속하기',self.buttonClicked)
+
+        buttonlayout.addWidget(continuebutton)
+
+    def showRank(self,totalrecord):
+        records=totalrecord
+
+        for num,i in enumerate(records):
+            self.records.append('{}.\t{}\t\t{}:{}:{}:{}'.format(num+1,i[0],i[1][0],i[1][1],i[1][2],i[1][3]))
+
+
+    def buttonClicked(self):
+        button=self.sender()
+        if button.text()=='계속하기':
+            self.close()
+
 # 게임화면
 class MyApp(QWidget):
     def __init__(self,name):
         super().__init__()
         # 데이터초기화
         self.totaldata={}
-        self.data={'playername':name,'time':[0,0,0,0],'pom':1000000,'money':1000000,'debt':200000000,'history':'',
-                   'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)}}
+        self.data={'playername':name,'time':[0,0,0,0],'pom':1000000,'money':10000000000000000000000,'debt':200000000,'history':'',
+                   'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)},
+                   'already':[False,False,False,False,False,False]}
 
         self.dataLoad(name)
         # 사용자이름
@@ -113,8 +181,17 @@ class MyApp(QWidget):
         # 보유금액 최고기록
         self.peakofmoney=self.data['pom']
 
-	    ## RGB값
+	    # 보유색상
         self.current_brush_color = self.data['brushcolors']
+
+
+        # 업적달성현황
+        self.already108=self.data['already'][0]
+        self.already1010=self.data['already'][1]
+        self.already1012=self.data['already'][2]
+        self.already1016=self.data['already'][3]
+        self.already1020=self.data['already'][4]
+        self.alreadyac=self.data['already'][5]
 
         self.initUI()
 
@@ -155,16 +232,63 @@ class MyApp(QWidget):
             self.data['bitcoins'][i]['x']=self.getmoneytab.tab1.bitcoins[i].x
             self.data['bitcoins'][i]['y']=self.getmoneytab.tab1.bitcoins[i].y
             self.data['bitcoins'][i]['investmentamount']=self.getmoneytab.tab1.bitcoins[i].investmentamount
+        #홀짝게임정보
         self.data['ore']=[self.getmoneytab.tab2.charge,self.getmoneytab.tab2.history]
-
+        # 보유색상, 구매현황
         self.data['brushcolors']=self.current_brush_color
+        # 최고 보유금액
+        self.data['pom']=self.peakofmoney
+        # 업적성취 정보
+        self.data['already'][0]=self.already108
+        self.data['already'][1]=self.already1010
+        self.data['already'][2]=self.already1012
+        self.data['already'][3]=self.already1016
+        self.data['already'][4]=self.already1020
+        self.data['already'][5]=self.alreadyac
 
+        # 총데이터 저장
         self.totaldata[self.playername]=self.data
-        #
         f = open('data.dat', 'wb')
         pickle.dump(self.totaldata, f)
         f.close()
 
+        #그림저장
+        self.paintertab.canvas.image.save("pictures/{}_main_image.png".format(self.playername))
+
+    # 업적달성시 기록저장을 위해 데이터를 불러오기
+    def recordLoad(self):
+        try:
+            f = open('record.dat', 'rb')
+            # 데이터에 불러온 기록을 저장
+            totalrecord = pickle.load(f)
+            # 그리고 변수에 이 데이터를 저장
+            self.totalrecord = totalrecord
+            f.close()
+            return totalrecord
+        except:
+            return {10**8:[],10**10:[],10**12:[],10**16:[],10**20:[],'allcolor':[]}
+
+    # 기록 정령
+    def recordSort(self,totalrecord,achievement):
+        before=totalrecord[achievement]
+        after=sorted(before,key=lambda x: (x[1][0],x[1][1],x[1][1],x[1][2],x[1][3]))[:10]
+        totalrecord[achievement]=after
+        return totalrecord
+
+    # 업적달성시 기록저장
+    def recordSaveNReturn(self,achievement,record):
+        #파일에서 해당 업적의 기록들을 꺼내와 자신의 기록과 합침
+        totalrecord = self.recordLoad()
+        myrecord = [self.playername,record]
+        totalrecord[achievement].append(myrecord)
+        #합친 기록을 정렬
+        totalrecord=self.recordSort(totalrecord,achievement)
+        #파일에 합친 기록을 저장
+        f = open('record.dat', 'wb')
+        pickle.dump(totalrecord, f)
+        f.close()
+        #리턴
+        return totalrecord[achievement]
 
     # 메인 UI
     def initUI(self):
@@ -303,19 +427,37 @@ class MyApp(QWidget):
                         return False
                 return True
 
+    # 업적달성창 띄우기
+    def showAchievement(self):
+        achievement=self.achievement()
+        print(achievement)
+        if achievement:
+            self.dataSave()
+            myrecord=[self.time[0],self.time[1],self.time[2],self.time[3]]
+            totalrecord=self.recordSaveNReturn(achievement,myrecord)
+            self.ex=AchievementWindow(achievement,myrecord,totalrecord)
+
     # 업적달성
     def achievement(self):
-        if self.money>=10^8: #1억
-            pass
-        elif self.money >= 10^10: #100억
-            pass
-        elif self.money >= 10^12: #1조
-            pass
-        elif self.money >= 10^16: #1경
-            pass
-        elif self.money >= 10^20: #1해
-            pass
-
+        if self.money>=10**8 and not self.already108: #1억
+            self.already108=True
+            return 10**8
+        elif self.money >= 10**10 and not self.already1010: #100억
+            self.already1010=True
+            return 10**10
+        elif self.money >= 10**12 and not self.already1012: #1조
+            self.already1012=True
+            return 10**12
+        elif self.money >= 10**16 and not self.already1016: #1경
+            self.already1016=True
+            return 10**16
+        elif self.money >= 10**20 and not self.already1020: #1해
+            self.already1020=True
+            return 10**20
+        elif len(self.current_brush_color)==len(self.storetab.colorButton_list)+1: # 모든 색상 구입
+            return 'allcolor'
+        else:
+            return 0
     ###################################################
     def buttonClicked(self):
         button = self.sender()
@@ -327,6 +469,7 @@ class MyApp(QWidget):
             if reply == QMessageBox.Yes:
                 self.dataSave()
                 print('저장됨')
+                
 ############################################
 if __name__ == '__main__':
     import sys

@@ -161,6 +161,7 @@ class OddOrEven(QWidget):
                     self.chargeUpdate(-withdrawl)
                     text= '홀짝게임에서 출금\n잔고: {:,} + {:,}'.format(self.status.money,int(0.9*withdrawl))
                     self.status.moneyUpdate(int(0.9*withdrawl),text)
+                    self.status.showAchievement()
 
         # 홀 선택
         elif len(button.text())==1:

@@ -39,7 +39,6 @@ class Slide_Thickness(QWidget):
         self.sld.setFixedSize(180,20)
         self.sld.setRange(1,50)
         self.sld.setValue(self.currentsize)
-        self.size = QLabel(str(self.sld.value()))
 
         self.okbutton.setFixedSize(80,30)
         self.cancelbutton.setFixedSize(80,30)

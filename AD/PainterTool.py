@@ -76,10 +76,10 @@ class ToolUI(QWidget):
         # layout.addWidget(QLabel('현재 색깔: '))
 
         # 색상 선택
-        cb = QComboBox(self)
-        self.status.cb = cb
-        self.status.cb.addItem("Black")
-        layout.addWidget(cb)
+        self.status.cb = QComboBox(self)
+        for i in list(self.status.data['brushcolors'].keys()): #저장됐던 색상들 불러오기.
+            self.status.cb.addItem(i)
+        layout.addWidget(self.status.cb)
 
         self.status.cb.currentIndexChanged.connect(self.comboBoxFunction)
 

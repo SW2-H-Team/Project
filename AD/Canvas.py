@@ -13,14 +13,17 @@ class Canvas(QMainWindow):
 
         self.drawingPath = None
 
-        mainImage = QImage(QSize(725, 430), QImage.Format_RGB32)
-        mainImage.fill(Qt.white)
-        mainImage.save("main_image.png")
+        # 저장된 그림 불러오기/ 새로만들기
+        try:
+            self.image = QPixmap("pictures/{}_main_image.png".format(self.status.playername))
+        except:
+            mainImage = QImage(QSize(725, 430), QImage.Format_RGB32)
+            mainImage.fill(Qt.white)
+            mainImage.save("pictures/{}_main_image.png".format(self.status.playername))
+            self.image = QPixmap("pictures/{}_main_image.png".format(self.status.playername))
 
-        # image 불러오기
-        self.image = QPixmap("main_image.png")
         self.resize(self.image.width(),self.height())
-
+        #####
         self.drawing = False
 
         self.color_r = 0
