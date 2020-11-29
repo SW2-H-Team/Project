@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
@@ -14,13 +15,16 @@ class Canvas(QMainWindow):
         self.drawingPath = None
 
         # 저장된 그림 불러오기/ 새로만들기
-        try:
-            self.image = QPixmap("pictures/{}_main_image.png".format(self.status.playername))
-        except:
+        self.image = QPixmap()
+        filename="pictures/{}_main_image.png".format(self.status.playername)
+        #해당 파일이름을 가진 그림이 존재하면,
+        if os.path.isfile(filename):
+            self.image.load(filename)
+        else:
             mainImage = QImage(QSize(725, 430), QImage.Format_RGB32)
             mainImage.fill(Qt.white)
-            mainImage.save("pictures/{}_main_image.png".format(self.status.playername))
-            self.image = QPixmap("pictures/{}_main_image.png".format(self.status.playername))
+            mainImage.save(filename)
+            self.image = QPixmap(filename)
 
         self.resize(self.image.width(),self.height())
         #####
