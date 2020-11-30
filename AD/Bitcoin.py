@@ -43,6 +43,7 @@ class Bitcoin(QWidget):
 
 
     def setUI(self):
+        #레이아웃
         mainlayout = QHBoxLayout()
         rightlayout = QGridLayout()
         leftlayout = QVBoxLayout()
@@ -51,36 +52,42 @@ class Bitcoin(QWidget):
         mainlayout.addLayout(rightlayout)
         self.setLayout(mainlayout)
 
+        # 그래프
         leftlayout.addWidget(self.canvas)
+        # 비트코인 속성
+        self.itemnamelabel = QLabel(self.itemname)
+        itemnamefont=QFont('KacstOne',10)
+        itemnamefont.setBold(True)
+        self.itemnamelabel.setFont(itemnamefont)
+        self.pricelabel = QLabel('매입가: {:,}원'.format(self.price))
+        self.holdinglabel = QLabel('보유량: {:,}개'.format(self.holding))
+        self.presentvaluelabel = QLabel('코인 현재가치: {:,}원'.format(self.presentvalue))
+        self.gnllabel = QLabel('평가손익: {:,}원'.format(self.presentvalue - self.investmentamount))
 
-        self.pricelabel = QLabel('매입가: {:,}'.format(self.price))
-        self.holdinglabel = QLabel('보유량: {:,}'.format(self.holding))
-        self.presentvaluelabel = QLabel('코인 현재가치: {:,}'.format(self.presentvalue))
-        self.gnllabel = QLabel('평가손익: {:,}'.format(self.presentvalue - self.investmentamount))
-
-        rightlayout.addWidget(QLabel(self.itemname), 0, 0)
-        rightlayout.addWidget(self.pricelabel,1,0)
-        rightlayout.addWidget(self.holdinglabel,3,0)
-        rightlayout.addWidget(self.presentvaluelabel,4,0)
-        rightlayout.addWidget(self.gnllabel, 5, 0)
+        # 매수,매도버튼
+        rightlayout.addWidget(self.itemnamelabel, 0, 0)
+        rightlayout.addWidget(self.pricelabel,2,0,3,2)
+        rightlayout.addWidget(self.holdinglabel,3,0,4,2)
+        rightlayout.addWidget(self.presentvaluelabel,4,0,5,2)
+        rightlayout.addWidget(self.gnllabel, 5, 0,6,2)
 
         buyingbutton = Button('매수', self.buttonClicked)
         sellingbutton = Button('매도', self.buttonClicked)
         buyingbutton.setFixedSize(120,30)
         sellingbutton.setFixedSize(120,30)
-        rightlayout.addWidget(buyingbutton,7,0)
-        rightlayout.addWidget(sellingbutton,7,1)
+        rightlayout.addWidget(buyingbutton,7,0,8,1)
+        rightlayout.addWidget(sellingbutton,7,1,8,2)
 
     def buttonClicked(self):
         button = self.sender()
         if button.text() =='매수':
-            buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.\n최대 매수가능량: {}'
+            buying, ok = QInputDialog.getInt(self, '매수 수량', '매수 수량을 입력하세요.\n최대 매수가능량: {}개'
                                              .format(self.status.money//self.price))
             investment = self.price * buying
 
             if ok:
-                if buying < 0:  # 예외처리
-                    QMessageBox.warning(self, '경고!', '0 이상의 수를 입력해주세요.', QMessageBox.Ok)
+                if buying <= 0:  # 예외처리
+                    QMessageBox.warning(self, '경고!', '0 보다 큰 수를 입력해주세요.', QMessageBox.Ok)
                 elif investment > self.status.money:
                     QMessageBox.warning(self, '경고!', '보유 금액이 부족합니다.', QMessageBox.Ok)
                 else:
@@ -108,7 +115,7 @@ class Bitcoin(QWidget):
             if not self.holding:
                 self.investmentamount=0
 
-        self.holdinglabel.setText('보유량: {:,}'.format(self.holding))
+        self.holdinglabel.setText('보유량: {:,}개'.format(self.holding))
     # 그래프 기울기 관리
     def changeEconomy(self):
         random = np.random.randint(1,1001)
@@ -215,9 +222,9 @@ class Bitcoin(QWidget):
         self.price = self.y[-1]
         self.presentvalue = self.price * self.holding
 
-        self.pricelabel.setText('매입가: {:,}'.format(self.price))
-        self.presentvaluelabel.setText('현재가치: {:,}'.format(self.presentvalue))
-        self.gnllabel.setText('평가손익: {:,}'.format(int(0.92*self.presentvalue) - self.investmentamount))
+        self.pricelabel.setText('매입가: {:,}원'.format(self.price))
+        self.presentvaluelabel.setText('현재가치: {:,}원'.format(self.presentvalue))
+        self.gnllabel.setText('평가손익: {:,}원'.format(int(0.92*self.presentvalue) - self.investmentamount))
 
         # 시간갱신
         if self.itemname == self.status.data['bitcoins'][0]['itemname']:

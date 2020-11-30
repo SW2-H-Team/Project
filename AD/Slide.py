@@ -4,8 +4,6 @@ from PyQt5.QtGui import *
 
 from Button import *
 
-
-
 class Slide_Thickness(QWidget):
     def __init__(self, tool):
         super().__init__()
@@ -32,8 +30,8 @@ class Slide_Thickness(QWidget):
         self.cancelbutton = Button('cancel', self.buttonClicked)
 
         # 위젯들 설정
-        font=self.size.font()
-        font.setPointSize(20)
+        #폰트설정
+        font=QFont('Uroob',30)
         self.size.setFont(font)
         # 슬라이드 설정
         self.sld.setFixedSize(180,20)
@@ -53,7 +51,7 @@ class Slide_Thickness(QWidget):
         mainlayout.addWidget(self.cancelbutton,3,0,4,2)
 
         self.setLayout(mainlayout)
-        self.setFixedSize(200,100)
+        self.setFixedSize(200,120)
         self.move(300,300)
         self.setWindowTitle(self.title)
         self.show()
@@ -78,13 +76,7 @@ class Slide_Thickness(QWidget):
         elif button.text()=='cancel':
             self.close()
 
-
-
-
-
-
-
-
+# 텍스트 바꾸
 class Slide_ChangedText(QWidget):
     def __init__(self, item, tool, items):
         super().__init__()
@@ -97,8 +89,6 @@ class Slide_ChangedText(QWidget):
             if self.item == self.items[r]:
                 self.currentsize = self.tool.canvas.stringFontSize
 
-
-
         self.initUI()
 
     def initUI(self):
@@ -109,14 +99,13 @@ class Slide_ChangedText(QWidget):
         self.cancelbutton = Button('cancel', self.buttonClicked)
 
         # 위젯들 설정
-        font=self.size.font()
-        font.setPointSize(20)
+        # 폰트설정
+        font = QFont('Uroob', 30)
         self.size.setFont(font)
         # 슬라이드 설정
         self.sld.setFixedSize(180,20)
         self.sld.setRange(1,50)
         self.sld.setValue(self.currentsize)
-        self.size = QLabel(str(self.sld.value()))
 
         self.okbutton.setFixedSize(80,30)
         self.cancelbutton.setFixedSize(80,30)
@@ -131,7 +120,7 @@ class Slide_ChangedText(QWidget):
         mainlayout.addWidget(self.cancelbutton,3,0,4,2)
 
         self.setLayout(mainlayout)
-        self.setFixedSize(200,100)
+        self.setFixedSize(200,120)
         self.move(300,300)
         self.setWindowTitle(self.title)
         self.show()
@@ -151,13 +140,7 @@ class Slide_ChangedText(QWidget):
         elif button.text()=='cancel':
             self.close()
 
-
-
-
-
-
-
-
+# 투명도바꾸기
 class Slide_ColorEffect(QWidget):
     def __init__(self, tool):
         super().__init__()
@@ -175,14 +158,13 @@ class Slide_ColorEffect(QWidget):
         self.cancelbutton = Button('cancel', self.buttonClicked)
 
         # 위젯들 설정
-        font=self.size.font()
-        font.setPointSize(20)
+        #폰트설정
+        font=QFont('Uroob',30)
         self.size.setFont(font)
         # 슬라이드 설정
         self.sld.setFixedSize(180,20)
         self.sld.setRange(0, 255)
         self.sld.setValue(self.currentsize)
-        self.size = QLabel(str(self.sld.value()))
 
         self.okbutton.setFixedSize(80,30)
         self.cancelbutton.setFixedSize(80,30)
@@ -198,9 +180,9 @@ class Slide_ColorEffect(QWidget):
         mainlayout.addWidget(self.cancelbutton,3,0,4,2)
 
         self.setLayout(mainlayout)
-        self.setFixedSize(200,100)
+        self.setFixedSize(200,120)
         self.move(300,300)
-        self.setWindowTitle(self.title)
+        self.setWindowTitle('투명도 조절')
         self.show()
 
     def setText(self):
@@ -215,8 +197,6 @@ class Slide_ColorEffect(QWidget):
             self.close()
         elif button.text() == 'cancel':
             self.close()
-
-
 
 if __name__ == '__main__':
     import sys

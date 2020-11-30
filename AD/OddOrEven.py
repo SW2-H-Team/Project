@@ -40,12 +40,24 @@ class OddOrEven(QWidget):
         #히스토리레이아웃
 
         self.historylabel = QLabel(self.history)
+        historyfont = QFont('굴림', 15)
+        historyfont.setBold(True)
+        historyfont.setItalic(True)
+        self.historylabel.setFont(historyfont)
         historylayout.addWidget(QLabel('기록'),2,4,2,8)
         historylayout.addWidget(self.historylabel,4,4,4,8)
 
         #버튼레이아웃
         self.oddbutton = Button('홀',self.buttonClicked)
         self.evenbutton = Button('짝',self.buttonClicked)
+
+        buttonfont = QFont('고딕', 50)
+        buttonfont.setBold(True)
+        self.oddbutton.setFont(buttonfont)
+        self.evenbutton.setFont(buttonfont)
+
+        self.oddbutton.setFixedSize(150,150)
+        self.evenbutton.setFixedSize(150,150)
 
         self.oddbutton.setCheckable(True)
         self.evenbutton.setCheckable(True)
@@ -57,22 +69,33 @@ class OddOrEven(QWidget):
         buttonlayout.addStretch(2)
 
         #상태레이아웃
-        status=''
+        status='홀/짝을 선택해주세요!'
         self.statuslabel=QLabel(status)
+
+        statusfont = QFont('고딕', 20)
+        statusfont.setBold(True)
+        self.statuslabel.setFont(statusfont)
+        self.statuslabel.setAlignment(Qt.AlignHCenter)
 
         statuslayout.addWidget(self.statuslabel)
 
         #충전레이아웃
 
-        self.chargelabel = QLabel(str(self.charge))
-        chargebutton = Button('충전하기', self.buttonClicked)
-        withdrawlbutton = Button('출금하기',self.buttonClicked)
+        self.chargelabel = QLabel('충전금: {:,}'.format(self.charge))
+        chargefont = QFont('굴림', 15)
+        chargebutton = Button('충전', self.buttonClicked)
+        withdrawlbutton = Button('출금',self.buttonClicked)
+
+        chargebutton.setFixedSize(80,50)
+        withdrawlbutton.setFixedSize(80,50)
+        chargebutton.setFont(chargefont)
+        withdrawlbutton.setFont(chargefont)
+        self.chargelabel.setFont(chargefont)
 
         charginglayout.addStretch(1)
         charginglayout.addWidget(self.chargelabel)
         charginglayout.addWidget(chargebutton)
         charginglayout.addWidget(withdrawlbutton)
-        charginglayout.addStretch(1)
 
     # 상태메세지 바꾸기
     def statusUpdate(self,text):
@@ -80,7 +103,7 @@ class OddOrEven(QWidget):
 
     def chargeUpdate(self,amount):
         self.charge+=amount
-        self.chargelabel.setText('{:,}'.format(self.charge))
+        self.chargelabel.setText('충전금: {:,}'.format(self.charge))
 
     # 한 시간마다 결과나옴.
     def getNumber(self):
@@ -114,10 +137,6 @@ class OddOrEven(QWidget):
                     self.statusUpdate('성공! {:,}원 획득! '.format(int(1.9 * self.charge)))
                     self.chargeUpdate(int(0.9*self.charge))
                     self.evenbutton.toggle()
-        # 어떤 버튼도 선택되지 않을 때,
-        else:
-            pass
-            #self.statusUpdate('홀?짝?')
 
     # 기록 업데이트
     def historyUpdate(self,number):
@@ -130,7 +149,7 @@ class OddOrEven(QWidget):
     def buttonClicked(self):
         button= self.sender()
         # 충전 버튼
-        if button.text()=='충전하기' :
+        if button.text()=='충전' :
             charge, ok = QInputDialog.getInt(self, '충전하기', '충전할 금액을 입력하세요.\n충전가능금액: {:,}'
                                              .format(self.status.money))
             # ok 버튼을 누르면,
@@ -146,7 +165,7 @@ class OddOrEven(QWidget):
                     text= '홀짝게임에 충전\n잔고: {:,} - {:,}'.format(self.status.money,charge)
                     self.status.moneyUpdate(-charge,text)
 
-        elif button.text()=='출금하기' :
+        elif button.text()=='출금' :
             withdrawl, ok = QInputDialog.getInt(self, '출금하기', '출금할 금액을 입력하세요.\n수수료 10%\n출금가능금액: {}'
                                              .format(self.charge))
             # ok버튼을 누르면,
