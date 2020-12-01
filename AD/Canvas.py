@@ -16,7 +16,7 @@ class Canvas(QMainWindow):
 
         # 저장된 그림 불러오기/ 새로만들기
         self.image = QPixmap()
-        filename="pictures/{}_main_image.png".format(self.status.playername)
+        filename="data/pictures/{}_main_image.png".format(self.status.playername)
         #해당 파일이름을 가진 그림이 존재하면,
         if os.path.isfile(filename):
             #  그리던 파일 불러오기
@@ -24,8 +24,8 @@ class Canvas(QMainWindow):
         else:
             mainImage = QImage(QSize(725, 430), QImage.Format_RGB32)
             mainImage.fill(Qt.white)
-            mainImage.save('main_image.png')
-            self.image = QPixmap('main_image.png')
+            mainImage.save('data/main_image.png')
+            self.image = QPixmap('data/main_image.png')
 
         self.resize(self.image.width(),self.height())
         #####
@@ -39,30 +39,23 @@ class Canvas(QMainWindow):
         self.brush_size = 5
         self.brush_mode = Qt.SolidLine
 
-
         self.string = 'you and me'
         self.stringFont = 'DejaVu Sans Mono'
         self.stringFontSize = 18
 
-
        # 모드 선택 ['drawing':그리기, 'line':직선, 'text':텍스트, ]
         self.save_drawingType = 'drawing'
-
 
         # 직선 모드에서 활용할 point
         self.past_point = None
         self.present_point = None
 
-
         self.initUI()
-
-
 
     def initUI(self):
         self.setWindowTitle('Simple Painter')
         self.setGeometry(300, 300, 725, 430)
         self.show()
-
 
     def paintEvent(self, e):
         canvas = QPainter(self)
@@ -70,7 +63,6 @@ class Canvas(QMainWindow):
         if self.drawingPath:
             canvas.setPen(QPen(self.brush_color, self.brush_size, self.brush_mode, Qt.RoundCap))
             canvas.drawPath(self.drawingPath)
-
 
     # 좌클릭을 눌렀을 때
     def mousePressEvent(self, e):
@@ -82,7 +74,6 @@ class Canvas(QMainWindow):
             else:
                 self.past_point = e.pos()
 
-
     # 좌클릭을 한 상태로 움직일 때
     def mouseMoveEvent(self, e):
         if e.buttons() and Qt.LeftButton and self.drawingPath:
@@ -93,7 +84,6 @@ class Canvas(QMainWindow):
             else:
                 self.drawingPath.lineTo(e.pos())
                 self.update()
-
 
     # 좌클릭 버튼에서 손이 떼졌을 때
     def mouseReleaseEvent(self, e):
@@ -113,9 +103,6 @@ class Canvas(QMainWindow):
 
             self.drawingPath = None
             self.update()
-
-
-
 
 if __name__ == '__main__':
 

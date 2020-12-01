@@ -261,7 +261,7 @@ class MyApp(QWidget):
     def dataLoad(self,name):
         # 데이터파일 열기
         try:
-            f = open('data.dat', 'rb')
+            f = open('data/data.dat', 'rb')
             # 데이터에 불러온 데이터 저장
             try:
                 totaldata = pickle.load(f)
@@ -312,16 +312,16 @@ class MyApp(QWidget):
         self.data['already'][5]=self.alreadyac
         # 총데이터 저장
         self.totaldata[self.playername]=self.data
-        f = open('data.dat', 'wb')
+        f = open('data/data.dat', 'wb')
         pickle.dump(self.totaldata, f)
         f.close()
         #그림저장
-        self.paintertab.canvas.image.save("pictures/{}_main_image.png".format(self.playername))
+        self.paintertab.canvas.image.save("data/pictures/{}_main_image.png".format(self.playername))
 
     # 업적달성시 기록저장을 위해 데이터를 불러오기
     def recordLoad(self):
         try:
-            f = open('record.dat', 'rb')
+            f = open('data/record.dat', 'rb')
             # 데이터에 불러온 기록을 저장
             totalrecord = pickle.load(f)
             # 그리고 변수에 이 데이터를 저장
@@ -347,7 +347,7 @@ class MyApp(QWidget):
         #합친 기록을 정렬
         totalrecord=self.recordSort(totalrecord,achievement)
         #파일에 합친 기록을 저장
-        f = open('record.dat', 'wb')
+        f = open('data/record.dat', 'wb')
         pickle.dump(totalrecord, f)
         f.close()
         #리턴
@@ -547,7 +547,7 @@ class MyApp(QWidget):
 
             if reply == QMessageBox.Yes:
                 self.dataSave()
-                ok = QMessageBox.question(self, '저장됨', '데이터를 성공적으로 저장했습니다!',
+                QMessageBox.question(self, '저장됨', '데이터를 성공적으로 저장했습니다!',
                                           QMessageBox.Yes, QMessageBox.Yes)
 
 
