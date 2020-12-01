@@ -12,6 +12,10 @@ from Button import Button
 
 # 로그인 화면
 class LoginWindow(QWidget):
+    """
+    게임 실행시 처음으로 마주하게 되는 창입니다. 간단한 게임에 대한 설정이 표시 돼있습니다.
+    입력칸에 플레이어의 이름을 적고 입력을 누르면 게임을 시작합니다.
+    """
     def __init__(self):
         super().__init__()
 
@@ -79,6 +83,10 @@ class LoginWindow(QWidget):
 
 # 패배 화면
 class DefeatWindow(QWidget):
+    """
+    파산하여 패배하면 나타나는 창입니다. 플레이어의 기록과 다시하기 버튼이있습니다.
+    다시하기를 누르면 로그인창으로 넘어가 닉네임을 입력하여 게임을 다시 시작할 수 있습니다.
+    """
     def __init__(self,status):
         super().__init__()
 
@@ -144,6 +152,11 @@ class DefeatWindow(QWidget):
 
 #업적달성창
 class AchievementWindow(QWidget):
+    """
+    게임 진행 중 특정 기준을 만족하면 나타나는 창입니다.
+    현재 플레이어의 기록과 역대 플레이어의 기록의 순위가 나타나있습니다.
+    계속하기를 눌러 창을 닫고 게임을 계속할 수 있습니다.
+    """
     def __init__(self,achievement,record,totalrecord):
         super().__init__()
 
@@ -225,11 +238,19 @@ class AchievementWindow(QWidget):
 
 # 게임화면
 class MyApp(QWidget):
+    """
+    로그인 창에서 이름을 입력하면 해당 이름으로 저장된 정보가 있는지 탐색한 후,
+    있으면 저장된 정보를 불러오고, 없으면 처음부터 시작합니다.
+    그림을 그릴 수 있는 그림판 탭, 물감(색깔)을 구입할 수 있는 상점 탭,
+    물감을 구입하고 빚을 갚기 위해 돈을 벌수 있는 용돈 벌기 탭이 있습니다.
+    우측에는 돈 사용 내역을 표시하는 가계부, 하단에는 플레이어의 현 정보를 표시하는 상태창이 있습니다.
+    상태창의 저장버튼을 눌러 그림과 비트코인 정보 등을 포함한 모든 정보를 파일에 저장합니다.
+    """
     def __init__(self,name):
         super().__init__()
         # 데이터초기화
         self.totaldata={}
-        self.data={'playername':name,'time':[0,6,19,0],'pom':50000,'money':60000,'debt':200000000,'history':'',
+        self.data={'playername':name,'time':[0,0,0,0],'pom':50000,'money':50000,'debt':200000000,'history':'',
                    'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)},
                    'already':[False,False,False,False,False,False]}
 

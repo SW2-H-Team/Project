@@ -5,6 +5,10 @@ from PyQt5.QtGui import *
 from Button import *
 
 class Slide_Thickness(QWidget):
+    """
+    그림판에서 선굵기를 변경을 누르면 나타나는 창입니다. 슬라이드를 통해 크기를 변경할 수 있습니다.
+    변화된 크기는 선/직선/지우개 개별적으로 저장됩니다.
+    """
     def __init__(self, tool):
         super().__init__()
 
@@ -76,8 +80,12 @@ class Slide_Thickness(QWidget):
         elif button.text()=='cancel':
             self.close()
 
-# 텍스트 바꾸
+# 텍스트 바꾸기
 class Slide_ChangedText(QWidget):
+    """
+    그림판에 텍스트를 입력하기 할 때 텍스트의 크기를 정하기 위한 창입니다.
+     슬라이드를 통해 텍스트 크기를 변경할 수 있습니다.
+    """
     def __init__(self, item, tool, items):
         super().__init__()
         self.title='폰트변경'
@@ -142,6 +150,10 @@ class Slide_ChangedText(QWidget):
 
 # 투명도바꾸기
 class Slide_ColorEffect(QWidget):
+    """
+    그림판에서 선/직선/지우개의 투명도를 조절하는 창입니다.
+    슬라이드를 통해 투명도를 조절할 수 있습니다.
+    """
     def __init__(self, tool):
         super().__init__()
         self.title='색효과'

@@ -1,12 +1,13 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 
-from Button import Button
 from Bitcoin import *
 from OddOrEven import *
 
 class GetMoney(QWidget):
-
+    """
+    돈을 벌 수 있는 '비트코인'과 '홀짝게임'이 존재하는 탭입니다.
+    희망하는 방법으로 돈을 벌 수 있습니다.
+    """
     def __init__(self,status):
         super().__init__()
 
@@ -31,9 +32,11 @@ class GetMoney(QWidget):
         tablayout.addWidget(tabs)
 
 if __name__ == '__main__':
+    from Main import *
     import sys
 
     app = QApplication(sys.argv)
-    getmoney = GetMoney()
+    status=MyApp()
+    getmoney = GetMoney(status)
     getmoney.show()
     sys.exit(app.exec_())

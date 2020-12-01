@@ -1,14 +1,15 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-
 
 from Button import Button
 from Slide import *
 
-
 class ToolUI(QWidget):
+    """
+    그림판에서 그리기 설정을 할 수 있는 도구가 있는 클래스입니다.
+    다양한 기능과 색깔을 이용해 그림을 그리고 그린 그림은 저장할 수 있습니다.
+    """
     def __init__(self, canvas, status, parent=None):
         super().__init__(parent)
         self.canvas = canvas

@@ -6,7 +6,9 @@ from PyQt5.QtCore import *
 
 
 class Canvas(QMainWindow):
-
+    """
+    그림판에서 그림이 그려지는 부분입니다.
+    """
     def __init__(self, status):
         super().__init__()
 

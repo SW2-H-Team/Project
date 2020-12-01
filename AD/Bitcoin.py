@@ -5,12 +5,16 @@ from PyQt5.QtGui import *
 from Button import Button
 
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
 
 class Bitcoin(QWidget):
+    """
+    비트코인 상점에 표시되는 비트코인 한 개의 정보입니다.
+    매 시간마다 내부의 계산식에 의해 비트코인의 값을 갱신하여 그 값을 그래프에 표시합니다.
+    시간의 흐름은 여기에서 그래프의 애니메이션을 보여주는 함수에 의해 발생합니다.
+    """
     def __init__(self,name,status,holding=0,x=[0],y=[np.random.randint(6000, 12000)],investmentamount=0):
         super().__init__()
 
@@ -97,7 +101,6 @@ class Bitcoin(QWidget):
                     text= '{} {:,}개 매수\n잔고: {:,} - {:,}'.format(self.itemname,buying,self.status.money,investment)
                     self.status.moneyUpdate(-1*self.price*buying,text)
 
-
         elif button.text() =='매도':
             selling, ok = QInputDialog.getInt(self, '매도 수량', '매도 수량을 입력하세요. 수수료 8%\n현재 코인 보유량: {}'
                                               .format(self.holding))
@@ -116,7 +119,7 @@ class Bitcoin(QWidget):
                 self.investmentamount=0
 
         self.holdinglabel.setText('보유량: {:,}개'.format(self.holding))
-    # 그래프 기울기 관리
+    # 그래프 기울기 유지/변동 여부 설정
     def changeEconomy(self):
         random = np.random.randint(1,1001)
         if random <= 20: return True  # 2%
@@ -233,6 +236,9 @@ class Bitcoin(QWidget):
         return [self.line]
 
 class BitcoinMarket(QWidget):
+    """
+    여러 비트코인을 생성하여 담아두는 장소입니다.
+    """
     def __init__(self,status):
         super().__init__()
 
@@ -301,6 +307,7 @@ class BitcoinMarket(QWidget):
 
 if __name__ == '__main__':
     import sys
+    from Main import main
 
     app = QApplication(sys.argv)
     bcmarket = BitcoinMarket()

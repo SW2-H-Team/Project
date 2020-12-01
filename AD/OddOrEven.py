@@ -6,8 +6,12 @@ from Button import Button
 
 import numpy as np
 
-
 class OddOrEven(QWidget):
+    """
+    사행성 확률 게임입니다. 먼저 돈을 충전하고 홀/짝 중 하나를 선택한 후 기다리면 게임에서 한시간마다
+    둘 중 한개의 값이 나오는데, 이 때 나온 값과 같은지 비교해서 같으면 돈을 따고, 다르면 돈을 잃습니다.
+    돈을 땄으면 출금을 하여 현금화 시킬 수 있습니다.
+    """
     def __init__(self,status):
         super().__init__()
         self.status=status
@@ -206,7 +210,6 @@ class OddOrEven(QWidget):
                     self.statusUpdate('짝을 선택했습니다.')
                 elif not button.isChecked():
                     self.statusUpdate('짝 선택을 취소했습니다.')
-
 
 if __name__ == '__main__':
     import sys

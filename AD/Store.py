@@ -1,17 +1,18 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 
 from Button import Button
 
 class Store(QWidget):
-
+    """
+    번 돈으로 원하는 그림을 그리기 위해 필요한 물감을 사는 곳입니다.
+    가격은 물감을 살 때마다 올라가며, 산 색깔은 그림판 탭에서 확인 할 수 있습니다.
+    모든 색깔을 다 사면 업적을 달성할 수 있습니다.
+    만약 빚쟁이가 찾아왔는데 돈을 준비하지 못하면, 구매했던 물감을 한개 뺏기게 됩니다.
+    """
     def __init__(self, status):
         super().__init__()
         self.status = status
         self.setUI()
-
-
 
     def setUI(self):
         mainlayout = QVBoxLayout()
@@ -105,7 +106,7 @@ class Store(QWidget):
         self.color_price = self.color_price * (self.count ** 2)
         self.count += 1
 
-
+########################################3
 if __name__ == '__main__':
 
     import sys

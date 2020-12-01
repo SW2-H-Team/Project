@@ -4,6 +4,9 @@ import Canvas
 import PainterTool
 
 class Painter(QWidget):
+    """
+    그림판입니다. 그림을 그릴 수 있는 캔버스와 그리기 설정을 할 수 있는 도구레이어로 나뉩니다.
+    """
 
     def __init__(self, status, parent=None):
         super().__init__(parent)
@@ -25,18 +28,11 @@ class Painter(QWidget):
         self.canvas = Canvas.Canvas(self.status)
         canvaslayout.addWidget(self.canvas)
 
-        ## 툴
         #도구
         tools = PainterTool.ToolUI(self.canvas,self.status)
         toollayout.addWidget(tools)
 
-
-    def buttonClicked(self):
-
-        button = self.sender()
-        key = button.text()
-        print(key)
-
+#########################################################
 if __name__ == '__main__':
 
     import sys
