@@ -12,6 +12,8 @@ class MyWindow(QWidget):
         self.setupUI()
 
     def setupUI(self):
+        font, ok = QFontDialog.getFont()
+
         self.setGeometry(200, 200,800, 500)
         self.setWindowTitle("PyChart Viewer v0.1")
         self.setWindowIcon(QIcon('icon.png'))

@@ -30,7 +30,7 @@ class Bitcoin(QWidget):
         self.ax = self.fig.add_subplot(ylim=(0, self.y[0] * 3), xlim=(0,60))
         self.canvas = FigureCanvas(self.fig)
         self.line, = self.ax.plot(self.x, self.y,color='red', animated=True, lw=1)
-        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=1)
+        self.ani = animation.FuncAnimation(self.fig, self.updateLine, blit=True, interval=50)
         # 그래프 속성
         self.itemname = name        #종목이름
         self.price = self.y[-1] #매입가

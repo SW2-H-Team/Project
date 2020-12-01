@@ -94,7 +94,10 @@ class Store(QWidget):
                     self.status.current_brush_color["{}".format(key)] = self.RGBNumber_dic[key]
                     self.status.cb.addItem("{}".format(key))
                     self.moneyChange()
-                    self.status.showAchievement() # 모든 색상을 구입했는지 감
+                    # 파산체크
+                    if self.status.bankrupt():
+                        self.status.defeat()
+                self.status.showAchievement() # 모든 색상을 구입했는지 판단
             else:
                 pass
 

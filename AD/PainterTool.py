@@ -70,10 +70,6 @@ class ToolUI(QWidget):
         for i in range(0, 4):
             layout.addWidget(QLabel())
         layout.addWidget(QLabel('색 바꾸기: '))
-        # layout.addWidget(Button('1', self.foregroundColor()))
-        # layout.addWidget(QLabel('배경색: '))
-        # layout.addWidget(Button('배경', self.buttonClicked()))
-        # layout.addWidget(QLabel('현재 색깔: '))
 
         # 색상 선택
         self.status.cb = QComboBox(self)

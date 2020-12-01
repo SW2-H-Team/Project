@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -96,7 +97,7 @@ class DefeatWindow(QWidget):
         recordfont=QFont('Noto Sans CJK SC Medium',13)
         namelabel=QLabel('이름: '+self.name,)
         timelabel=QLabel('생존시간: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
-        peakofmoneylabel=QLabel('최고 보유금액: '+str(self.peakofmoney))
+        peakofmoneylabel=QLabel('최고 보유금액: {:,}'.format(self.peakofmoney))
 
         namelabel.setFont(recordfont)
         timelabel.setFont(recordfont)
@@ -228,7 +229,7 @@ class MyApp(QWidget):
         super().__init__()
         # 데이터초기화
         self.totaldata={}
-        self.data={'playername':name,'time':[0,0,0,0],'pom':50000,'money':50000,'debt':200000000,'history':'',
+        self.data={'playername':name,'time':[0,6,19,0],'pom':50000,'money':60000,'debt':200000000,'history':'',
                    'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)},
                    'already':[False,False,False,False,False,False]}
 
@@ -243,10 +244,8 @@ class MyApp(QWidget):
         self.time = self.data['time']
         # 보유금액 최고기록
         self.peakofmoney=self.data['pom']
-
 	    # 보유색상
         self.current_brush_color = self.data['brushcolors']
-
 
         # 업적달성현황
         self.already108=self.data['already'][0]
@@ -456,7 +455,9 @@ class MyApp(QWidget):
             self.time[1]=0
             if self.debt: # 일주일마다 채무 상환
                 self.payBack()
-                self.checkDefeated() #파산크
+                # 파산체크
+                if self.bankrupt():
+                    self.defeat()
 
         self.timelabel.setText('시간 경과: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
 
@@ -468,18 +469,33 @@ class MyApp(QWidget):
             text = '채무 상환\n잔고: {:,} - {:,}'.format(self.money, 1000000)
             self.moneyUpdate(-1000000,text)
         else:
-            # @@ 도구,색깔 있는지 판별
-                # @@@ 있으면 뺏고 차감시켜
-            text = '{} 압류당함.\n잔고: {} - {}'.format('$$',self.money,self.money)
-            self.moneyUpdate(-self.money,text)
+            # 구입한 색깔이 있으면 해당 색깔을 압류함.
+            if len(self.current_brush_color) !=1:
+                color=self.foreclosure()
+                text = '{} 압류당함.\n잔고: {} - {}'.format(color, self.money, self.money)
+                self.moneyUpdate(-self.money, text)
+            #없으면 패배처리.
+            else:
+                QMessageBox.warning(self, '파산!', '모든 것을 압류당했습니다!',QMessageBox.Ok)
+                self.defeat()
 
-    # 패배 체크
-    def checkDefeated(self):
-        if self.bankrupt():
-            for i in self.getmoneytab.tab1.bitcoins: # 시간이 흐르지않게 막아줌
-                i.ani._stop()
-            self.close() #현재화면을 끄고,
-            self.ex = DefeatWindow(self) #패배화면을 띄운다.
+    # 색깔 압류
+    def foreclosure(self):
+        index=np.random.randint(1,len(self.current_brush_color))
+        color=self.cb.itemText(index)
+        # 잠겼던 버튼 다시 해제
+        self.storetab.colorButton_dic[color].setEnabled(True)
+        self.storetab.colorButton_dic[color].setStyleSheet('background:gray')
+        del self.current_brush_color[color] # 보유색상에서 제거
+        self.cb.removeItem(index) #콤보박스에서도 제거
+        return color #압류한 색상 리턴,
+
+    # 패배 처리
+    def defeat(self):
+        for i in self.getmoneytab.tab1.bitcoins: # 시간이 흐르지않게 막아줌
+            i.ani._stop()
+        self.close() #현재화면을 끄고,
+        self.ex = DefeatWindow(self) #패배화면을 띄운다.
 
     # 파산감지
     def bankrupt(self):

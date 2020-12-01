@@ -125,14 +125,16 @@ class OddOrEven(QWidget):
                     self.chargeUpdate(-self.charge)
                     self.evenbutton.toggle()
                     #파산체크
-                    self.status.checkDefeated()
+                    if self.status.bankrupt():
+                        self.status.defeat()
             elif number==2:
                 if self.oddbutton.isChecked():
                     self.statusUpdate('실패! {:,}원 증발'.format(self.charge))
                     self.chargeUpdate(-self.charge)
                     self.oddbutton.toggle()
-                    #파산체
-                    self.status.checkDefeated()
+                    # 파산체크
+                    if self.status.bankrupt():
+                        self.status.defeat()
                 else:
                     self.statusUpdate('성공! {:,}원 획득! '.format(int(1.9 * self.charge)))
                     self.chargeUpdate(int(0.9*self.charge))
