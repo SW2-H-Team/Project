@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
-
+# 캔버스
 class Canvas(QMainWindow):
     """
     그림판에서 그림이 그려지는 부분입니다.
@@ -52,9 +52,10 @@ class Canvas(QMainWindow):
         self.past_point = None
         self.present_point = None
 
-        self.initUI()
+        self.setUI()
 
-    def initUI(self):
+    # UI설정
+    def setUI(self):
         self.setWindowTitle('Simple Painter')
         self.setGeometry(300, 300, 725, 430)
         self.show()
@@ -106,6 +107,7 @@ class Canvas(QMainWindow):
             self.drawingPath = None
             self.update()
 
+####################################
 if __name__ == '__main__':
 
     app = QApplication(sys.argv)

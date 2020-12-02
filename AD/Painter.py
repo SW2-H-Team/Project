@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 import Canvas
 import PainterTool
 
+#그림판
 class Painter(QWidget):
     """
     그림판입니다. 그림을 그릴 수 있는 캔버스와 그리기 설정을 할 수 있는 도구레이어로 나뉩니다.
@@ -14,6 +15,7 @@ class Painter(QWidget):
         self.setGeometry(300, 300, 750, 510)
         self.setUI()
 
+    # UI설정
     def setUI(self):
         ###레이아웃
         mainlayout = QGridLayout()

@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 
 from Button import Button
 
+#상점
 class Store(QWidget):
     """
     번 돈으로 원하는 그림을 그리기 위해 필요한 물감을 사는 곳입니다.
@@ -14,6 +15,7 @@ class Store(QWidget):
         self.status = status
         self.setUI()
 
+    # UI설정
     def setUI(self):
         mainlayout = QVBoxLayout()
         tablayout = QVBoxLayout()
@@ -78,6 +80,7 @@ class Store(QWidget):
 
         tab.setLayout(tab.layout)
 
+    # 색상 구입 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
@@ -102,11 +105,12 @@ class Store(QWidget):
             else:
                 pass
 
+    # 구입가격의 점진적 변화 적용함수
     def moneyChange(self):
         self.color_price = self.color_price * (self.count ** 2)
         self.count += 1
 
-########################################3
+########################################
 if __name__ == '__main__':
 
     import sys

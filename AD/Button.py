@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 
+# 버튼 제작 클래스
 class Button(QToolButton):
     """
     이 게임에 존재하는 버튼을 만드는 클래스입니다.

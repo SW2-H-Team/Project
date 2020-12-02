@@ -6,6 +6,7 @@ from Button import Button
 
 import numpy as np
 
+# 홀짝게임
 class OddOrEven(QWidget):
     """
     사행성 확률 게임입니다. 먼저 돈을 충전하고 홀/짝 중 하나를 선택한 후 기다리면 게임에서 한시간마다
@@ -105,6 +106,7 @@ class OddOrEven(QWidget):
     def statusUpdate(self,text):
         self.statuslabel.setText(text)
 
+    # 충전금 변화 및 표시
     def chargeUpdate(self,amount):
         self.charge+=amount
         self.chargelabel.setText('충전금: {:,}'.format(self.charge))
@@ -116,6 +118,7 @@ class OddOrEven(QWidget):
         # 결과 확인
         self.checkResult(number)
 
+    # 플레이어의 선택과 갱신된 결과를 비교하여 성공여부 확인
     def checkResult(self,number):
         # 버튼을 선택했을때,
         if self.oddbutton.isChecked() or self.evenbutton.isChecked():
@@ -152,6 +155,7 @@ class OddOrEven(QWidget):
         self.history+=result+' '
         self.historylabel.setText(self.history)
 
+    # 충전/출금 버튼, 홀/짝 버튼 입력시
     def buttonClicked(self):
         button= self.sender()
         # 충전 버튼

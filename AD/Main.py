@@ -21,6 +21,7 @@ class LoginWindow(QWidget):
 
         self.setUI()
 
+    # UI설정
     def setUI(self):
         mainlayout = QGridLayout()
         self.setLayout(mainlayout)
@@ -67,6 +68,7 @@ class LoginWindow(QWidget):
         self.move(200, 120)
         self.show()
 
+    # 로그인버튼 입력시,
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='로그인':
@@ -96,6 +98,7 @@ class DefeatWindow(QWidget):
 
         self.setUI()
 
+    # UI설정
     def setUI(self):
         mainlayout=QVBoxLayout()
         recordlayout=QVBoxLayout()
@@ -144,6 +147,7 @@ class DefeatWindow(QWidget):
 
         self.show()
 
+    # 다시하기버튼 입력시,
     def buttonClicked(self):
         button=self.sender()
         if button.text()=='다시하기':
@@ -166,6 +170,7 @@ class AchievementWindow(QWidget):
 
         self.setUI()
 
+    # UI설정
     def setUI(self):
         #레이아웃
         mainlayout=QVBoxLayout()
@@ -224,13 +229,14 @@ class AchievementWindow(QWidget):
 
         buttonlayout.addWidget(continuebutton)
 
+    # 기록창에 다른 플레이어들의 기록표시
     def showRank(self,totalrecord):
         records=totalrecord
 
         for num,i in enumerate(records):
             self.records.append('{}.\t{}\t\t{}:{}:{}:{}'.format(num+1,i[0],i[1][0],i[1][1],i[1][2],i[1][3]))
 
-
+    # 계속하기 버튼 입력시
     def buttonClicked(self):
         button=self.sender()
         if button.text()=='계속하기':
@@ -276,7 +282,7 @@ class MyApp(QWidget):
         self.already1020=self.data['already'][4]
         self.alreadyac=self.data['already'][5]
 
-        self.initUI()
+        self.setUI()
 
     # 시작시 데이터 불러오기
     def dataLoad(self,name):
@@ -375,7 +381,7 @@ class MyApp(QWidget):
         return totalrecord[achievement]
 
     # 메인 UI
-    def initUI(self):
+    def setUI(self):
         # 메인 레이아웃
         mainlayout = QGridLayout()
         statuslayout = QHBoxLayout()
@@ -558,7 +564,8 @@ class MyApp(QWidget):
             return 'allcolor'
         else:
             return 0
-    ###################################################
+
+    # 데이터저장버튼 입력시
     def buttonClicked(self):
         button = self.sender()
 
@@ -570,7 +577,6 @@ class MyApp(QWidget):
                 self.dataSave()
                 QMessageBox.question(self, '저장됨', '데이터를 성공적으로 저장했습니다!',
                                           QMessageBox.Yes, QMessageBox.Yes)
-
 
 ############################################
 if __name__ == '__main__':

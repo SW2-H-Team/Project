@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import *
 from Bitcoin import *
 from OddOrEven import *
 
+#용돈벌기 탭
 class GetMoney(QWidget):
     """
     돈을 벌 수 있는 '비트코인'과 '홀짝게임'이 존재하는 탭입니다.
@@ -15,6 +16,7 @@ class GetMoney(QWidget):
 
         self.setUI()
 
+    # UI설정
     def setUI(self):
         mainlayout=QVBoxLayout()
         tablayout = QHBoxLayout()
@@ -31,6 +33,7 @@ class GetMoney(QWidget):
 
         tablayout.addWidget(tabs)
 
+##################################
 if __name__ == '__main__':
     from Main import *
     import sys

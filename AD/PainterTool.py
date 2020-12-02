@@ -31,6 +31,7 @@ class ToolUI(QWidget):
 
         self.tool()
 
+    # tool의 UI
     def tool(self):
         layout = QHBoxLayout()
         self.setLayout(layout)
@@ -86,7 +87,6 @@ class ToolUI(QWidget):
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         layout.addWidget(self.label, 1)
 
-
     # canvas로 전달
     def comboBoxFunction(self):
         self.save_red = self.status.current_brush_color[self.status.cb.currentText()][0]
@@ -97,12 +97,10 @@ class ToolUI(QWidget):
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.ChangedColor(self.save_brush_color)
 
-
-
     # ------------------------------------------------------------------------ #
 
 
-    # 그림 저장하기
+    # 그린 그림 저장하기
     def save(self):
         fpath, _ = QFileDialog.getSaveFileName(self, 'Save Image', '',
                                                "PNG(*.png);;JPEG(*.jpg);;JPEG(*.jpeg);;All Files(*.*) ")
@@ -124,19 +122,10 @@ class ToolUI(QWidget):
         if fpath:
             self.canvas.image.save(fpath + _)
 
-
     # 그림 초기화
     def clear(self):
         self.canvas.image.fill(Qt.white)
         self.canvas.update()
-
-    # def foregroundColor(self):
-    #    self.ChangedColor(Qt.red)
-
-    # 배경색 (바뀌게 될지도 모르니까 그냥 냅둠)
-    # def backgroungColor(self):
-    #    self.ChangedColor(QColor(255,255,255))
-
 
     # 색깔과 사이즈에 변화주는 함수
     def ChangedColor(self, color):
@@ -144,9 +133,11 @@ class ToolUI(QWidget):
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.canvas.brush_color = color
 
+    # 브러쉬 크기 변경
     def ChangedSize(self, size):
         self.canvas.brush_size = size
 
+    # 브러쉬 RGB값 변경
     def ChangedRGBA(self, r, g, b, a):
         self.save_red = r
         self.save_green = g
@@ -156,15 +147,18 @@ class ToolUI(QWidget):
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))
         self.ChangedColor(self.MakeColor())
 
+    # RGB값을 배합해서 색상 리턴
     def MakeColor(self):
         self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
         return self.save_brush_color
 
+    # 그리기 설정 총 변화
     def ChangedValue(self, color, size, mode):
         self.ChangedColor(color)
         self.ChangedSize(size)
         self.canvas.brush_mode = mode
 
+    # 텍스트의 글씨체 바꾸기
     def ChangedFont(self, font, size):
         self.canvas.stringFont = font
         self.canvas.stringFontSize = size
@@ -173,6 +167,7 @@ class ToolUI(QWidget):
     # ----------------------------------------------------------------------- #
 
 
+    # 도구의 각 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         key = button.text()
@@ -223,13 +218,11 @@ class ToolUI(QWidget):
             self.canvas.save_drawingType = 'text'
             self.ChangedText()
 
-
     # 굵기 정하는 창 띄워주는 함수
     def setThickness(self):
         self.sld = Slide_Thickness(self)
 
-
-    # 변경할 것인지 물어보는 창 띄워주는 함수
+    # 선모드를 변경할 것인지 물어보는 창 띄워주는 함수
     def changingMode(self):
         # 어떤 모드를 선택할 것인 것인지
         items = ("실선", "점선")
@@ -248,7 +241,6 @@ class ToolUI(QWidget):
 
         return result
 
-
     # 텍스트 기능 실행을 위한 함수
     def ChangedText(self):
         s, OK = QInputDialog.getText(self, "입력글자", "텍스트에 입력할 글자를 적어주세요.")
@@ -260,7 +252,6 @@ class ToolUI(QWidget):
             if ok:
                 self.sld = Slide_ChangedText(item, self, items)
 
-
-    # 색효과 기능 실행을 위한 함수
+    # 색효과(투명도 조절) 기능 실행을 위한 함수
     def ColorEffect(self):
         self.sld = Slide_ColorEffect(self)

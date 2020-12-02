@@ -9,6 +9,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.animation as animation
 
+#비트코인
 class Bitcoin(QWidget):
     """
     비트코인 상점에 표시되는 비트코인 한 개의 정보입니다.
@@ -45,7 +46,7 @@ class Bitcoin(QWidget):
 
         self.setUI()
 
-
+    # UI설정
     def setUI(self):
         #레이아웃
         mainlayout = QHBoxLayout()
@@ -82,6 +83,7 @@ class Bitcoin(QWidget):
         rightlayout.addWidget(buyingbutton,7,0,8,1)
         rightlayout.addWidget(sellingbutton,7,1,8,2)
 
+    # 매수/매도 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         if button.text() =='매수':
@@ -119,18 +121,20 @@ class Bitcoin(QWidget):
                 self.investmentamount=0
 
         self.holdinglabel.setText('보유량: {:,}개'.format(self.holding))
-    # 그래프 기울기 유지/변동 여부 설정
+
+    # 그래프 기울기 추세 유지/변동 여부 설정
     def changeEconomy(self):
         random = np.random.randint(1,1001)
         if random <= 20: return True  # 2%
         else: return False
 
+    # 그래프 기울기 유지/변동 여부 설정
     def changeGradient(self):
         random= np.random.randint(1,21)
         if random<=6: return True #30%
         else: return False
 
-    # 코인의 경제상황 (개별적인 그래프 변화율)
+    # 코인의 경제상황 (개별적인 그래프 변화 추세 )
     def updateEconomy(self):
         random = np.random.randint(1, 101)
         if random <= 4:       #4%
@@ -235,6 +239,7 @@ class Bitcoin(QWidget):
 
         return [self.line]
 
+# 비트코인 거래소
 class BitcoinMarket(QWidget):
     """
     여러 비트코인을 생성하여 담아두는 장소입니다.
@@ -246,6 +251,7 @@ class BitcoinMarket(QWidget):
 
         self.setUI()
 
+    # UI설정
     def setUI(self):
         mainlayout = QVBoxLayout()
         self.setLayout(mainlayout)
@@ -284,7 +290,7 @@ class BitcoinMarket(QWidget):
                 name += chr(np.random.randint(97,123))
         return name
 
-    # 비트코인 불러오기
+    # 저장된 비트코인 정보 불러오기
     def bitcoinLoad(self,status,index,layout):
         name = self.status.data['bitcoins'][index]['itemname']
         holding = self.status.data['bitcoins'][index]['holding']

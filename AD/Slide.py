@@ -24,9 +24,10 @@ class Slide_Thickness(QWidget):
             self.currentsize = self.tool.save_eraser_size
             self.title = '지우개 크기 조절'
 
-        self.initUI()
+        self.setUI()
 
-    def initUI(self):
+    # UI설정
+    def setUI(self):
         # 위젯들 정의
         self.size = QLabel(str(self.currentsize))
         self.sld = QSlider(Qt.Horizontal, self)
@@ -60,10 +61,12 @@ class Slide_Thickness(QWidget):
         self.setWindowTitle(self.title)
         self.show()
 
+    # 바뀐 슬라이드 값을 표시하는 함수
     def setText(self):
         self.size.setText(str(self.sld.value()))
         self.currentsize = self.sld.value()
 
+    # 취소/확인 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='ok':
@@ -97,9 +100,10 @@ class Slide_ChangedText(QWidget):
             if self.item == self.items[r]:
                 self.currentsize = self.tool.canvas.stringFontSize
 
-        self.initUI()
+        self.setUI()
 
-    def initUI(self):
+    # UI설정
+    def settUI(self):
         # 위젯들 정의
         self.size = QLabel(str(self.currentsize))
         self.sld = QSlider(Qt.Horizontal, self)
@@ -133,10 +137,12 @@ class Slide_ChangedText(QWidget):
         self.setWindowTitle(self.title)
         self.show()
 
+    # 바뀐 슬라이드 값 표시 함수
     def setText(self):
         self.size.setText(str(self.sld.value()))
         self.currentsize = self.sld.value()
 
+    # 취소/확인 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         if button.text()=='ok':
@@ -160,9 +166,10 @@ class Slide_ColorEffect(QWidget):
         self.tool = tool
         self.currentsize = self.tool.save_alpha
 
-        self.initUI()
+        self.settUI()
 
-    def initUI(self):
+    # UI설정
+    def setUI(self):
         # 위젯들 정의
         self.size = QLabel(str(self.currentsize))
         self.sld = QSlider(Qt.Horizontal, self)
@@ -197,10 +204,12 @@ class Slide_ColorEffect(QWidget):
         self.setWindowTitle('투명도 조절')
         self.show()
 
+    # 바뀐 슬라이드 값을 표시하는 함수
     def setText(self):
         self.size.setText(str(self.sld.value()))
         self.currentsize = self.sld.value()
 
+    # 취소/확인 버튼 입력시
     def buttonClicked(self):
         button = self.sender()
         if button.text() == 'ok':
@@ -210,6 +219,7 @@ class Slide_ColorEffect(QWidget):
         elif button.text() == 'cancel':
             self.close()
 
+#########################################################
 if __name__ == '__main__':
     import sys
 
