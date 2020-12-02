@@ -105,7 +105,7 @@ class DefeatWindow(QWidget):
         recordfont=QFont('Noto Sans CJK SC Medium',13)
         namelabel=QLabel('이름: '+self.name,)
         timelabel=QLabel('생존시간: {}주 {}일 {}시간 {}분'.format(self.time[0],self.time[1],self.time[2],self.time[3]))
-        peakofmoneylabel=QLabel('최고 보유금액: {:,}'.format(self.peakofmoney))
+        peakofmoneylabel=QLabel('최고 보유금액: {:,}원'.format(self.peakofmoney))
 
         namelabel.setFont(recordfont)
         timelabel.setFont(recordfont)
