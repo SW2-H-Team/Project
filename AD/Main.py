@@ -81,7 +81,7 @@ class LoginWindow(QWidget):
             else:
                 # 게임 실행
                 self.close() #로그인 창은 끄고,
-                ex = MyApp(name)
+                ex = MainWindow(name)
 
 # 패배 화면
 class DefeatWindow(QWidget):
@@ -243,7 +243,7 @@ class AchievementWindow(QWidget):
             self.close()
 
 # 게임화면
-class MyApp(QWidget):
+class MainWindow(QWidget):
     """
     로그인 창에서 이름을 입력하면 해당 이름으로 저장된 정보가 있는지 탐색한 후,
     있으면 저장된 정보를 불러오고, 없으면 처음부터 시작합니다.
