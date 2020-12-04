@@ -97,7 +97,7 @@ class Store(QWidget):
                     self.status.moneyUpdate(-self.color_price, "{}구입\n{:,} - {:,}".format(key, self.status.money, self.color_price))
                     self.status.current_brush_color["{}".format(key)] = self.RGBNumber_dic[key]
                     self.status.cb.addItem("{}".format(key))
-                    self.moneyChange()
+                    self.priceChange()
                     # 파산체크
                     if self.status.bankrupt():
                         self.status.defeat()
@@ -106,7 +106,7 @@ class Store(QWidget):
                 pass
 
     # 구입가격의 점진적 변화 적용함수
-    def moneyChange(self):
+    def priceChange(self):
         self.color_price = self.color_price * (self.count ** 2)
         self.count += 1
 

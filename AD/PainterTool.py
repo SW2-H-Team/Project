@@ -29,10 +29,10 @@ class ToolUI(QWidget):
         self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
 
 
-        self.tool()
+        self.setUI()
 
     # tool의 UI
-    def tool(self):
+    def setUI(self):
         layout = QHBoxLayout()
         self.setLayout(layout)
 
@@ -127,7 +127,7 @@ class ToolUI(QWidget):
         self.canvas.image.fill(Qt.white)
         self.canvas.update()
 
-    # 색깔과 사이즈에 변화주는 함수
+    # 색깔 변경시 라벨에 해당 색을 보여주고 색을 변경한다.
     def ChangedColor(self, color):
         self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))

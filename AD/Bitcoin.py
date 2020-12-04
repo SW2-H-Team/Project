@@ -199,7 +199,7 @@ class Bitcoin(QWidget):
             self.ax.set_ylim(self.y[0]*0.4,self.y[0]*2)
 
     # 그래프 갱신
-    def updateLine(self, i):
+    def updateLine(self,i):
         # 60초가 채워지면 그래프 다시그리기
         lastx=self.x[-1]
         if lastx > self.x[0]+59:
@@ -261,19 +261,19 @@ class BitcoinMarket(QWidget):
         scrollarea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
         bitcoins = QGroupBox()
-        vbox = QVBoxLayout()
-        bitcoins.setLayout(vbox) # 그룹박스에는 레이아웃을 넣어야함
+        self.vbox = QVBoxLayout()
+        bitcoins.setLayout(self.vbox) # 그룹박스에는 레이아웃을 넣어야함
 
         ## 비트코인 생성
         self.bitcoins=[]
         # 불러온 데이터의 정보를 그대로 사용
         if self.status.data['bitcoins']:
             for i in range(5):
-                self.bitcoinLoad(self.status,i,vbox)
+                self.bitcoinLoad(self.status,i)
         # 새로운 데이터의 경우 비트코인을 새로 생성
         else:
             for i in range(5):
-                self.bitcoinGenerate(vbox)
+                self.bitcoinGenerate()
 
         scrollarea.setWidget(bitcoins)
 
@@ -291,21 +291,21 @@ class BitcoinMarket(QWidget):
         return name
 
     # 저장된 비트코인 정보 불러오기
-    def bitcoinLoad(self,status,index,layout):
+    def bitcoinLoad(self,status,index):
         name = self.status.data['bitcoins'][index]['itemname']
         holding = self.status.data['bitcoins'][index]['holding']
         x= self.status.data['bitcoins'][index]['x']
         y= self.status.data['bitcoins'][index]['y']
         investmentamount=self.status.data['bitcoins'][index]['investmentamount']
         oldbitcoin = Bitcoin(name,status,holding,x,y,investmentamount)
-        layout.addWidget(oldbitcoin)
+        self.vbox.addWidget(oldbitcoin)
         self.bitcoins.append(oldbitcoin)
 
     # 비트코인 생성
-    def bitcoinGenerate(self,layout):
+    def bitcoinGenerate(self):
         name = self.setBitcoinName() #비트코인 이름을 만들고,
         newbitcoin = Bitcoin(name,self.status) #그 이름을 갖고 비트코인을 생성한다음,
-        layout.addWidget(newbitcoin) # 생선한 비트코인을 비트코인 마켓에 추가한다.
+        self.vbox.addWidget(newbitcoin) # 생선한 비트코인을 비트코인 마켓에 추가한다.
         self.status.data['bitcoins'].append({
             'itemname':name,'holding':0,'x':[0],'y':newbitcoin.y,'investmentamount':0}) # 메인의 데이터에 이 비트코인 정보를 저장한다.
         self.bitcoins.append(newbitcoin)  # 마지막으로 메인의 데이터에 이 비트코인 정보를 추가한다.
