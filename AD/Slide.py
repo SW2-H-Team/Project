@@ -103,7 +103,7 @@ class Slide_ChangedText(QWidget):
         self.setUI()
 
     # UI설정
-    def settUI(self):
+    def setUI(self):
         # 위젯들 정의
         self.size = QLabel(str(self.currentsize))
         self.sld = QSlider(Qt.Horizontal, self)
