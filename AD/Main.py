@@ -509,12 +509,12 @@ class MainWindow(QWidget):
     # 색깔 압류
     def foreclosure(self):
         index=np.random.randint(1,len(self.current_brush_color))
-        color=self.cb.itemText(index)
+        color=self.paintertab.tools.cb.itemText(index)
         # 잠겼던 버튼 다시 해제
         self.storetab.colorButton_dic[color].setEnabled(True)
         self.storetab.colorButton_dic[color].setStyleSheet('background:gray')
         del self.current_brush_color[color] # 보유색상에서 제거
-        self.cb.removeItem(index) #콤보박스에서도 제거
+        self.paintertab.tools.cb.removeItem(index) #콤보박스에서도 제거
         return color #압류한 색상 리턴,
 
     # 패배 처리

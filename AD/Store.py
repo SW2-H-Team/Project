@@ -96,7 +96,7 @@ class Store(QWidget):
                     self.colorButton_dic[key].setEnabled(False)
                     self.status.moneyUpdate(-self.color_price, "{}구입\n{:,} - {:,}".format(key, self.status.money, self.color_price))
                     self.status.current_brush_color["{}".format(key)] = self.RGBNumber_dic[key]
-                    self.status.cb.addItem("{}".format(key))
+                    self.status.paintertab.tools.cb.addItem("{}".format(key))
                     self.priceChange()
                     # 파산체크
                     if self.status.bankrupt():

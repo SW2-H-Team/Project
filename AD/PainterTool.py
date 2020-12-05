@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from Button import Button
 from Slide import *
 
-class ToolUI(QWidget):
+class PainterTool(QWidget):
     """
     그림판에서 그리기 설정을 할 수 있는 도구가 있는 클래스입니다.
     다양한 기능과 색깔을 이용해 그림을 그리고 그린 그림은 저장할 수 있습니다.
@@ -74,12 +74,12 @@ class ToolUI(QWidget):
         layout.addWidget(QLabel('색 바꾸기: '))
 
         # 색상 선택
-        self.status.cb = QComboBox(self)
+        self.cb = QComboBox(self)
         for i in list(self.status.data['brushcolors'].keys()): #저장됐던 색상들 불러오기.
-            self.status.cb.addItem(i)
-        layout.addWidget(self.status.cb)
+            self.cb.addItem(i)
+        layout.addWidget(self.cb)
 
-        self.status.cb.currentIndexChanged.connect(self.comboBoxFunction)
+        self.cb.currentIndexChanged.connect(self.comboBoxFunction)
 
         # 선택한 색 보이기
         self.label = QLabel()
@@ -89,9 +89,9 @@ class ToolUI(QWidget):
 
     # canvas로 전달
     def comboBoxFunction(self):
-        self.save_red = self.status.current_brush_color[self.status.cb.currentText()][0]
-        self.save_green = self.status.current_brush_color[self.status.cb.currentText()][1]
-        self.save_blue = self.status.current_brush_color[self.status.cb.currentText()][2]
+        self.save_red = self.status.current_brush_color[self.cb.currentText()][0]
+        self.save_green = self.status.current_brush_color[self.cb.currentText()][1]
+        self.save_blue = self.status.current_brush_color[self.cb.currentText()][2]
         self.save_brush_color = QColor(self.save_red, self.save_green, self.save_blue, self.save_alpha)
         self.label.setStyleSheet('color:free; background:rgb({},{},{},{})'.
                                  format(self.save_red, self.save_green, self.save_blue, self.save_alpha))

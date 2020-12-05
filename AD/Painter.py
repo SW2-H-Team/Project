@@ -31,8 +31,8 @@ class Painter(QWidget):
         canvaslayout.addWidget(self.canvas)
 
         #도구
-        tools = PainterTool.ToolUI(self.canvas,self.status)
-        toollayout.addWidget(tools)
+        self.tools = PainterTool.PainterTool(self.canvas,self.status)
+        toollayout.addWidget(self.tools)
 
 #########################################################
 if __name__ == '__main__':
