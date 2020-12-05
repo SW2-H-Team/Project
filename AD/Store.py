@@ -70,6 +70,7 @@ class Store(QWidget):
                 c = 0
 
         self.color_price = 10000
+        self.defalut_price = 10000
         self.count = 2
         # 데이터 불러오기
         for key in list(self.status.data['brushcolors'].keys()):
@@ -85,11 +86,12 @@ class Store(QWidget):
         button = self.sender()
         key = button.text()
 
+        # 버튼 클릭시 구입 여부 결정
         if key in self.colorButton_list:
             reply = QMessageBox.question(self, "구매", "구입하시겠습니까?\n{:,}".format(self.color_price),
                                          QMessageBox.No | QMessageBox.Yes)
             if reply == QMessageBox.Yes:
-                if self.status.money < self.color_price:
+                if self.status.money - self.color_price <= 0:
                     QMessageBox.warning(self, "경고", "잔액이 부족합니다.", QMessageBox.Ok)
                 else:
                     self.colorButton_dic[key].setStyleSheet('background:%s' %key)
@@ -107,7 +109,8 @@ class Store(QWidget):
 
     # 구입가격의 점진적 변화 적용함수
     def priceChange(self):
-        self.color_price = self.color_price * (self.count ** 2)
+        self.color_price += self.defalut_price * (self.count ** 2)
+        self.defalut_price = self.defalut_price * 2
         self.count += 1
 
 ########################################
@@ -119,4 +122,3 @@ if __name__ == '__main__':
     store = Store()
     store.show()
     sys.exit(app.exec_())
-
