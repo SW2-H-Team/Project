@@ -57,7 +57,7 @@ ADS(Architecture Design Specification)
 |Painter|\_\_init\_\_생성자|status| |Canvas와 PainterTool에 넘겨줄 status를 정의한다.|
 |--|setUI| | |그림판을 구성하는 UI를 보여준다.|
 |Canvas|\_\_init\_\_생성자|status| |그림그리는데 필요한 설정들을 초기화한다.|
-|--|setUI| | | |윈도우를 설정하고 보인다. |
+|--|setUI| | |윈도우를 설정하고 보인다. |
 |--|paintEvent|e| |그림을 그리고 그 그린 모습을 화면에 띄워준다. |
 |--|mousePressEvent|e| |마우스 왼쪽 버튼을 누르면 대게 그 좌표 값을 저장한다. |
 |--|mouseMoveEvent|e| |마우스 왼쪽 버튼을 누른 채 마우스를 움직이면 대게 마우스 포인트를 따라 그림을 그린다. |
