@@ -19,12 +19,11 @@ class Store(QWidget):
     def setUI(self):
         mainlayout = QVBoxLayout()
         tablayout = QVBoxLayout()
-        itemlayout = QGridLayout()
 
         self.setLayout(mainlayout)
         mainlayout.addWidget(QLabel('원하시는 상품을 구매하세요. '))
         mainlayout.addLayout(tablayout)
-        mainlayout.addLayout(itemlayout)
+
         # 탭
         tab = QWidget()
 
@@ -70,7 +69,7 @@ class Store(QWidget):
                 c = 0
 
         self.color_price = 10000
-        self.defalut_price = 10000
+        self.default_price = 10000
         self.count = 2
         # 데이터 불러오기
         for key in list(self.status.data['brushcolors'].keys()):
@@ -109,6 +108,6 @@ class Store(QWidget):
 
     # 구입가격의 점진적 변화 적용함수
     def priceChange(self):
-        self.color_price += self.defalut_price * (self.count ** 2)
-        self.defalut_price = self.defalut_price * 2
+        self.color_price += self.default_price * (self.count ** 2)
+        self.default_price = self.default_price * 2
         self.count += 1

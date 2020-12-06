@@ -16,6 +16,7 @@
 |method|\_\_init\_\_생성자|로그인창을 생성한다. |
 |-- |setUI |로그인창 UI를 보여준다. |
 |-- | buttonClicked |로그인창을 닫고,self.nameinput에 입력된 이름을 MainWindow의 인자로 넘겨준다.  |
+
 #### DefeatWindow
 | |이름 |역할,설명 | 
 |----|---- |---- |
@@ -36,6 +37,7 @@
 |method|\_\_init\_\_생성자|패배창을 생성한다. |
 |-- |setUI |패배창 UI를 보여준다. |
 |-- |buttonClicked |패배창을 닫고 로그인화면을 띄운다. |
+
 #### AchievementWindow
 | |이름 |역할,설명 | 
 |----|---- |---- |
@@ -59,6 +61,7 @@
 |-- |setUI |업적창 UI를 보여준다. |
 |-- |showRank|인자로 전달 받은 기록을 순위표에 한줄 씩 보여준다. |
 |-- |buttonClicked |업적창을 닫는다. |
+
 #### MainWindow
 | |이름 |역할,설명 | 
 |----|---- |---- |
@@ -102,7 +105,7 @@
 |--|payBack|게임상시간이 1주이링 지날 때마다 남은 빚이 있으면, 일정 금액을 상환한다. 만약 현재 보유금액이 상환액보다 적으면, 구매한 물감을 압류한다. 압류당할 물감도 없으면, 파산한다.|
 |--|foreclosure|보유한 물감을 랜덤으로 삭제하고, 콤보박스에서 이를 지우며, 해당 색을 상점에서 다시 활성화하고 어떤 물감을 압류당했는지 반환한다.|
 |--|defeat|시간의 흐름을 중지하고, 메인 창을 닫고, 패배화면창을 띄운다.|
-|--|bankrupt|현재보유금액이 없거나, 비트코인의 보유량이 0이거나, 홀짝게임의 충전금이 0이어서 더이상 돈을 벌 방법이 없다면 파산처리한다.|
+|--|bankrupt|현재보유금액이 없거나, 비트코인의 보유량이 0이거나, 홀짝게임의 충전금이 0이어서 더이상 돈을 벌 방법이 없다면 파산처리한다. 보유금액이 줄어들 때마다 호출돼 현재 상태를 판별한다.|
 |--|showAchievement|업적 달성했는지 판별하고, 업적달성을 했으면, 현재 데이터를 저장하고 달성한 업적, 현재플레이어의 기록, 다른 플레이어의 해당 업적 기록 정보를 갖는 업적창을 띄운다.|
 |--|achievement|업적 달성했는지 판별하는 함수. 달성한 업적의 종류를 반환한다. 만약 업적 달성이 아니면 0을 반환한다.|
 |--|buttonClicked|데이터를 저장할 지 물어보고 yes면 데이터를 저장한다. |
@@ -126,7 +129,7 @@
 #### PainterTool
 | |이름 |역할,설명 | 
 |----|---- |---- |
-|attributes|self.status||
+|attributes|self.status|전달받은 MainWindow의 인스턴스를 정의한다.|
 |--|self.canvas||
 |--|self.save_eraser_size||
 |--|self.save_brush_size||
@@ -163,7 +166,7 @@
 #### Canvas
 | |이름 |역할,설명 | 
 |----|---- |---- |
-|attributes|self.status||
+|attributes|self.status|전달받은 MainWindow의 인스턴스를 정의한다.|
 |--|self.drawingPath||
 |--|self.image||
 |--|self.drawing||
@@ -191,7 +194,111 @@
 #### Store
 | |이름 |역할,설명 | 
 |----|---- |---- |
-|attributes|self.status||
+|attributes|self.status|전달받은 MainWindow의 인스턴스를 정의한다.|
+|--|mainlayout|메인레이아웃|
+|--|tablayout|물감 구매버튼들이 나열되는 레이아웃|
+|--|self.redButton|빨간색 물감 구매 버튼|
+|--|self.yellowButton|노란색 물감 구매 버튼|
+|--|self.blueButton|파란색 물감 구매 버튼|
+|--|self.greenButton|초록색 물감 구매 버튼|
+|--|self.orangeButton|주황색 물감 구매 버튼|
+|--|self.purpleButton|자주색 물감 구매 버튼|
+|--|self.brownButton|갈색 물감 구매 버튼|
+|--|self.cyanButton|밝은 청록색 물감구매 버튼|
+|--|self.skyblueButton|하늘색 물감 구매 버튼|
+|--|self.colorButton_list|버튼의 색깔을 나열한 리스트|
+|--|self.colorButton_dic|각 색깔의 문구와 해당 색깔의 버튼을 매치한 사전|
+|--|self.RGBNumber_dic|각 색깔마다의 RGB값을 튜플 형태로 매치한 사전|
+|--|button_list|버튼들을 나열한 리스트|
+|--|self.color_price|물감 구매 가격 |
+|--|self.default_price|물감 구매 가격에 더해지는 가중치|
+|--|self.count|물감 구매 횟수|
+|method|\_\_init\_\_생성자|상점을 생성한다.|
+|--|setUI|상점 UI를 보여준다.|
+|--|buttonClicked|모든 물감버튼에 대한 콜백함수. 버튼을 누르면 물감을 구매할 지 묻는 팝업창을 띄운다. 물감을 구매하면 보유금액과 가계부를 갱신한다.|
+|--|priceChange|물감 구매할 때마다 self.default_price를 연산하여 self.color_price에 더해 물감 가격을 올린다.|
+
+## GetMoney.py
+
+#### GetMoney
+| |이름 |역할,설명 | 
+|----|---- |---- |
+|attributes|self.status|전달받은 MainWindow의 인스턴스를 비트코인거래소과 홀짝게임에 전달해주기 위해 정의한것이다.|
+|--|mainlayout|메인레이아웃|
+|--|tablayout|비트코인거래소와 홀짝게임을 묶은 탭의 레이아웃|
+|--|self.tab1|비트코인 거래소 탭. BitcoinMarket를 생성한다.|
+|--|self.tab2|홀짝게임 탭. OddOrEven을 생성한다.|
+|--|tabs|비트코인 거래소와 홀짝게임을 묶은 탭|
+|method|\_\_init\_\_생성자|GetMoney를 생성한다.|
+|--|setUI|GetMoney의 UI를 보여준다.|
+
+## Bitcoin.py
+
+#### Bitcoin
+| |이름 |역할,설명 | 
+|----|---- |---- |
+|attributes|self.status|전달받은 MainWindow의 객체. 보유금액과 시간에 직접적으로 접촉하기 위해 정의됐다.|
+|--|self.x|비트코인 그래프의 x축. 시간(분)|
+|--|self.y|비트코인 그래프의 y축. 각 x에 대한 가격|
+|--|self.economy|비트코인 그래프의 기울기 추세.|
+|--|self.adjustment|비트코인의 과도한 성장을 제한하기 위해 기울기에 곱해지는 가중치.|
+|--|self.gradient|비트코인 그래프의 기울기|
+|--|self.subgradient|비트코인 그래프의 역동적인 움직임을 구현하기 위해 기울기에 더해지는 가중치|
+|--|self.fig|비트코인 그래프가 그려지는 화면을 생성한다.|
+|--|self.ax|비트코인의 축을 그린다.|
+|--|self.canvas|그래프가 그려지는 화면|
+|--|self.line||
+|--|self.ani|비트코인의 애니메이션 객체. 생성하면 애니메이션을 작동시킨다. interval을 조정하여 애니메이션의 속도를 조절할 수 있다. 1초 == 1000|
+|--|self.itemname|한 비트코인 객체의 이름|
+|--|self.price|비트코인의 현재 가격|
+|--|self.holding|플레이어의 비트코인 보유량|
+|--|self.investmentamount|해당 비트코인에 투자한 금액|
+|--|self.presentvalue| 비트코인의 현재 총 가치.보유량 * 현재가격|
+|--|mainlayout|메인레이아웃|
+|--|rightlayout|비트코인 정보가 입력되는 레이아웃|
+|--|leftlayout|그래프가 그려지는 레이아웃|
+|--|self.itemlabel|비트코인 이름의 라벨|
+|--|itemnamefont|"의 폰트.|
+|--|self.pricelabel|비트코인 가격의 라벨|
+|--|self.holdinglabel|비트코인 보유량의 라벨|
+|--|self.presentvaluelabel|비트코인 현재 총가치의 라벨|
+|--|self.gnllabl|gross&loss.평가손익의 라벨|
+|--|buyingbutton|매수버튼|
+|--|sellingbutton|매도버튼|
+|method|\_\_init\_\_생성자|비트코인 하나를 생성한다.|
+|--|setUI|비트코인의UI를 보여준다.|
+|--|buttonClicked|매수/매도버튼에 대한 콜백함수. 누르면 매수/매도 량을 입력할 수 있는 팝업창이 뜬다.|
+|--|changeEconomy|그래프의 기울기 추세를 바꿀지 난수를 생성해 랜덤으로 정한다.|
+|--|changeGradient|그래프의 기울기를 바꿀지 난수를 생성해 랜덤으로 정한다.|
+|--|updateEconomy|그래프의 기울기 추세를 난수를 생성해 정한다. changeEconomy가 True일 때 호출된다.|
+|--|updateGradient|그래프의 기울기를 재설정한다.changeGradient가 True일때 호출된다. 그래프의 기울기는 가중치 * (정규분포함수 * 기울기 추세)로 계산한다.|
+|--|setAdjustment|가격 폭등을 막기위해 비트코인의 가격의 구간마다 곱해지는 가중치를 조정한다. 가격이 0이 되지 않게 조정도 해준다.|
+|--|setSubgradient|현실처럼 역동적인 비트코인 그래프를 만들기 위해 매 분마다 기울기에 랜덤한 값을 더한다.|
+|--|setYLim|그래프의 가격이 상승함에 따라 조정되는 기울기에 맞게 그래프의 Y축 범위를 조정한다.|
+|--|updateLine|시간이 흐를 때마다 갱신될 그래프의 값을 전달해주는 함수. 그래프의 내용을 갱신과 동시에, 기울기 조정 여부를 정한다. 게임 시간은 여기 있는 timeUpdate에 의해 이루어지며, 그래프는 게임상 시간 60분이 차면 처음부터 그려진다. |
+
+#### BitcoinMarket
+| |이름 |역할,설명 | 
+|----|---- |---- |
+|attributes|status|전달받은 MainWindow의 인스턴스를 각 Bitocin에 전달해주기위해 정의됐다.|
+|--|mainlayout|메인레이아웃|
+|--|scrollarea|비트코인들의 그룹을 스크롤 가능한 공간에 넣은것.|
+|--|bitcoins|비트코인들을 그룹화 한것.|
+|--|self.vbox|bitcoins의 레이아웃.|
+|--|self.bitcoins|생성된 5개의 비트코인이 담겨있는 리스트. 저장할때 데이터에 이 리스트를 저장한다. |
+|method|\_\_init\_\_생성자|비트코인 거래소를 생성한다.|
+|--|setUI|비트코인 거래소의 UI를 보여준다. 이때 현재 플레이어의 이름으로 저장된 비트코인 정보가 있으면 이를 불러오고, 없으면 새로 생성한다.|
+|--|setBitcoinName|소문자 알파벳과 대문자 알파벳에 해당하는 아스키코드 값을 난수로 생성해 랜덤한 이름을 만든다. |
+|--|bitcoinLoad| 저장된 비트코인 정보를 받아온다. |
+|--|bitcoinGenerate|비트코인을 생성해, 비트코인 거래소에 추가하고, 전달받은 MainWindow의 인스턴스에 이 코인의 정보를 추가한다.|
+
+## OddOrEven.py
+
+#### OddOrEven
+| |이름 |역할,설명 | 
+|----|---- |---- |
+|attributes|status||
+|--|||
 |--|||
 |--|||
 |--|||
@@ -202,6 +309,11 @@
 |--|||
 |--|||
 |--|||
+|--|||
+|--|||
+|--|||
+|--|||
+
 
 
 
