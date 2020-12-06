@@ -218,11 +218,3 @@ class Slide_ColorEffect(QWidget):
             self.close()
         elif button.text() == 'cancel':
             self.close()
-
-#########################################################
-if __name__ == '__main__':
-    import sys
-
-    app = QApplication(sys.argv)
-    ex = Slide_Thickness()
-    sys.exit(app.exec_())

@@ -106,10 +106,3 @@ class Canvas(QMainWindow):
 
             self.drawingPath = None
             self.update()
-
-####################################
-if __name__ == '__main__':
-
-    app = QApplication(sys.argv)
-    canvas = Canvas('heng')
-    sys.exit(app.exec_())

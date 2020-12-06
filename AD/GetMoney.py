@@ -32,14 +32,3 @@ class GetMoney(QWidget):
         tabs.addTab(self.tab2, '홀짝')
 
         tablayout.addWidget(tabs)
-
-##################################
-if __name__ == '__main__':
-    from Main import *
-    import sys
-
-    app = QApplication(sys.argv)
-    status=MyApp()
-    getmoney = GetMoney(status)
-    getmoney.show()
-    sys.exit(app.exec_())

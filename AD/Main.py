@@ -27,8 +27,8 @@ class LoginWindow(QWidget):
         self.setLayout(mainlayout)
 
         # 제목
-        gametitle = QLabel('    Dream Of Painter')
-        gametitlefont=QFont('Chilanka',30)
+        gametitle = QLabel('    인생역전 인생역작')
+        gametitlefont=QFont('Noto Serif CJK JP Black',30)
         gametitlefont.setBold(True)
         gametitle.setFont(gametitlefont)
         gametitle.setFixedSize(400,50)

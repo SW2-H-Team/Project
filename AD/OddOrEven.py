@@ -214,11 +214,3 @@ class OddOrEven(QWidget):
                     self.statusUpdate('짝을 선택했습니다.')
                 elif not button.isChecked():
                     self.statusUpdate('짝 선택을 취소했습니다.')
-
-if __name__ == '__main__':
-    import sys
-
-    app = QApplication(sys.argv)
-    ore = OddOrEven()
-    ore.show()
-    sys.exit(app.exec_())

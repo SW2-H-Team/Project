@@ -112,13 +112,3 @@ class Store(QWidget):
         self.color_price += self.defalut_price * (self.count ** 2)
         self.defalut_price = self.defalut_price * 2
         self.count += 1
-
-########################################
-if __name__ == '__main__':
-
-    import sys
-
-    app = QApplication(sys.argv)
-    store = Store()
-    store.show()
-    sys.exit(app.exec_())

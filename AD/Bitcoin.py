@@ -309,13 +309,3 @@ class BitcoinMarket(QWidget):
         self.status.data['bitcoins'].append({
             'itemname':name,'holding':0,'x':[0],'y':newbitcoin.y,'investmentamount':0}) # 메인의 데이터에 이 비트코인 정보를 저장한다.
         self.bitcoins.append(newbitcoin)  # 마지막으로 메인의 데이터에 이 비트코인 정보를 추가한다.
-
-
-if __name__ == '__main__':
-    import sys
-    from Main import main
-
-    app = QApplication(sys.argv)
-    bcmarket = BitcoinMarket()
-    bcmarket.show()
-    sys.exit(app.exec_())
