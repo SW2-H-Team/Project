@@ -268,11 +268,11 @@ class BitcoinMarket(QWidget):
         self.bitcoins=[]
         # 불러온 데이터의 정보를 그대로 사용
         if self.status.data['bitcoins']:
-            for i in range(5):
+            for i in range(4):
                 self.bitcoinLoad(self.status,i)
         # 새로운 데이터의 경우 비트코인을 새로 생성
         else:
-            for i in range(5):
+            for i in range(4):
                 self.bitcoinGenerate()
 
         scrollarea.setWidget(bitcoins)

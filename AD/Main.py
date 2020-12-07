@@ -407,7 +407,7 @@ class MainWindow(QWidget):
 
         #상태창
         self.namelabel = QLabel('이름: {}'.format(self.playername))
-        self.moneylabel = QLabel('Money: {:,}원'.format(self.money))
+        self.moneylabel = QLabel('현재 보유금액: {:,}원'.format(self.money))
         self.timelabel = QLabel('시간 경과: {}m'.format(self.time[3]))
         self.timelabel.setFixedWidth(200)
 
@@ -432,7 +432,7 @@ class MainWindow(QWidget):
 
 
         self.setLayout(mainlayout)
-        self.setWindowTitle('AD')
+        self.setWindowTitle('인생역전 인생역작')
 
         self.setFixedSize(1000, 600)
         self.move(200, 100)

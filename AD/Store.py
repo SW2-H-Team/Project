@@ -76,7 +76,7 @@ class Store(QWidget):
             if key!='Black':
                 self.colorButton_dic[key].setStyleSheet('background:%s' % key)
                 self.colorButton_dic[key].setEnabled(False)
-                self.moneyChange()
+                self.priceChange()
 
         tab.setLayout(tab.layout)
 
