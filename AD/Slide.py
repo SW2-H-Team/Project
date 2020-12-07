@@ -166,7 +166,7 @@ class Slide_ColorEffect(QWidget):
         self.tool = tool
         self.currentsize = self.tool.save_alpha
 
-        self.settUI()
+        self.setUI()
 
     # UI설정
     def setUI(self):

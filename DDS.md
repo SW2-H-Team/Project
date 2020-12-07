@@ -280,7 +280,7 @@
 #### BitcoinMarket
 | |이름 |역할,설명 | 
 |----|---- |---- |
-|attributes|status|전달받은 MainWindow의 인스턴스를 각 Bitocin에 전달해주기위해 정의됐다.|
+|attributes|self.status|전달받은 MainWindow의 인스턴스를 각 Bitocin에 전달해주기위해 정의됐다.|
 |--|mainlayout|메인레이아웃|
 |--|scrollarea|비트코인들의 그룹을 스크롤 가능한 공간에 넣은것.|
 |--|bitcoins|비트코인들을 그룹화 한것.|
@@ -297,25 +297,65 @@
 #### OddOrEven
 | |이름 |역할,설명 | 
 |----|---- |---- |
-|attributes|status||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
-|method|\_\_init\_\_생성자||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
-|--|||
+|attributes|self.status|전달받은 Mainwindow의 인스턴스를 정의한다. |
+|--|self.charge|홀/짝 게임에 베팅하는 금액. 충전금. self.status에 저장돼있는 데이터로 충전금을 초기화한다.|
+|--|self.history|플레이어가 다음 결과를 예측할 수 있게, 전의 결과를 기록해둔 것. self.status에 저장돼있는 데이터로 기록을 초기화한다.|
+|--|mainlayout|홀짝게임의 메인레이아웃|
+|--|historylayout|기록에 대한 레이아웃|
+|--|buttonlayout|홀/짝버튼에 대한 레이아웃|
+|--|statuslayout|상태메세지에 대한 레이아웃|
+|--|charginglayout|충전금 관련 위젯들에 대한 레이아웃|
+|--|self.historylabel|결과의 기록. 새 결과가 나올때마다 갱신된다. 1일이 지나면 초기화된다.|
+|--|historyfont|기록에 대한 폰트|
+|--|self.oddbutton|홀 버튼. 눌린상태가 돼야 선택한 것이다.|
+|--|self.evenbutton|짝 버튼. " |
+|--|buttonfont|홀/짝 버튼의 폰트|
+|--|status|결과에 따른 상태메세지 문구|
+|--|self.statuslabel|상태메세지 라벨|
+|--|statusfont|"의 폰트|
+|--|self.chargelabel|충전금 라벨|
+|--|chargefont|"의 폰트|
+|--|chargetbutton|금액 충전버튼.  |
+|--|withdrawlbutton|출금버튼|
+|--|number|홀/짝게임의 결과. 1은 홀, 2는 짝이다.|
+|method|\_\_init\_\_생성자|홀짝게임을 생성한다.|
+|--|setUI|홀짝게임의 UI를 보여준다.|
+|--|statusUpdate|현 홀짝게임의 상태메시지를 갱신한다.|
+|--|chargeUpdate|충전금을 충전/출금하거나 돈을 따거나/잃은 만큼 변화를 반영하고, 충전금 라벨을 갱신한다. |
+|--|getNumber|게임상 시간 1시간마다 호출되며, 1이나 2의 수를 랜덤으로 생성하여 이를 기록 업데이트 함수와 결과확인 함수에 전달한다. 1이 홀이고 2는 짝이다.|
+|--|checkResult|홀/짝 버튼이 눌린 상태와 전달받은 number를 비교해 충전금에 그 결과를 반영하고 상태메세지를 생신한다.|
+|--|historyUpdate|기록을 갱신한다. 게임상 시간 하루가 지나면 초기화된다.|
+|--|buttonClicked|충전/출금, 홀/짝 버튼에 대한 콜백함수. 충전/출금 버튼에서는 사용자의 보유 금액을 변화시키고, 홀/짝 버튼은 한번에 두 버튼을 누를 수 없게 설정한다.|
 
+## Slide.py
 
+#### Slide_Thickness
+| |이름 |역할,설명 | 
+|----|---- |---- |
+|attributes|self.tool|전달받은 Tool의 인스턴스를 정의한다. |
+|--|self.currentsize|현재 선의 굵기. tool에서 현재 눌려있는 버튼에 따라 다르게 초기화된다.|
+|--|self.title|슬라이드 창의 제목. tool에서 현재 눌려있는 버튼에 따라 달라진다.|
+|--|self.size|슬라이드 창에 보이는, 슬라이드의 수치이다. ok 버튼을 누르면 선굵기가 해당 수치로 변한다.|
+|--|self.sld|사용자가 직접 잡고 끌어 수치를 변경할 수 있는 슬라이드.|
+|--|self.okbutton|ok버튼|
+|--|self.cancelbutton|cancel버튼|
+|--|font|슬라이드에 표시되는 수치의 폰트|
+|--|mainlayout|슬라이드의 메인 레이아웃|
+|method|\_\_init\_\_생성자|슬라이드를 생성한다.|
+|--|setUI|슬라이드의 UI를 보여준다.|
+|--|setText|슬라이드의 변화에 따라 슬라이드에 표시되는 값을 변경한다.|
+|--|buttonClicked|ok/cancel에 대한 콜백함수. |
 
+#### Slide_ChangedText
+self.currentsize가 텍스트의 크기를 의미하는 것 말고는 Slide_Thickness와 동일하다.
+
+#### Slide_ColorEffect
+self.currentsize가 선의 투명도를 의미하는 것 말고는 Slide_Thickness와 동일하다. 
+
+## Button.py
+
+#### Button
+수업에 제공된 실습파일에서 크기 조절하는 부분을 삭제한 것이다. 이미 수업에서 다뤘던 부분이니 자세한 설명은 생략한다.
 
 
 
