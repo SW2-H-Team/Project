@@ -30,8 +30,6 @@ class Canvas(QMainWindow):
             self.image = QPixmap('data/main_image.png')
 
         self.resize(self.image.width(),self.height())
-        #####
-        self.drawing = False
 
         self.color_r = 0
         self.color_g = 0
