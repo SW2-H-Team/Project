@@ -130,17 +130,16 @@
 | |이름 |역할,설명 | 
 |----|---- |---- |
 |attributes|self.status|전달받은 MainWindow의 인스턴스를 정의한다.|
-|--|self.canvas||
-|--|self.save_eraser_size||
-|--|self.save_brush_size||
-|--|self.save_line_size||
-|--|self.save_brush_mode||
-|--|self.save_point||
-|--|self.save_red||
-|--|self.save_blue||
-|--|self.save_green||
-|--|self.save_alpha||
-|--|self.save_brush_color||
+|--|self.canvas|전달받은 canvas의 인스턴스를 정의한다.|
+|--|self.save_eraser_size|canvas와 연계되는 도구 지우개 굵기 값을 저장한다.|
+|--|self.save_brush_size|canvas와 연계되는 도구 브러쉬 굵기 값을 저장한다.|
+|--|self.save_line_size|canvas와 연계되는 도구 선의 굵기 값을 저장한다.|
+|--|self.save_brush_mode|canvas와 연계되는 브러쉬의 모드 값를 저장한다.|
+|--|self.save_red|색 설정을 위한 RGBA의 Red 값|
+|--|self.save_blue|색 설정을 위한 RGBA의 Blue 값|
+|--|self.save_green|색 설정을 위한 RGBA의 Green 값|
+|--|self.save_alpha|색 설정을 위한 RGBA의 Alpha 값|
+|--|self.save_brush_color|색 설정을 위해 정한 변수와 QColor를 이용하여 색 정보를 저장한다.|
 |--|self.tools|각 종 그리기 도구가 포함되는 리스트이다.|
 |--|self.tools[0]|붓. 자유로운 곡선그리기가 가능하다.|
 |--|self.tools[1]|직선 그리기|
@@ -153,22 +152,22 @@
 |--|self.tools[8]|전체 지우기. 캔버스에 그려져있는 모든 그림을 지운다. |
 |--|self.cb|보유한 색상들의 콤보박스. 원하는 색상을 선택해 선의 색을 바꿀 수 있다.|
 |--|self.label|현재 사용중인 색상이 어떤 것인지 색깔로 보여준다.|
-|method|\_\_init\_\_생성자||
-|--|setUI|도 UI를 보여준다.|
-|--|comboBoxFunction||
-|--|save||
-|--|clear||
-|--|ChangedColor||
-|--|ChangedSize||
-|--|ChangedRGBA||
-|--|MakeColor||
-|--|ChangedValue||
-|--|ChangedFont||
-|--|buttonClicked||
-|--|setThickness||
-|--|changingMode||
-|--|ChangedText||
-|--|ColorEffect||
+|method|\_\_init\_\_생성자|PainterTool를 실행한다.|
+|--|setUI|도구의 UI를 보여준다.|
+|--|comboBoxFunction|상점에서 구매한 색으로 변경한다.|
+|--|save|그린 그림을 이미지 파일로 내보낸다.|
+|--|clear|그림을 초기화 한다.|
+|--|ChangedColor|받은 인자의 색으로 색정보를 변경한다.|
+|--|ChangedSize|받은 인자의 굵기로 굵기 값을 변경한다.|
+|--|ChangedRGBA|받은 인자의 값으로 색을 만들 수 있게 RGBA 값을 저장하고 변경한 색정보를 변경한다.|
+|--|MakeColor|저장된 RGBA값을 이용하여 색을 만든다.|
+|--|ChangedValue|색과 굵기와 모드를 모두 변경한다.|
+|--|ChangedFont|폰트의 굵기와 크기를 변경한다.|
+|--|buttonClicked|도구에서 눌린 버튼에 맞게 기능을 실행한다.|
+|--|setThickness|굵기 정하는 창을 띄워주는 함수이다.|
+|--|changingMode|선모드를 변경할 것인지 물어보는 함수이다.|
+|--|ChangedText|텍스트 기능을 변경하기 위해 창을 띄워주는 함수이다.|
+|--|ColorEffect|색효과를 주기 위해 사용자에게 input을 받는 함수이다.|
 
 ## Canvas.py
 
@@ -176,27 +175,27 @@
 | |이름 |역할,설명 | 
 |----|---- |---- |
 |attributes|self.status|전달받은 MainWindow의 인스턴스를 정의한다.|
-|--|self.drawingPath||
-|--|self.image||
-|--|self.drawing||
-|--|self.color_r||
-|--|self.color_g||
-|--|self.color_a||
-|--|self.brush_color||
-|--|self.brush_size||
-|--|self.brush_mode||
-|--|string||
-|--|stringFont||
-|--|stringFontSize||
-|--|save_drawingType||
-|--|past_point||
-|--|present_point||
-|method|\_\_init\_\_생성자||
-|--|setUI||
-|--|paintEvent||
-|--|mousePressEvent||
-|--|mouseMoveEvent||
-|--|mouseReleaseEvent||
+|--|self.drawingPath|그림을 그리고 있는지 유무 파악|
+|--|self.image|그림을 그릴 이미지 파일|
+|--|self.color_r|색 RGBA의 값 중 Red|
+|--|self.color_g|색 RGBA의 값 중 Green|
+|--|self.color_b|색 RGBA의 값 중 Blue|
+|--|self.color_a|색 RGBA의 값 중 Alpha|
+|--|self.brush_color|브러쉬 색|
+|--|self.brush_size|브러쉬 크기(굵기)|
+|--|self.brush_mode|브러쉬 모드|
+|--|string|텍스트 모드에서 사용할 글자|
+|--|stringFont|글자의 폰트|
+|--|stringFontSize|글자 크기|
+|--|save_drawingType|그림을 그릴 때 브러쉬 모드|
+|--|past_point|저장해 둘 절대 좌표 값(마우스 좌클릭 했을 때)|
+|--|present_point|저장해둘 절대 좌표 값(마우스 좌클릭 뗐을 때)|
+|method|\_\_init\_\_생성자|그림을 그린다.|
+|--|setUI|window를 설정한다.|
+|--|paintEvent|그림 이벤트 함수|
+|--|mousePressEvent|마우스 버튼 누를 때 이벤트 함수|
+|--|mouseMoveEvent|마우스 움직일 때 이벤트 함수|
+|--|mouseReleaseEvent|마우스 버튼 뗐을 때 이벤트 함수|
 
 ## Store.py
 
