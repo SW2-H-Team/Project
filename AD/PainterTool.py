@@ -20,7 +20,6 @@ class PainterTool(QWidget):
         self.save_brush_size = 5
         self.save_line_size = 5
         self.save_brush_mode = Qt.SolidLine
-        self.save_point = 5
 
         self.save_red = 0
         self.save_blue = 0
