@@ -100,7 +100,7 @@ ADS(Architecture Design Specification)
 |--|setBitcoinName| |name |무작위의 비트코인 이름을 생성한다. |
 |--|bitcoinLoad|status,index| |데이터에 저장돼있는 비트코인 정보를 불러온다.| 
 |--|bitcoinGenerate| | |하나의 비트코인을 생성해 화면에 추가한다.|
-|OddOrEven|\_\_init\_\_생성자|status| | | |
+|OddOrEven|\_\_init\_\_생성자|status| | |
 |--|setUI| | |홀짝게임 UI를 보여준다.|
 |--|statusUpdate|text| |상태메세지를 변경한다.|
 |--|chargeUpdate|amount| |충전금을 amount만큼 변경한다.|
@@ -109,15 +109,15 @@ ADS(Architecture Design Specification)
 |--|historyUpdate|number| |화면에 표시되는 결과의 기록을 갱신한다. |
 |--|buttonClicked| | | 충전/출금, 홀/짝 버튼의 콜백함수. |
 |Button|\_\_init\_\_생성자|text, callback| |전달받는 콜백함수를 가진 버튼을 생성한다. |
-|Slide_Thickness|\_\_init\_\_생성자|tool|현재 선택중인 버튼에 맞는 창제목을 설정한다. |
+|Slide_Thickness|\_\_init\_\_생성자| tool | |현재 선택중인 버튼에 맞는 창제목을 설정한다. |
 |--|setUI| | |슬라이드 창을 보여준다. |
 |--|setText| | |창에 표시되는 숫자를 슬라이드 변화에 맞춘다. |
 |--|buttonClicked| | |ok/cancel 버튼에 대한 콜백함수. |
-|Slide_ChangedText|\_\_init\_\_생성자|item, tool, items||||
+|Slide_ChangedText|\_\_init\_\_생성자|item, tool, items| | |
 |--|setUI| | |슬라이드 창을 보여준다. |
 |--|setText| | |창에 표시되는 숫자를 슬라이드 변화에 맞춘다.|
 |--|buttonClicked| | |ok/cancel 버튼에 대한 콜백함수. |
-|Slide_ColorEffect|\_\_init\_\_생성자|tool||||
+|Slide_ColorEffect|\_\_init\_\_생성자|tool| | |
 |--|setUI| | |슬라이드 창을 보여준다. |
 |--|setText| | |창에 표시되는 숫자를 슬라이드 변화에 맞춘다.|
 |--|buttonClicked| | |ok/cancel 버튼에 대한 콜백함수. |
