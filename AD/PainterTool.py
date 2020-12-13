@@ -212,7 +212,10 @@ class PainterTool(QWidget):
             self.setThickness()
 
         elif key == '투명도':
-            self.ColorEffect()
+            if self.tools[2].isChecked():
+                QMessageBox.warning(self, '경고!', '지우개는 투명도를 조절할 수 없습니다!', QMessageBox.Ok)
+            else:
+                self.ColorEffect()
 
         elif key == '텍스트':
             self.canvas.save_drawingType = 'text'
