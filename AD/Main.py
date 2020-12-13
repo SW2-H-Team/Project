@@ -256,7 +256,7 @@ class MainWindow(QWidget):
         super().__init__()
         # 데이터초기화
         self.totaldata={}
-        self.data={'playername':name,'time':[0,0,0,0],'pom':50000,'money':50000,'debt':200000000,'history':'',
+        self.data={'playername':name,'time':[0,0,0,0],'pom':50000,'money':500000000000000000,'debt':200000000,'history':'',
                    'bitcoins':[],'ore':[0,''],'brushcolors':{"Black": (0, 0, 0)},
                    'already':[False,False,False,False,False,False]}
 
@@ -319,7 +319,7 @@ class MainWindow(QWidget):
         self.data['debt']=self.debt
         self.data['history']=self.history.toPlainText()
         #비트코인의 이름, 보유량, x,y 를 저장
-        for i in range(5):
+        for i in range(4):
             self.data['bitcoins'][i]['holding']=self.getmoneytab.tab1.bitcoins[i].holding
             self.data['bitcoins'][i]['x']=self.getmoneytab.tab1.bitcoins[i].x
             self.data['bitcoins'][i]['y']=self.getmoneytab.tab1.bitcoins[i].y
