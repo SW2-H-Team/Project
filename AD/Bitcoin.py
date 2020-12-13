@@ -16,7 +16,7 @@ class Bitcoin(QWidget):
     매 시간마다 내부의 계산식에 의해 비트코인의 값을 갱신하여 그 값을 그래프에 표시합니다.
     시간의 흐름은 여기에서 그래프의 애니메이션을 보여주는 함수에 의해 발생합니다.
     """
-    def __init__(self,name,status,holding=0,x=[0],y=[np.random.randint(6000, 12000)],investmentamount=0):
+    def __init__(self,name,status,holding=0,x=[x for x in range(60)],y=[np.random.randint(6000, 12000)]*60,investmentamount=0):
         super().__init__()
 
         self.setFixedSize(680,200)
@@ -202,6 +202,7 @@ class Bitcoin(QWidget):
     def updateLine(self,i):
         # 60초가 채워지면 그래프 다시그리기
         lastx=self.x[-1]
+
         if lastx > self.x[0]+59:
             self.x = [0]
             self.y = [self.y[-1]]
@@ -236,7 +237,6 @@ class Bitcoin(QWidget):
         # 시간갱신
         if self.itemname == self.status.data['bitcoins'][0]['itemname']:
             self.status.timeUpdate()
-
         return [self.line]
 
 # 비트코인 거래소
